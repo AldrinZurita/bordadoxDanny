@@ -1,0 +1,12 @@
+package bo.bordadoxdanny.app.data.profile
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "profile")
+data class ProfileEntity(
+    @PrimaryKey val id: Long = 1, // Single profile record
+    val name: String,
+    val email: String,
+    val phone: String
+)
