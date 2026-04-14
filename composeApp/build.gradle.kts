@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+    alias(libs.plugins.googleGmsGoogleServices)
 }
 
 kotlin {
@@ -32,6 +33,7 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
+            implementation(libs.firebase.messaging)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -91,6 +93,7 @@ android {
 }
 
 dependencies {
+    //implementation(libs.firebase.messaging)
     debugImplementation(libs.compose.uiTooling)
     ksp(libs.room.compiler)
 }
