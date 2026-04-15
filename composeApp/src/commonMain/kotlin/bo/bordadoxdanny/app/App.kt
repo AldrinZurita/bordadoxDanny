@@ -1,49 +1,93 @@
 package bo.bordadoxdanny.app
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.resources.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import bo.bordadoxdanny.app.features.navigation.Screen
+import bo.bordadoxdanny.app.features.navigation.bottomNavItems
+import bo.bordadoxdanny.app.features.orders.presentation.OrdersScreen
+import bo.bordadoxdanny.app.features.cash.presentation.CashScreen
+import bo.bordadoxdanny.app.features.reports.presentation.ReportsScreen
+import bo.bordadoxdanny.app.features.profile.presentation.ProfileScreen
+import org.koin.compose.KoinContext
 
-import bordadoxdanny.composeapp.generated.resources.Res
-import bordadoxdanny.composeapp.generated.resources.compose_multiplatform
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview
 fun App() {
-    MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+    KoinContext {
+        MaterialTheme {
+            val navController = rememberNavController()
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination
+
+            Scaffold(
+                bottomBar = {
+                    NavigationBar {
+                        bottomNavItems.forEach { screen ->
+                            NavigationBarItem(
+                                icon = { 
+                                    Icon(
+                                        imageVector = getScreenIcon(screen), 
+                                        contentDescription = screen.title
+                                    ) 
+                                },
+                                label = { Text(screen.title) },
+                                selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                                onClick = {
+                                    navController.navigate(screen.route) {
+                                        popUpTo(navController.graph.findStartDestination().route ?: Screen.Orders.route) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
+            ) { innerPadding ->
+                NavHost(
+                    navController = navController,
+                    startDestination = Screen.Orders.route,
+                    modifier = Modifier.padding(innerPadding)
                 ) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+                    composable(Screen.Orders.route) {
+                        OrdersScreen()
+                    }
+                    composable(Screen.Cash.route) {
+                        CashScreen()
+                    }
+                    composable(Screen.Reports.route) {
+                        ReportsScreen()
+                    }
+                    composable(Screen.Profile.route) {
+                        ProfileScreen()
+                    }
                 }
             }
         }
+    }
+}
+
+private fun getScreenIcon(screen: Screen): ImageVector {
+    return when (screen) {
+        Screen.Orders -> Icons.Default.ShoppingCart
+        Screen.Cash -> Icons.AutoMirrored.Filled.List
+        Screen.Reports -> Icons.Default.Notifications
+        Screen.Profile -> Icons.Default.AccountCircle
     }
 }
