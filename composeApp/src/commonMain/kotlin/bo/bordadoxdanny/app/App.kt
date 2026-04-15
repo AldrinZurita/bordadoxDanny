@@ -1,9 +1,6 @@
 package bo.bordadoxdanny.app
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.AccountCircle
@@ -13,21 +10,19 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import bo.bordadoxdanny.app.presentation.navigation.Screen
-import bo.bordadoxdanny.app.presentation.navigation.bottomNavItems
-import bo.bordadoxdanny.app.presentation.orders.OrdersViewModel
-import bo.bordadoxdanny.app.presentation.cash.CashViewModel
-import bo.bordadoxdanny.app.presentation.reports.ReportsViewModel
-import bo.bordadoxdanny.app.presentation.profile.ProfileViewModel
+import bo.bordadoxdanny.app.features.navigation.Screen
+import bo.bordadoxdanny.app.features.navigation.bottomNavItems
+import bo.bordadoxdanny.app.features.orders.presentation.OrdersScreen
+import bo.bordadoxdanny.app.features.cash.presentation.CashScreen
+import bo.bordadoxdanny.app.features.reports.presentation.ReportsScreen
+import bo.bordadoxdanny.app.features.profile.presentation.ProfileScreen
 import org.koin.compose.KoinContext
-import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,82 +80,6 @@ fun App() {
                 }
             }
         }
-    }
-}
-
-@Composable
-fun OrdersScreen(viewModel: OrdersViewModel = koinViewModel()) {
-    val orders by viewModel.orders.collectAsState()
-    Column {
-        Text(
-            text = "Órdenes", 
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        )
-        LazyColumn {
-            items(orders) { order ->
-                Divider()
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(text = order.description, style = MaterialTheme.typography.bodyLarge)
-                    Text(text = "Bs. ${order.amount}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun CashScreen(viewModel: CashViewModel = koinViewModel()) {
-    val entries by viewModel.cashEntries.collectAsState()
-    Column {
-        Text(
-            text = "Caja", 
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        )
-        LazyColumn {
-            items(entries) { entry ->
-                Divider()
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(text = entry.reason, style = MaterialTheme.typography.bodyLarge)
-                    Text(text = "${entry.type}: Bs. ${entry.amount}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun ReportsScreen(viewModel: ReportsViewModel = koinViewModel()) {
-    val reports by viewModel.reports.collectAsState()
-    Column {
-        Text(
-            text = "Reportes", 
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        )
-        LazyColumn {
-            items(reports) { report ->
-                Divider()
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(text = report.title, style = MaterialTheme.typography.bodyLarge)
-                    Text(text = report.content, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun ProfileScreen(viewModel: ProfileViewModel = koinViewModel()) {
-    val profile by viewModel.profile.collectAsState()
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text(text = "Perfil", style = MaterialTheme.typography.headlineMedium)
-        profile?.let {
-            Text("Nombre: ${it.name}", modifier = Modifier.padding(top = 8.dp))
-            Text("Email: ${it.email}")
-            Text("Teléfono: ${it.phone}")
-        } ?: Text("Cargando perfil...")
     }
 }
 

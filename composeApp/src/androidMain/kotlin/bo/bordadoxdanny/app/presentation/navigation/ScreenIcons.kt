@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.ui.graphics.vector.ImageVector
+import bo.bordadoxdanny.app.features.navigation.Screen
 
 fun Screen.getIcon(): ImageVector {
     return when (this) {
