@@ -7,3 +7,8 @@ class IOSPlatform: Platform {
 }
 
 actual fun getPlatform(): Platform = IOSPlatform()
+
+actual suspend fun getFirebaseToken(): String? {
+    // Firebase Messaging not implemented for iOS yet in this guide
+    return null
+}
