@@ -1,14 +1,13 @@
 {
   "project_info": {
-    "project_number": "235985654352",
-    "firebase_url": "https://kotlinproject1-6d3a0-default-rtdb.firebaseio.com",
-    "project_id": "kotlinproject1-6d3a0",
-    "storage_bucket": "kotlinproject1-6d3a0.firebasestorage.app"
+    "project_number": "323008858804",
+    "project_id": "bordadoxdannyfirebaseproject",
+    "storage_bucket": "bordadoxdannyfirebaseproject.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:235985654352:android:c6719d3de33fc82e4b3755",
+        "mobilesdk_app_id": "1:323008858804:android:5488a23b4000299e2be5e1",
         "android_client_info": {
           "package_name": "bo.bordadoxdanny.app"
         }
@@ -16,45 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBrXFtCHOXCTOHt1ZuWJqLd9SH1f9Y91GI"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:235985654352:android:9f7146939775fe124b3755",
-        "android_client_info": {
-          "package_name": "com.example.kmp_room"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBrXFtCHOXCTOHt1ZuWJqLd9SH1f9Y91GI"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:235985654352:android:b436cf365ba67efd4b3755",
-        "android_client_info": {
-          "package_name": "com.ucb.app"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBrXFtCHOXCTOHt1ZuWJqLd9SH1f9Y91GI"
+          "current_key": "AIzaSyBp6NxG2SZ8vVZm97Pr0XZLeT961ccgrGI"
         }
       ],
       "services": {
