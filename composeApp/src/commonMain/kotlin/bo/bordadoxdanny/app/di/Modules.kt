@@ -1,10 +1,10 @@
 package bo.bordadoxdanny.app.di
 
-import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import bo.bordadoxdanny.app.features.cash.data.CashDao
 import bo.bordadoxdanny.app.features.cash.data.CashRepositoryImpl
 import bo.bordadoxdanny.app.data.database.AppDatabase
 import bo.bordadoxdanny.app.data.database.getDatabaseBuilder
+import bo.bordadoxdanny.app.data.database.createRoomDatabase
 import bo.bordadoxdanny.app.features.orders.data.OrderDao
 import bo.bordadoxdanny.app.features.orders.data.OrderRepositoryImpl
 import bo.bordadoxdanny.app.features.profile.data.ProfileDao
@@ -23,18 +23,16 @@ import bo.bordadoxdanny.app.features.cash.presentation.CashViewModel
 import bo.bordadoxdanny.app.features.orders.presentation.OrdersViewModel
 import bo.bordadoxdanny.app.features.profile.presentation.ProfileViewModel
 import bo.bordadoxdanny.app.features.reports.presentation.ReportsViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
+import bo.bordadoxdanny.app.domain.SyncDataUseCase
 import org.koin.compose.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
 val dataModule = module {
-    single<AppDatabase> {
-        getDatabaseBuilder()
-            .setDriver(BundledSQLiteDriver())
-            .setQueryCoroutineContext(Dispatchers.IO)
-            .build()
+    // 🔥 UNICA INSTANCIA PARA TODO EL PROYECTO
+    single<AppDatabase> { 
+        createRoomDatabase(getDatabaseBuilder()) 
     }
+    
     single<OrderDao> { get<AppDatabase>().orderDao() }
     single<CashDao> { get<AppDatabase>().cashDao() }
     single<ReportDao> { get<AppDatabase>().reportDao() }
@@ -51,6 +49,7 @@ val domainModule = module {
     factory { GetCashEntriesUseCase(get()) }
     factory { GetReportsUseCase(get()) }
     factory { GetProfileUseCase(get()) }
+    factory { SyncDataUseCase() }
 }
 
 val presentationModule = module {

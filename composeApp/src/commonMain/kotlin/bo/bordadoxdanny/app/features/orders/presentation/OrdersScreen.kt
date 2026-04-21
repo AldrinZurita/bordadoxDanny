@@ -25,7 +25,7 @@ fun OrdersScreen(viewModel: OrdersViewModel = koinViewModel()) {
         )
         LazyColumn {
             items(orders) { order ->
-                Divider()
+                Divider() 
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(text = order.description, style = MaterialTheme.typography.bodyLarge)
                     Text(text = "Bs. ${order.amount}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)

@@ -1,7 +1,9 @@
 package bo.bordadoxdanny.app
 
 import android.Manifest
-import android.content.Intent
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -10,86 +12,85 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.material3.Text
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import bo.bordadoxdanny.app.data.database.AppDatabase
+import bo.bordadoxdanny.app.firebase.FirebaseManager
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
+
+    private val TAG = "DEBUG_BORDADOS"
+    
+    // Instancia inyectada por Koin (Singleton)
+    private val database: AppDatabase by inject()
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
-        Log.d("FCM_LOG", "Permiso de notificaciones concedido: $isGranted")
+        Log.d(TAG, "Permiso de notificaciones concedido: $isGranted")
+        if (isGranted) {
+            createNotificationChannel()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        
+        try {
+            ContextProvider.init(applicationContext)
+            enableEdgeToEdge()
 
-        // 1. Verificar inicialización de Firebase
-        if (FirebaseApp.getApps(this).isEmpty()) {
-            Log.e("FCM_LOG", "❌ Firebase NO inicializado. Revisa tu google-services.json")
-        } else {
-            Log.d("FCM_LOG", "✅ Firebase inicializado correctamente")
-            
-            // OPCIÓN 1: Suscribirse a un tema para campañas globales instantáneas
-            FirebaseMessaging.getInstance().subscribeToTopic("all")
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Log.d("FCM_LOG", "✅ Suscrito al tema 'all' con éxito")
-                    } else {
-                        Log.e("FCM_LOG", "❌ Error al suscribirse al tema")
-                    }
+            if (FirebaseApp.getApps(this).isNotEmpty()) {
+                Log.d(TAG, "Firebase está inicializado")
+                FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                    if (task.isSuccessful) Log.d(TAG, "FCM TOKEN ACTUAL: ${task.result}")
                 }
-        }
-
-        // 2. Pedir permisos (Android 13+)
-        askNotificationPermission()
-
-        // 3. Capturar ruta inicial si la app se abre desde una notificación
-        val initialRoute = intent.getStringExtra("open_screen")
-        Log.d("FCM_LOG", "Ruta inicial detectada: $initialRoute")
-
-        // 4. Intentar obtener el Token con Logs detallados
-        lifecycleScope.launch {
-            try {
-                Log.d("FCM_LOG", "⏳ Solicitando Token...")
-                val token = getFirebaseToken()
-                if (token != null) {
-                    Log.d("FCM_LOG", "🚀 TU TOKEN FCM ES: $token")
-                } else {
-                    Log.e("FCM_LOG", "⚠️ El token regresó vacío (null)")
-                }
-            } catch (e: Exception) {
-                Log.e("FCM_LOG", "❌ Error al obtener token: ${e.message}")
+                setupRemoteConfig()
             }
-        }
 
-        setContent {
-            val startScreen = remember { mutableStateOf(initialRoute) }
+            // ELIMINADO: runRoomTest() - Evitamos competencia con WorkManager al iniciar
             
-            App()
+            askNotificationPermission()
+            createNotificationChannel()
 
-            LaunchedEffect(startScreen.value) {
-                startScreen.value?.let {
-                    Log.d("FCM_LOG", "Intentando navegar a: $it")
-                }
+            setContent {
+                App()
+            }
+
+        } catch (e: Exception) {
+            Log.e(TAG, "CRASH EN ONCREATE: ${e.message}")
+            setContent { Text("Error crítico: ${e.message}") }
+        }
+    }
+
+    private fun setupRemoteConfig() {
+        val remoteConfig = FirebaseRemoteConfig.getInstance()
+        val configSettings = FirebaseRemoteConfigSettings.Builder()
+            .setMinimumFetchIntervalInSeconds(0) 
+            .build()
+        remoteConfig.setConfigSettingsAsync(configSettings)
+        remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val cloudValue = remoteConfig.getString("test_message")
+                Log.d(TAG, "☁️ REMOTE CONFIG: $cloudValue")
             }
         }
     }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        val route = intent.getStringExtra("open_screen")
-        if (route != null) {
-            Log.d("FCM_LOG", "🔥 Nueva notificación detectada (onNewIntent)! Ruta: $route")
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = MyFcmService.CHANNEL_NAME
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(MyFcmService.CHANNEL_ID, name, importance)
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
         }
     }
 
@@ -102,10 +103,4 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun AppAndroidPreview() {
-    App()
 }
