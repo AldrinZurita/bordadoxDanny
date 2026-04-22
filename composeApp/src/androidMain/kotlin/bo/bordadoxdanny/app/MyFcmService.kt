@@ -1,19 +1,84 @@
 package bo.bordadoxdanny.app
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.util.Log
+import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import android.util.Log
 
 class MyFcmService : FirebaseMessagingService() {
 
-    override fun onMessageReceived(message: RemoteMessage) {
-        super.onMessageReceived(message)
-        // Aquí manejas la notificación cuando llega
-        Log.d("FCM", "Mensaje recibido de: ${message.from}")
+    companion object {
+        private const val TAG = "FCM_LOG"
+        const val CHANNEL_ID = "main_notification_channel"
+        const val CHANNEL_NAME = "Notificaciones de Bordados Danny"
+    }
+
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        Log.d(TAG, "📩 Mensaje recibido de: ${remoteMessage.from}")
+
+        // 1. DATA PAYLOAD (Internal/Custom Data)
+        val data = remoteMessage.data
+        val dataTitle = data["title"]
+        val dataBody = data["body"]
+        val route = data["open_screen"]
+
+        // 2. NOTIFICATION PAYLOAD (External/Console)
+        val notification = remoteMessage.notification
+        
+        // Priority logic: Data payload first (for internal control) then Notification payload
+        val finalTitle = dataTitle ?: notification?.title ?: "Bordados Danny"
+        val finalBody = dataBody ?: notification?.body ?: "Nueva actualización disponible"
+
+        Log.d(TAG, "Procesando: $finalTitle - $finalBody")
+        showNotification(finalTitle, finalBody, route)
+    }
+
+    private fun showNotification(title: String, message: String, route: String?) {
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // Create the channel for Android 8.0+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Canal principal para alertas y promociones"
+                enableLights(true)
+                setShowBadge(true)
+            }
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            putExtra("open_screen", route)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            this, System.currentTimeMillis().toInt(), intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.ic_dialog_info) // Default icon
+            .setContentTitle(title)
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+
+        notificationManager.notify(System.currentTimeMillis().toInt(), notificationBuilder.build())
     }
 
     override fun onNewToken(token: String) {
-        super.onNewToken(token)
-        Log.d("FCM", "Nuevo token generado: $token")
+        Log.d(TAG, "FCM_TOKEN_UPDATE: $token")
     }
 }

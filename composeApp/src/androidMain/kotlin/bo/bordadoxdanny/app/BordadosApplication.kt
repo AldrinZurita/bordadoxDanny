@@ -1,31 +1,44 @@
 package bo.bordadoxdanny.app
 
 import android.app.Application
+import android.util.Log
 import bo.bordadoxdanny.app.di.commonModules
 import bo.bordadoxdanny.app.di.androidModule
-import bo.bordadoxdanny.app.worker.LogScheduler
+import bo.bordadoxdanny.app.workers.LogScheduler
+import com.google.firebase.FirebaseApp
 import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.workmanager.koin.workManagerFactory
 import org.koin.core.context.startKoin
 
 class BordadosApplication : Application() {
-    
+
     override fun onCreate() {
         super.onCreate()
-        ContextProvider.init(this)
         
+        try {
+            FirebaseApp.initializeApp(this)
+            Log.d("BORDADOS", "Firebase initialized successfully")
+        } catch (e: Exception) {
+            Log.e("BORDADOS", "Firebase initialization failed: ${e.message}")
+        }
+
+        ContextProvider.init(this)
+
         startKoin {
             androidContext(this@BordadosApplication)
+            workManagerFactory()
             modules(commonModules + androidModule)
         }
-        
-        // Obtenemos el scheduler y ejecutamos el test inmediato
-        val logScheduler: LogScheduler = get()
-        
-        // Ejecutamos el test inmediato solo para ver el println en Logcat ahora
-        logScheduler.runImmediateTest()
-        
-        // También dejamos programada la tarea periódica real
-        logScheduler.schedulePeriodicUpload()
+
+        // 🔥 RESTAURADO: WorkManager habilitado con 2 segundos de delay
+        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+            try {
+                val logScheduler = get<LogScheduler>()
+                logScheduler.testWorkImmediately()
+            } catch (e: Exception) {
+                Log.e("BORDADOS", "Error en scheduler: ${e.message}")
+            }
+        }, 2000)
     }
 }
