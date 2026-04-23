@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "323008858804",
-    "project_id": "bordadoxdannyfirebaseproject",
-    "storage_bucket": "bordadoxdannyfirebaseproject.firebasestorage.app"
+    "project_number": "40996524529",
+    "project_id": "bordadoxdanny",
+    "storage_bucket": "bordadoxdanny.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:323008858804:android:5488a23b4000299e2be5e1",
+        "mobilesdk_app_id": "1:40996524529:android:75a62b950d77091bf33450",
         "android_client_info": {
           "package_name": "bo.bordadoxdanny.app"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBp6NxG2SZ8vVZm97Pr0XZLeT961ccgrGI"
+          "current_key": "AIzaSyAnvDk0dIyqSe29AWWW1UmQOII1xgGEejk"
         }
       ],
       "services": {

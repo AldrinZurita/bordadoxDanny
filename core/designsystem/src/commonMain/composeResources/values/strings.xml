@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="a11y_loading_indicator">Cargando, por favor espere</string>
+    <string name="a11y_input_generic_filled">Campo %1$s: %2$s</string>
+    <string name="a11y_input_username_filled">Nombre de usuario: %1$s</string>
+</resources>

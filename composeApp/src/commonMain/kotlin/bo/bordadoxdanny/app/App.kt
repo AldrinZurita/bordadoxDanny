@@ -5,6 +5,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import bo.bordadoxdanny.app.core.designsystem.components.buttons.PrimaryButton
 import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
@@ -18,6 +20,7 @@ import org.koin.compose.koinInject
 import bo.bordadoxdanny.app.workers.WorkerScheduler
 import bo.bordadoxdanny.app.features.profile.domain.ProfileRepository
 import bo.bordadoxdanny.app.features.profile.domain.Profile
+import bo.bordadoxdanny.app.features.settings.presentation.LanguageSelectionScreen
 
 // Generated Resources
 import bo.bordadoxdanny.app.Res
@@ -44,6 +47,9 @@ fun App() {
     var errorMessage by remember { mutableStateOf("") }
     var roomMessage by remember { mutableStateOf("Esperando acción de Room...") }
 
+    // Navigation state (very simple for testing)
+    var currentScreen by remember { mutableStateOf("main") }
+
     // Resolve the translated text for the status dynamically
     val statusText = when (statusType) {
         "pending" -> stringResource(Res.string.firebase_status_pending)
@@ -53,89 +59,112 @@ fun App() {
         else -> ""
     }
 
-    DsTheme(mode = ThemeMode.HIGH_CONTRAST) {
+    DsTheme(mode = ThemeMode.LIGHT) {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = AppTheme.colors.background
         ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                // 1. WELCOME MESSAGE
-                Text(
-                    text = stringResource(Res.string.welcome_message),
-                    style = AppTheme.typography.headlineLarge,
-                    color = AppTheme.colors.textPrimary
-                )
+            if (currentScreen == "settings") {
+                Column {
+                    IconButton(onClick = { currentScreen = "main" }) {
+                        Text("← Back")
+                    }
+                    LanguageSelectionScreen()
+                }
+            } else {
+                Column(
+                    modifier = Modifier.padding(16.dp).semantics(mergeDescendants = true) {},
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    // 1. WELCOME MESSAGE
+                    Text(
+                        text = stringResource(Res.string.welcome_message),
+                        style = AppTheme.typography.headlineLarge,
+                        color = AppTheme.colors.textPrimary
+                    )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
-                // 2. FIREBASE TEST
-                PrimaryButton(
-                    text = stringResource(Res.string.test_firebase_button),
-                    isLoading = statusType == "saving",
-                    onClick = {
-                        scope.launch {
-                            statusType = "saving"
-                            val currentTime = Clock.System.now().toEpochMilliseconds()
-                            val result = firebaseManager.saveData("test_connection", "Conectado a las $currentTime")
-                            
-                            if (result.isSuccess) {
-                                statusType = "success"
-                            } else {
-                                errorMessage = result.exceptionOrNull()?.message ?: "Error"
-                                statusType = "failed"
+                    // 5. SETTINGS BUTTON (NEW)
+                    PrimaryButton(
+                        text = "Notification Settings",
+                        onClick = { currentScreen = "settings" }
+                    )
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    // 2. FIREBASE TEST
+                    PrimaryButton(
+                        text = stringResource(Res.string.test_firebase_button),
+                        isLoading = statusType == "saving",
+                        onClick = {
+                            scope.launch {
+                                statusType = "saving"
+                                val currentTime = Clock.System.now().toEpochMilliseconds()
+                                val result = firebaseManager.saveData("test_connection", "Conectado a las $currentTime")
+                                
+                                if (result.isSuccess) {
+                                    statusType = "success"
+                                } else {
+                                    errorMessage = result.exceptionOrNull()?.message ?: "Error"
+                                    statusType = "failed"
+                                }
                             }
                         }
-                    }
-                )
-                
-                Text(
-                    text = stringResource(Res.string.firebase_status_label, statusText),
-                    style = AppTheme.typography.bodyMedium,
-                    color = AppTheme.colors.textPrimary
-                )
+                    )
+                    
+                    Text(
+                        text = stringResource(Res.string.firebase_status_label, statusText),
+                        style = AppTheme.typography.bodyMedium,
+                        color = AppTheme.colors.textPrimary,
+                        modifier = Modifier.semantics {
+                            contentDescription = "Estado de Firebase: $statusText"
+                        }
+                    )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
-                // 3. ROOM TEST BUTTON
-                PrimaryButton(
-                    text = "Probar Room (Guardar Perfil)",
-                    onClick = {
-                        scope.launch {
-                            try {
-                                roomMessage = "Guardando en Room..."
-                                val testProfile = Profile(
-                                    id = 1, 
-                                    name = "Test Room User", 
-                                    email = "room@test.com", 
-                                    phone = "999999"
-                                )
-                                profileRepository.updateProfile(testProfile)
-                                roomMessage = "✅ Éxito: Perfil guardado en Room!"
-                            } catch (e: Exception) {
-                                roomMessage = "❌ Error Room: ${e.message}"
+                    // 3. ROOM TEST BUTTON
+                    PrimaryButton(
+                        text = "Probar Room (Guardar Perfil)",
+                        onClick = {
+                            scope.launch {
+                                try {
+                                    roomMessage = "Guardando en Room..."
+                                    val testProfile = Profile(
+                                        id = 1, 
+                                        name = "Test Room User", 
+                                        email = "room@test.com", 
+                                        phone = "999999"
+                                    )
+                                    profileRepository.updateProfile(testProfile)
+                                    roomMessage = "✅ Éxito: Perfil guardado en Room!"
+                                } catch (e: Exception) {
+                                    roomMessage = "❌ Error Room: ${e.message}"
+                                }
                             }
                         }
-                    }
-                )
-                Text(
-                    text = roomMessage,
-                    style = AppTheme.typography.labelLarge,
-                    color = AppTheme.colors.textPrimary
-                )
+                    )
+                    Text(
+                        text = roomMessage,
+                        style = AppTheme.typography.labelLarge,
+                        color = AppTheme.colors.textPrimary,
+                        modifier = Modifier.semantics {
+                            contentDescription = "Estado de Room: ${roomMessage.replace("✅", "Éxito").replace("❌", "Error")}"
+                        }
+                    )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
-                // 4. WORKMANAGER TRIGGER (TEST)
-                PrimaryButton(
-                    text = stringResource(Res.string.sync_data_label),
-                    onClick = {
-                        logScheduler.testWorkImmediately()
-                    }
-                )
+                    // 4. WORKMANAGER TRIGGER (TEST)
+                    PrimaryButton(
+                        text = stringResource(Res.string.sync_data_label),
+                        onClick = {
+                            logScheduler.testWorkImmediately()
+                        }
+                    )
+                }
             }
         }
     }

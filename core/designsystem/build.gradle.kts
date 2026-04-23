@@ -40,6 +40,12 @@ kotlin {
     }
 }
 
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "bo.bordadoxdanny.app.core.designsystem"
+    generateResClass = auto
+}
+
 android {
     namespace = "bo.bordadoxdanny.app.core.designsystem"
     compileSdk = 35

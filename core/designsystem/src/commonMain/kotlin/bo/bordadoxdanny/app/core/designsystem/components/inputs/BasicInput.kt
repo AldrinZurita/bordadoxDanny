@@ -8,9 +8,17 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
+import bo.bordadoxdanny.app.core.designsystem.accessibility.A11yFormatters
+import bo.bordadoxdanny.app.core.designsystem.Res
+import bo.bordadoxdanny.app.core.designsystem.a11y_input_generic_filled
+import org.jetbrains.compose.resources.stringResource
 
+// TalkBack announces: "[Label], edit box" 
+// When filled: "Campo [Label]: [Value], edit box"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BasicInput(
@@ -19,12 +27,25 @@ fun BasicInput(
     label: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    singleLine: Boolean = true
+    singleLine: Boolean = true,
+    inputContentDescription: String? = null
 ) {
+    val resolvedDescription = if (value.isNotBlank()) {
+        stringResource(
+            Res.string.a11y_input_generic_filled, 
+            label, 
+            A11yFormatters.sanitizeUserInput(value)
+        )
+    } else {
+        inputContentDescription ?: label
+    }
+
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier,
+        modifier = modifier.semantics {
+            contentDescription = resolvedDescription
+        },
         enabled = enabled,
         singleLine = singleLine,
         label = { Text(label) },

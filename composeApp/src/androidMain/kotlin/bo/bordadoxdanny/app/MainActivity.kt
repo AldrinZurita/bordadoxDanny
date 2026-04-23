@@ -14,14 +14,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.Text
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import bo.bordadoxdanny.app.data.database.AppDatabase
-import bo.bordadoxdanny.app.firebase.FirebaseManager
+import bo.bordadoxdanny.app.util.NotificationHelper
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
@@ -54,8 +52,6 @@ class MainActivity : ComponentActivity() {
                 }
                 setupRemoteConfig()
             }
-
-            // ELIMINADO: runRoomTest() - Evitamos competencia con WorkManager al iniciar
             
             askNotificationPermission()
             createNotificationChannel()
@@ -86,9 +82,10 @@ class MainActivity : ComponentActivity() {
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = MyFcmService.CHANNEL_NAME
+            // Updated to use constants from NotificationHelper
+            val name = "Orders & Alerts"
             val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(MyFcmService.CHANNEL_ID, name, importance)
+            val channel = NotificationChannel("translated_notifications", name, importance)
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }

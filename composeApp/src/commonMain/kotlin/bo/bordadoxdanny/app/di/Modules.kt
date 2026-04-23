@@ -11,6 +11,9 @@ import bo.bordadoxdanny.app.features.profile.data.ProfileDao
 import bo.bordadoxdanny.app.features.profile.data.ProfileRepositoryImpl
 import bo.bordadoxdanny.app.features.reports.data.ReportDao
 import bo.bordadoxdanny.app.features.reports.data.ReportRepositoryImpl
+import bo.bordadoxdanny.app.features.settings.data.UserPreferencesDao
+import bo.bordadoxdanny.app.features.settings.presentation.SettingsViewModel
+import bo.bordadoxdanny.app.features.notifications.TranslationService
 import bo.bordadoxdanny.app.features.cash.domain.CashRepository
 import bo.bordadoxdanny.app.features.cash.domain.GetCashEntriesUseCase
 import bo.bordadoxdanny.app.features.orders.domain.GetOrdersUseCase
@@ -24,11 +27,14 @@ import bo.bordadoxdanny.app.features.orders.presentation.OrdersViewModel
 import bo.bordadoxdanny.app.features.profile.presentation.ProfileViewModel
 import bo.bordadoxdanny.app.features.reports.presentation.ReportsViewModel
 import bo.bordadoxdanny.app.domain.SyncDataUseCase
-import org.koin.compose.viewmodel.dsl.viewModelOf
+import bo.bordadoxdanny.app.util.Notifier
+import io.ktor.client.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 
 val dataModule = module {
-    // 🔥 UNICA INSTANCIA PARA TODO EL PROYECTO
     single<AppDatabase> { 
         createRoomDatabase(getDatabaseBuilder()) 
     }
@@ -37,11 +43,26 @@ val dataModule = module {
     single<CashDao> { get<AppDatabase>().cashDao() }
     single<ReportDao> { get<AppDatabase>().reportDao() }
     single<ProfileDao> { get<AppDatabase>().profileDao() }
+    single<UserPreferencesDao> { get<AppDatabase>().userPreferencesDao() }
 
     single<OrderRepository> { OrderRepositoryImpl(get()) }
     single<CashRepository> { CashRepositoryImpl(get()) }
     single<ReportRepository> { ReportRepositoryImpl(get()) }
     single<ProfileRepository> { ProfileRepositoryImpl(get()) }
+}
+
+val networkModule = module {
+    single {
+        HttpClient {
+            install(ContentNegotiation) {
+                json(Json {
+                    ignoreUnknownKeys = true
+                    prettyPrint = true
+                })
+            }
+        }
+    }
+    single { TranslationService(get(), AppConfig.LOCO_API_KEY) }
 }
 
 val domainModule = module {
@@ -53,10 +74,11 @@ val domainModule = module {
 }
 
 val presentationModule = module {
-    viewModelOf(::OrdersViewModel)
-    viewModelOf(::CashViewModel)
-    viewModelOf(::ReportsViewModel)
-    viewModelOf(::ProfileViewModel)
+    factory { OrdersViewModel(get()) }
+    factory { CashViewModel(get()) }
+    factory { ReportsViewModel(get()) }
+    factory { ProfileViewModel(get()) }
+    factory { SettingsViewModel(get(), get(), get()) }
 }
 
-val commonModules = listOf(dataModule, domainModule, presentationModule)
+val commonModules = listOf(dataModule, networkModule, domainModule, presentationModule)
