@@ -1,20 +1,14 @@
 package bo.bordadoxdanny.app.workers
 
 import android.content.Context
+import android.util.Log
 import androidx.work.*
 import java.util.concurrent.TimeUnit
 
 class LogScheduler(private val context: Context) : WorkerScheduler {
     
-    // Método para producción (Cada 15 min)
     override fun scheduleLogUpload() {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresBatteryNotLow(true)
-            .build()
-
         val logRequest = PeriodicWorkRequestBuilder<LogUploadWorker>(15, TimeUnit.MINUTES)
-            .setConstraints(constraints)
             .addTag("LOG_WORK_TAG")
             .build()
 
@@ -25,12 +19,24 @@ class LogScheduler(private val context: Context) : WorkerScheduler {
         )
     }
 
-    // 🔥 MÉTODO DE PRUEBA: Ejecuta el worker inmediatamente
     override fun testWorkImmediately() {
         val testRequest = OneTimeWorkRequestBuilder<LogUploadWorker>()
-            .addTag("LOG_WORK_TAG")
+            .build()
+        WorkManager.getInstance(context).enqueue(testRequest)
+    }
+
+    override fun syncConfigNow() {
+        Log.d("BORDADOS_SYNC", "LogScheduler: Solicitando ejecución de SyncConfigWorker...")
+        
+        // Quitamos constraints temporalmente para asegurar que corra en el emulador
+        val syncRequest = OneTimeWorkRequestBuilder<SyncConfigWorker>()
+            .addTag("CONFIG_SYNC_TAG")
             .build()
 
-        WorkManager.getInstance(context).enqueue(testRequest)
+        WorkManager.getInstance(context).enqueueUniqueWork(
+            "InitialConfigSync",
+            ExistingWorkPolicy.REPLACE,
+            syncRequest
+        )
     }
 }

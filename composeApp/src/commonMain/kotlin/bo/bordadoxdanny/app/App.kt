@@ -1,141 +1,82 @@
 package bo.bordadoxdanny.app
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import bo.bordadoxdanny.app.core.designsystem.components.buttons.PrimaryButton
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
 import bo.bordadoxdanny.app.core.designsystem.theme.DsTheme
 import bo.bordadoxdanny.app.core.designsystem.theme.ThemeMode
-import bo.bordadoxdanny.app.firebase.FirebaseManager
-import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
-import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
-import bo.bordadoxdanny.app.workers.WorkerScheduler
-import bo.bordadoxdanny.app.features.profile.domain.ProfileRepository
-import bo.bordadoxdanny.app.features.profile.domain.Profile
-
-// Generated Resources
-import bo.bordadoxdanny.app.Res
-import bo.bordadoxdanny.app.welcome_message
-import bo.bordadoxdanny.app.sync_data_label
-import bo.bordadoxdanny.app.firebase_status_label
-import bo.bordadoxdanny.app.firebase_status_pending
-import bo.bordadoxdanny.app.firebase_status_saving
-import bo.bordadoxdanny.app.firebase_status_success
-import bo.bordadoxdanny.app.firebase_status_failed
-import bo.bordadoxdanny.app.test_firebase_button
+import bo.bordadoxdanny.app.features.navigation.Screen
+import bo.bordadoxdanny.app.features.navigation.bottomNavItems
+import bo.bordadoxdanny.app.features.orders.presentation.OrdersScreen
+import bo.bordadoxdanny.app.features.cash.presentation.CashScreen
+import bo.bordadoxdanny.app.features.reports.presentation.ReportsScreen
+import bo.bordadoxdanny.app.features.profile.presentation.ProfileScreen
+import bo.bordadoxdanny.app.features.config.presentation.ConfigScreen
 
 @Composable
 fun App() {
-    val scope = rememberCoroutineScope()
-    val firebaseManager = remember { FirebaseManager() }
+    val navController = rememberNavController()
     
-    // Inject WorkerScheduler and ProfileRepository
-    val logScheduler = koinInject<WorkerScheduler>()
-    val profileRepository = koinInject<ProfileRepository>()
-    
-    // We store the "status type" instead of the translated string in state.
-    var statusType by remember { mutableStateOf("pending") }
-    var errorMessage by remember { mutableStateOf("") }
-    var roomMessage by remember { mutableStateOf("Esperando acción de Room...") }
+    DsTheme(mode = ThemeMode.LIGHT) {
 
-    // Resolve the translated text for the status dynamically
-    val statusText = when (statusType) {
-        "pending" -> stringResource(Res.string.firebase_status_pending)
-        "saving" -> stringResource(Res.string.firebase_status_saving)
-        "success" -> stringResource(Res.string.firebase_status_success)
-        "failed" -> stringResource(Res.string.firebase_status_failed, errorMessage)
-        else -> ""
-    }
-
-    DsTheme(mode = ThemeMode.HIGH_CONTRAST) {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = AppTheme.colors.background
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AppTheme.colors.background)
         ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                // 1. WELCOME MESSAGE
-                Text(
-                    text = stringResource(Res.string.welcome_message),
-                    style = AppTheme.typography.headlineLarge,
-                    color = AppTheme.colors.textPrimary
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                // 2. FIREBASE TEST
-                PrimaryButton(
-                    text = stringResource(Res.string.test_firebase_button),
-                    isLoading = statusType == "saving",
-                    onClick = {
-                        scope.launch {
-                            statusType = "saving"
-                            val currentTime = Clock.System.now().toEpochMilliseconds()
-                            val result = firebaseManager.saveData("test_connection", "Conectado a las $currentTime")
-                            
-                            if (result.isSuccess) {
-                                statusType = "success"
-                            } else {
-                                errorMessage = result.exceptionOrNull()?.message ?: "Error"
-                                statusType = "failed"
-                            }
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                containerColor = AppTheme.colors.background,
+                bottomBar = {
+                    NavigationBar(
+                        containerColor = AppTheme.colors.surface
+                    ) {
+                        val navBackStackEntry by navController.currentBackStackEntryAsState()
+                        val currentDestination = navBackStackEntry?.destination
+                        
+                        bottomNavItems.forEach { screen ->
+                            NavigationBarItem(
+                                icon = { Icon(Icons.Filled.Home, contentDescription = null, tint = AppTheme.colors.primary) }, 
+                                label = { Text(screen.title, color = AppTheme.colors.textPrimary) },
+                                selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                                onClick = {
+                                    navController.navigate(screen.route) {
+                                        popUpTo(navController.graph.findStartDestination().route!!) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                }
+                            )
                         }
                     }
-                )
-                
-                Text(
-                    text = stringResource(Res.string.firebase_status_label, statusText),
-                    style = AppTheme.typography.bodyMedium,
-                    color = AppTheme.colors.textPrimary
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                // 3. ROOM TEST BUTTON
-                PrimaryButton(
-                    text = "Probar Room (Guardar Perfil)",
-                    onClick = {
-                        scope.launch {
-                            try {
-                                roomMessage = "Guardando en Room..."
-                                val testProfile = Profile(
-                                    id = 1, 
-                                    name = "Test Room User", 
-                                    email = "room@test.com", 
-                                    phone = "999999"
-                                )
-                                profileRepository.updateProfile(testProfile)
-                                roomMessage = "✅ Éxito: Perfil guardado en Room!"
-                            } catch (e: Exception) {
-                                roomMessage = "❌ Error Room: ${e.message}"
-                            }
-                        }
-                    }
-                )
-                Text(
-                    text = roomMessage,
-                    style = AppTheme.typography.labelLarge,
-                    color = AppTheme.colors.textPrimary
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                // 4. WORKMANAGER TRIGGER (TEST)
-                PrimaryButton(
-                    text = stringResource(Res.string.sync_data_label),
-                    onClick = {
-                        logScheduler.testWorkImmediately()
-                    }
-                )
+                }
+            ) { innerPadding ->
+                NavHost(
+                    navController = navController,
+                    startDestination = Screen.Config.route,
+                    modifier = Modifier.padding(innerPadding)
+                ) {
+                    composable(Screen.Orders.route) { OrdersScreen() }
+                    composable(Screen.Cash.route) { CashScreen() }
+                    composable(Screen.Reports.route) { ReportsScreen() }
+                    composable(Screen.Profile.route) { ProfileScreen() }
+                    composable(Screen.Config.route) { ConfigScreen() }
+                }
             }
         }
     }

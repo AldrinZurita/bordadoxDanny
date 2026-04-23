@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "198c04cbe62e5a9ae25270d84fffe311",
+    "identityHash": "76ed7fc871648e6a2cf631025b600461",
     "entities": [
       {
         "tableName": "orders",
@@ -153,11 +153,35 @@
             "id"
           ]
         }
+      },
+      {
+        "tableName": "app_config",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`key` TEXT NOT NULL, `value` TEXT NOT NULL, PRIMARY KEY(`key`))",
+        "fields": [
+          {
+            "fieldPath": "key",
+            "columnName": "key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "key"
+          ]
+        }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '198c04cbe62e5a9ae25270d84fffe311')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '76ed7fc871648e6a2cf631025b600461')"
     ]
   }
 }

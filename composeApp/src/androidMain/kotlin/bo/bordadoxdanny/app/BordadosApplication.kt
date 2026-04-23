@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 import bo.bordadoxdanny.app.di.commonModules
 import bo.bordadoxdanny.app.di.androidModule
-import bo.bordadoxdanny.app.workers.LogScheduler
+import bo.bordadoxdanny.app.workers.WorkerScheduler
 import com.google.firebase.FirebaseApp
 import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
@@ -31,14 +31,14 @@ class BordadosApplication : Application() {
             modules(commonModules + androidModule)
         }
 
-        // 🔥 RESTAURADO: WorkManager habilitado con 2 segundos de delay
+        // 🔥 Sincronización inicial al arrancar
         android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
             try {
-                val logScheduler = get<LogScheduler>()
-                logScheduler.testWorkImmediately()
+                val scheduler = get<WorkerScheduler>()
+                scheduler.syncConfigNow()
             } catch (e: Exception) {
-                Log.e("BORDADOS", "Error en scheduler: ${e.message}")
+                Log.e("BORDADOS", "Error iniciando sincronización: ${e.message}")
             }
-        }, 2000)
+        }, 1000)
     }
 }

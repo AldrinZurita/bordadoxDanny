@@ -8,11 +8,13 @@ sealed class Screen(
     object Cash : Screen("cash", "Caja")
     object Reports : Screen("reports", "Reportes")
     object Profile : Screen("profile", "Perfil")
+    object Config : Screen("config", "Configuración")
 }
 
 val bottomNavItems = listOf(
     Screen.Orders,
     Screen.Cash,
     Screen.Reports,
-    Screen.Profile
+    Screen.Profile,
+    Screen.Config
 )

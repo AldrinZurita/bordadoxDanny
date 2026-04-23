@@ -11,6 +11,8 @@ import bo.bordadoxdanny.app.features.profile.data.ProfileDao
 import bo.bordadoxdanny.app.features.profile.data.ProfileRepositoryImpl
 import bo.bordadoxdanny.app.features.reports.data.ReportDao
 import bo.bordadoxdanny.app.features.reports.data.ReportRepositoryImpl
+import bo.bordadoxdanny.app.features.config.data.ConfigDao
+import bo.bordadoxdanny.app.features.config.data.ConfigRepositoryImpl
 import bo.bordadoxdanny.app.features.cash.domain.CashRepository
 import bo.bordadoxdanny.app.features.cash.domain.GetCashEntriesUseCase
 import bo.bordadoxdanny.app.features.orders.domain.GetOrdersUseCase
@@ -19,11 +21,15 @@ import bo.bordadoxdanny.app.features.profile.domain.GetProfileUseCase
 import bo.bordadoxdanny.app.features.profile.domain.ProfileRepository
 import bo.bordadoxdanny.app.features.reports.domain.GetReportsUseCase
 import bo.bordadoxdanny.app.features.reports.domain.ReportRepository
+import bo.bordadoxdanny.app.features.config.domain.ConfigRepository
+import bo.bordadoxdanny.app.features.config.domain.GetConfigUseCase
 import bo.bordadoxdanny.app.features.cash.presentation.CashViewModel
 import bo.bordadoxdanny.app.features.orders.presentation.OrdersViewModel
 import bo.bordadoxdanny.app.features.profile.presentation.ProfileViewModel
 import bo.bordadoxdanny.app.features.reports.presentation.ReportsViewModel
+import bo.bordadoxdanny.app.features.config.presentation.ConfigViewModel
 import bo.bordadoxdanny.app.domain.SyncDataUseCase
+import bo.bordadoxdanny.app.firebase.RemoteConfigManager
 import org.koin.compose.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
@@ -37,11 +43,15 @@ val dataModule = module {
     single<CashDao> { get<AppDatabase>().cashDao() }
     single<ReportDao> { get<AppDatabase>().reportDao() }
     single<ProfileDao> { get<AppDatabase>().profileDao() }
+    single<ConfigDao> { get<AppDatabase>().configDao() }
+
+    single { RemoteConfigManager() }
 
     single<OrderRepository> { OrderRepositoryImpl(get()) }
     single<CashRepository> { CashRepositoryImpl(get()) }
     single<ReportRepository> { ReportRepositoryImpl(get()) }
     single<ProfileRepository> { ProfileRepositoryImpl(get()) }
+    single<ConfigRepository> { ConfigRepositoryImpl(get(), get()) }
 }
 
 val domainModule = module {
@@ -49,6 +59,7 @@ val domainModule = module {
     factory { GetCashEntriesUseCase(get()) }
     factory { GetReportsUseCase(get()) }
     factory { GetProfileUseCase(get()) }
+    factory { GetConfigUseCase(get()) }
     factory { SyncDataUseCase() }
 }
 
@@ -57,6 +68,7 @@ val presentationModule = module {
     viewModelOf(::CashViewModel)
     viewModelOf(::ReportsViewModel)
     viewModelOf(::ProfileViewModel)
+    viewModelOf(::ConfigViewModel)
 }
 
 val commonModules = listOf(dataModule, domainModule, presentationModule)
