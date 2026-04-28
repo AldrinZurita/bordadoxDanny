@@ -53,7 +53,7 @@ fun App() {
         else -> ""
     }
 
-    DsTheme(mode = ThemeMode.HIGH_CONTRAST) {
+    DsTheme(mode = ThemeMode.LIGHT) {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = AppTheme.colors.background
