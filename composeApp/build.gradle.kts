@@ -13,6 +13,7 @@ plugins {
     alias(libs.plugins.googleGmsGoogleServices)
     alias(libs.plugins.room)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -38,7 +39,6 @@ kotlin {
             implementation(libs.androidx.work.runtime)
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.workmanager)
-            implementation(libs.compose.uiToolingPreview)
         }
         commonMain.dependencies {
             implementation(project(":core:designsystem"))
@@ -47,6 +47,7 @@ kotlin {
             implementation(libs.compose.material3)
             implementation(libs.compose.ui)
             implementation(libs.compose.components.resources)
+            implementation(libs.compose.uiToolingPreview) // Moved to commonMain
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.compose.icons.extended)
@@ -55,6 +56,7 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.serialization.json)
             
             // Room
             implementation(libs.room.runtime)
