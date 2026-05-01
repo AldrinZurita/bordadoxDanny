@@ -1,15 +1,11 @@
 package bo.bordadoxdanny.app
 
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import bo.bordadoxdanny.app.core.designsystem.components.buttons.PrimaryButton
 import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
 import bo.bordadoxdanny.app.core.designsystem.theme.DsTheme
 import bo.bordadoxdanny.app.core.designsystem.theme.ThemeMode
@@ -17,9 +13,10 @@ import bo.bordadoxdanny.app.features.navigation.AppNavHost
 
 @Composable
 fun App() {
+    var currentMode by remember { mutableStateOf(ThemeMode.LIGHT) }
     val snackbarHostState = remember { SnackbarHostState() }
-    
-    DsTheme(mode = ThemeMode.LIGHT) {
+
+    DsTheme(mode = currentMode) {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = AppTheme.colors.background
@@ -28,8 +25,27 @@ fun App() {
                 contentWindowInsets = WindowInsets.safeDrawing,
                 snackbarHost = { SnackbarHost(snackbarHostState) },
                 containerColor = AppTheme.colors.background
-            ) { _ ->
-                AppNavHost()
+            ) { paddingValues ->
+                Column(modifier = Modifier.padding(paddingValues)) {
+                    // Theme switcher row
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        ThemeMode.entries.forEach { mode ->
+                            PrimaryButton(
+                                text = mode.name,
+                                onClick = { currentMode = mode },
+                                enabled = currentMode != mode
+                            )
+                        }
+                    }
+                    
+                    // Main Content
+                    Box(modifier = Modifier.weight(1f)) {
+                        AppNavHost()
+                    }
+                }
             }
         }
     }
