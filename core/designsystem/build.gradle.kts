@@ -38,3 +38,9 @@ kotlin {
         }
     }
 }
+
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "bo.bordadoxdanny.app.core.designsystem"
+    generateResClass = auto
+}

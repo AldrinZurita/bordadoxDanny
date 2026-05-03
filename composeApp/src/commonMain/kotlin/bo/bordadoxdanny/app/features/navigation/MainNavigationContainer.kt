@@ -14,6 +14,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
 import bo.bordadoxdanny.app.core.designsystem.components.dividers.HorizontalDivider
+import bo.bordadoxdanny.app.core.designsystem.components.icons.AppIcon
 
 @Composable
 fun MainNavigationContainer() {
@@ -21,20 +22,16 @@ fun MainNavigationContainer() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    // Determinamos si debemos mostrar la barra (puedes excluir Login/Registro aquí)
     val showBottomBar = Screen.bottomNavItems.any { screen ->
         currentDestination?.hasRoute(screen.route::class) == true
     } || currentDestination?.hasRoute(NavRoute.Testing::class) == true
 
     Column(modifier = Modifier.fillMaxSize().background(AppTheme.colors.background)) {
-        // Área de contenido dinámico (Ocupa todo el espacio de arriba)
         Box(modifier = Modifier.weight(1f)) {
             AppNavHost(navController = navController)
         }
 
-        // Barra de navegación personalizada (Usando tu designsystem)
         if (showBottomBar) {
-            // Usamos el divisor de tu designsystem
             HorizontalDivider()
 
             Row(
@@ -55,7 +52,6 @@ fun MainNavigationContainer() {
                             .fillMaxHeight()
                             .clickable {
                                 navController.navigate(screen.route) {
-                                    // Usamos la ruta inicial Testing para limpiar la pila
                                     popUpTo(NavRoute.Testing) {
                                         saveState = true
                                     }
@@ -65,13 +61,23 @@ fun MainNavigationContainer() {
                             },
                         contentAlignment = Alignment.Center
                     ) {
-                        BasicText(
-                            text = screen.title,
-                            // Color primario si está seleccionado, textPrimary si no
-                            style = AppTheme.typography.labelLarge.copy(
-                                color = if (isSelected) AppTheme.colors.primary else AppTheme.colors.textPrimary
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            AppIcon(
+                                resource = screen.icon,
+                                contentDescription = screen.title,
+                                tint = if (isSelected) AppTheme.colors.primary else AppTheme.colors.textPrimary
                             )
-                        )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            BasicText(
+                                text = screen.title,
+                                style = AppTheme.typography.labelLarge.copy(
+                                    color = if (isSelected) AppTheme.colors.primary else AppTheme.colors.textPrimary
+                                )
+                            )
+                        }
                     }
                 }
             }
