@@ -9,7 +9,7 @@ import bo.bordadoxdanny.app.core.designsystem.components.buttons.PrimaryButton
 import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
 import bo.bordadoxdanny.app.core.designsystem.theme.DsTheme
 import bo.bordadoxdanny.app.core.designsystem.theme.ThemeMode
-import bo.bordadoxdanny.app.features.navigation.AppNavHost
+import bo.bordadoxdanny.app.features.navigation.MainNavigationContainer
 
 @Composable
 fun App() {
@@ -27,7 +27,7 @@ fun App() {
                 containerColor = AppTheme.colors.background
             ) { paddingValues ->
                 Column(modifier = Modifier.padding(paddingValues)) {
-                    // Theme switcher row
+                    // Theme switcher row (Esto se mantiene igual)
                     Row(
                         modifier = Modifier.padding(16.dp),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -42,8 +42,9 @@ fun App() {
                     }
                     
                     // Main Content
+                    // Cambiamos AppNavHost por MainNavigationContainer
                     Box(modifier = Modifier.weight(1f)) {
-                        AppNavHost()
+                        MainNavigationContainer()
                     }
                 }
             }

@@ -14,5 +14,6 @@ fun Screen.getIcon(): ImageVector {
         Screen.Cash -> Icons.Filled.List
         Screen.Reports -> Icons.Filled.Notifications
         Screen.Profile -> Icons.Filled.AccountCircle
+        Screen.Testing -> Icons.Filled.ShoppingCart
     }
 }

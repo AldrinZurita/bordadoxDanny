@@ -1,18 +1,16 @@
 package bo.bordadoxdanny.app.features.navigation
 
 sealed class Screen(
-    val route: String,
+    val route: NavRoute,
     val title: String
 ) {
-    object Orders : Screen("orders", "Órdenes")
-    object Cash : Screen("cash", "Caja")
-    object Reports : Screen("reports", "Reportes")
-    object Profile : Screen("profile", "Perfil")
-}
+    data object Orders : Screen(NavRoute.Orders, "Órdenes")
+    data object Cash : Screen(NavRoute.Cash, "Caja")
+    data object Reports : Screen(NavRoute.Reports, "Reportes")
+    data object Profile : Screen(NavRoute.Profile, "Perfil")
+    data object Testing : Screen(NavRoute.Testing, "Pruebas")
 
-val bottomNavItems = listOf(
-    Screen.Orders,
-    Screen.Cash,
-    Screen.Reports,
-    Screen.Profile
-)
+    companion object {
+        val bottomNavItems = listOf(Orders, Cash, Reports, Profile, Testing)
+    }
+}
