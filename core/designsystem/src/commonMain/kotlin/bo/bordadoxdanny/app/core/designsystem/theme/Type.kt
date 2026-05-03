@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.sp
 data class Typography(
     val headlineLarge: TextStyle,
     val bodyMedium: TextStyle,
-    val labelLarge: TextStyle,
+    val labelLarge: TextStyle
 )
 
 val DefaultTypography = Typography(

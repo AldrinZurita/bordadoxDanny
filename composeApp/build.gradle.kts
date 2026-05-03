@@ -35,6 +35,7 @@ kotlin {
     
     sourceSets {
         androidMain.dependencies {
+            implementation(project(":core:daemon"))
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.work.runtime)
             implementation(libs.koin.android)
@@ -47,7 +48,7 @@ kotlin {
             implementation(libs.compose.material3)
             implementation(libs.compose.ui)
             implementation(libs.compose.components.resources)
-            implementation(libs.compose.uiToolingPreview) // Moved to commonMain
+            implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.compose.icons.extended)
@@ -109,7 +110,6 @@ android {
 }
 
 dependencies {
-    // REMOVED: implementation(project(":composeApp")) - This caused the circular dependency
     debugImplementation(libs.compose.uiTooling)
     add("kspAndroid", libs.room.compiler)
     add("kspIosArm64", libs.room.compiler)
@@ -122,15 +122,12 @@ dependencies {
     "androidMainImplementation"(libs.firebase.config)
 }
 
-// Fix for Circular Dependency in Compose Multiplatform Resources
-// We use name-based lookup to avoid Unresolved reference: GenerateResValues
 tasks.configureEach {
     if (name.contains("processDebugResources") || name.contains("processReleaseResources")) {
         mustRunAfter(tasks.matching { it.name.contains("generateComposeResValues", ignoreCase = true) })
     }
 }
 
-// Refactored task for Configuration Cache compatibility using injection
 abstract class DownloadTranslationsTask @Inject constructor(
     private val fileSystem: FileSystemOperations,
     private val archiveOperations: ArchiveOperations

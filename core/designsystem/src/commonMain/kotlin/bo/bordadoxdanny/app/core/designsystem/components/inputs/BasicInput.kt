@@ -2,7 +2,6 @@ package bo.bordadoxdanny.app.core.designsystem.components.inputs
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -11,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BasicInput(
     value: String,
@@ -24,26 +22,21 @@ fun BasicInput(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
+        label = { Text(text = label) },
         modifier = modifier,
         enabled = enabled,
         singleLine = singleLine,
-        label = { Text(label) },
         textStyle = AppTheme.typography.bodyMedium.copy(color = AppTheme.colors.textPrimary),
+        shape = RoundedCornerShape(8.dp),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedTextColor = AppTheme.colors.textPrimary,
-            unfocusedTextColor = AppTheme.colors.textPrimary,
-            disabledTextColor = AppTheme.colors.textPrimary.copy(alpha = 0.38f),
             focusedBorderColor = AppTheme.colors.primary,
-            unfocusedBorderColor = AppTheme.colors.textPrimary.copy(alpha = 0.5f),
-            disabledBorderColor = AppTheme.colors.textPrimary.copy(alpha = 0.12f),
             focusedLabelColor = AppTheme.colors.primary,
-            unfocusedLabelColor = AppTheme.colors.textPrimary.copy(alpha = 0.6f),
+            unfocusedBorderColor = AppTheme.colors.textPrimary.copy(alpha = 0.5f),
             cursorColor = AppTheme.colors.primary,
             selectionColors = TextSelectionColors(
                 handleColor = AppTheme.colors.primary,
                 backgroundColor = AppTheme.colors.primary.copy(alpha = 0.4f)
             )
-        ),
-        shape = RoundedCornerShape(8.dp)
+        )
     )
 }

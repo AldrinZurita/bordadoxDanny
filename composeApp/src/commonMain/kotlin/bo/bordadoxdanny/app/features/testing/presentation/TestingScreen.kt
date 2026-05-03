@@ -27,7 +27,9 @@ import bo.bordadoxdanny.app.firebase_status_failed
 import bo.bordadoxdanny.app.test_firebase_button
 
 @Composable
-fun TestingScreen() {
+fun TestingScreen(
+    onNavigateToDaemon: () -> Unit = {}
+) {
     val scope = rememberCoroutineScope()
     val firebaseManager = remember { FirebaseManager() }
     
@@ -55,6 +57,13 @@ fun TestingScreen() {
             text = stringResource(Res.string.welcome_message),
             style = AppTheme.typography.headlineLarge,
             color = AppTheme.colors.textPrimary
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        PrimaryButton(
+            text = "Go to Daemon Status",
+            onClick = onNavigateToDaemon
         )
 
         Spacer(modifier = Modifier.height(24.dp))

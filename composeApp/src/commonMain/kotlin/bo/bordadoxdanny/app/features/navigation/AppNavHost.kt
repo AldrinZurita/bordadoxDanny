@@ -1,62 +1,63 @@
 package bo.bordadoxdanny.app.features.navigation
 
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import bo.bordadoxdanny.app.core.daemon.ui.DaemonStatusScreen
+import bo.bordadoxdanny.app.core.daemon.watchdog.WatchdogViewModel
 import bo.bordadoxdanny.app.features.profile.presentation.ProfileScreen
 import bo.bordadoxdanny.app.features.testing.presentation.TestingScreen
+import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun AppNavHost() {
-    val navController = rememberNavController()
-
+fun AppNavHost(
+    navController: NavHostController,
+    modifier: Modifier = Modifier
+) {
     NavHost(
-        navController = navController, 
-        startDestination = NavRoute.Testing
+        navController = navController,
+        startDestination = NavRoute.Testing,
+        modifier = modifier
     ) {
         composable<NavRoute.Testing> {
-            TestingScreen()
+            TestingScreen(
+                onNavigateToDaemon = {
+                    navController.navigate(NavRoute.Daemon)
+                }
+            )
         }
-        
+
         composable<NavRoute.Profile> {
             ProfileScreen()
         }
 
-        composable<NavRoute.ProfileEdit> {
-            // ProfileEditScreen()
+        composable<NavRoute.Daemon> {
+            val viewModel: WatchdogViewModel = koinViewModel()
+            DaemonStatusScreen(viewModel = viewModel)
         }
 
-        composable<NavRoute.Github> {
-            // GithubScreen()
-        }
-
-        composable<NavRoute.Crypto> {
-            // CryptoScreen()
-        }
-
-        composable<NavRoute.FakeStore> {
-            // StoreScreen()
-        }
-
-        composable<NavRoute.CountryStore> {
-            // CountryScreen()
-        }
-
-        composable<NavRoute.Dollar> {
-            // DollarScreen()
-        }
-
+        // Placeholders usando BasicText y el Design System
         composable<NavRoute.Orders> {
-            // OrdersScreen()
+            BasicText(
+                text = "Pantalla de Órdenes",
+                style = AppTheme.typography.headlineLarge.copy(color = AppTheme.colors.textPrimary)
+            )
         }
-
         composable<NavRoute.Cash> {
-            // CashScreen()
+            BasicText(
+                text = "Pantalla de Caja",
+                style = AppTheme.typography.headlineLarge.copy(color = AppTheme.colors.textPrimary)
+            )
         }
-
         composable<NavRoute.Reports> {
-            // ReportsScreen()
+            BasicText(
+                text = "Pantalla de Reportes",
+                style = AppTheme.typography.headlineLarge.copy(color = AppTheme.colors.textPrimary)
+            )
         }
     }
 }

@@ -2,6 +2,9 @@ package bo.bordadoxdanny.app
 
 import android.app.Application
 import android.util.Log
+import bo.bordadoxdanny.app.core.daemon.notifications.NotificationHelper
+import bo.bordadoxdanny.app.core.daemon.worker.HeartbeatScheduler
+import bo.bordadoxdanny.app.core.daemon.di.daemonModule
 import bo.bordadoxdanny.app.di.commonModules
 import bo.bordadoxdanny.app.di.androidModule
 import bo.bordadoxdanny.app.workers.LogScheduler
@@ -28,8 +31,12 @@ class BordadosApplication : Application() {
         startKoin {
             androidContext(this@BordadosApplication)
             workManagerFactory()
-            modules(commonModules + androidModule)
+            modules(commonModules + androidModule + daemonModule)
         }
+
+        // Initialize Daemon components
+        NotificationHelper.createChannel(this)
+        HeartbeatScheduler.start(this)
 
         // 🔥 RESTAURADO: WorkManager habilitado con 2 segundos de delay
         android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({

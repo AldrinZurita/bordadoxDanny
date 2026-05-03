@@ -1,18 +1,20 @@
 package bo.bordadoxdanny.app.features.navigation
 
-sealed class Screen(
-    val route: String,
-    val title: String
-) {
-    object Orders : Screen("orders", "Órdenes")
-    object Cash : Screen("cash", "Caja")
-    object Reports : Screen("reports", "Reportes")
-    object Profile : Screen("profile", "Perfil")
-}
+import bo.bordadoxdanny.app.core.designsystem.theme.AppIcons
+import org.jetbrains.compose.resources.DrawableResource
 
-val bottomNavItems = listOf(
-    Screen.Orders,
-    Screen.Cash,
-    Screen.Reports,
-    Screen.Profile
-)
+sealed class Screen(
+    val route: NavRoute,
+    val title: String,
+    val icon: DrawableResource
+) {
+    data object Orders : Screen(NavRoute.Orders, "Órdenes", AppIcons.Account)
+    data object Cash : Screen(NavRoute.Cash, "Caja", AppIcons.Account)
+    data object Reports : Screen(NavRoute.Reports, "Reportes", AppIcons.Account)
+    data object Profile : Screen(NavRoute.Profile, "Perfil", AppIcons.Account)
+    data object Testing : Screen(NavRoute.Testing, "Testing", AppIcons.Account)
+
+    companion object {
+        val bottomNavItems = listOf(Orders, Cash, Reports, Profile, Testing)
+    }
+}
