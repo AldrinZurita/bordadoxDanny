@@ -1,5 +1,6 @@
 package bo.bordadoxdanny.app.features.navigation
 
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -9,6 +10,7 @@ import bo.bordadoxdanny.app.core.daemon.ui.DaemonStatusScreen
 import bo.bordadoxdanny.app.core.daemon.watchdog.WatchdogViewModel
 import bo.bordadoxdanny.app.features.profile.presentation.ProfileScreen
 import bo.bordadoxdanny.app.features.testing.presentation.TestingScreen
+import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -21,11 +23,6 @@ fun AppNavHost(
         startDestination = NavRoute.Testing,
         modifier = modifier
     ) {
-
-        composable<NavRoute.Profile> {
-            ProfileScreen()
-        }
-
         composable<NavRoute.Testing> {
             TestingScreen(
                 onNavigateToDaemon = {
@@ -34,15 +31,33 @@ fun AppNavHost(
             )
         }
 
+        composable<NavRoute.Profile> {
+            ProfileScreen()
+        }
+
         composable<NavRoute.Daemon> {
             val viewModel: WatchdogViewModel = koinViewModel()
             DaemonStatusScreen(viewModel = viewModel)
         }
 
-        // Rutas para los items de la BottomBar
-        composable<NavRoute.Orders> { /* TODO: Implementar OrdersScreen */ }
-        composable<NavRoute.Cash> { /* TODO: Implementar CashScreen */ }
-        composable<NavRoute.Reports> { /* TODO: Implementar ReportsScreen */ }
-        composable<NavRoute.Testing> {TestingScreen ()}
+        // Placeholders usando BasicText y el Design System
+        composable<NavRoute.Orders> {
+            BasicText(
+                text = "Pantalla de Órdenes",
+                style = AppTheme.typography.headlineLarge.copy(color = AppTheme.colors.textPrimary)
+            )
+        }
+        composable<NavRoute.Cash> {
+            BasicText(
+                text = "Pantalla de Caja",
+                style = AppTheme.typography.headlineLarge.copy(color = AppTheme.colors.textPrimary)
+            )
+        }
+        composable<NavRoute.Reports> {
+            BasicText(
+                text = "Pantalla de Reportes",
+                style = AppTheme.typography.headlineLarge.copy(color = AppTheme.colors.textPrimary)
+            )
+        }
     }
 }

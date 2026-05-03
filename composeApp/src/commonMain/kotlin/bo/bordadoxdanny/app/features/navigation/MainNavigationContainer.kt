@@ -3,7 +3,7 @@ package bo.bordadoxdanny.app.features.navigation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Text
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -13,6 +13,7 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
+import bo.bordadoxdanny.app.core.designsystem.components.dividers.HorizontalDivider
 
 @Composable
 fun MainNavigationContainer() {
@@ -25,7 +26,7 @@ fun MainNavigationContainer() {
         currentDestination?.hasRoute(screen.route::class) == true
     } || currentDestination?.hasRoute(NavRoute.Testing::class) == true
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize().background(AppTheme.colors.background)) {
         // Área de contenido dinámico (Ocupa todo el espacio de arriba)
         Box(modifier = Modifier.weight(1f)) {
             AppNavHost(navController = navController)
@@ -33,6 +34,9 @@ fun MainNavigationContainer() {
 
         // Barra de navegación personalizada (Usando tu designsystem)
         if (showBottomBar) {
+            // Usamos el divisor de tu designsystem
+            HorizontalDivider()
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -52,7 +56,6 @@ fun MainNavigationContainer() {
                             .clickable {
                                 navController.navigate(screen.route) {
                                     // Usamos la ruta inicial Testing para limpiar la pila
-                                    // Esto evita que se acumulen pantallas al navegar
                                     popUpTo(NavRoute.Testing) {
                                         saveState = true
                                     }
@@ -62,11 +65,12 @@ fun MainNavigationContainer() {
                             },
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
+                        BasicText(
                             text = screen.title,
-                            // Color primario si está seleccionado, textPrimary si no (del designsystem)
-                            color = if (isSelected) AppTheme.colors.primary else AppTheme.colors.textPrimary,
-                            style = AppTheme.typography.bodyMedium
+                            // Color primario si está seleccionado, textPrimary si no
+                            style = AppTheme.typography.labelLarge.copy(
+                                color = if (isSelected) AppTheme.colors.primary else AppTheme.colors.textPrimary
+                            )
                         )
                     }
                 }

@@ -8,7 +8,8 @@ sealed class Screen(
     data object Cash : Screen(NavRoute.Cash, "Caja")
     data object Reports : Screen(NavRoute.Reports, "Reportes")
     data object Profile : Screen(NavRoute.Profile, "Perfil")
-    data object Testing : Screen(NavRoute.Testing, "Pruebas")
+    data object Testing : Screen(NavRoute.Testing, "Testing")
+
 
     companion object {
         val bottomNavItems = listOf(Orders, Cash, Reports, Profile, Testing)
