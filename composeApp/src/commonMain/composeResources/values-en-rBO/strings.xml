@@ -1,19 +1,39 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
  Loco xml export: Android strings
  Project: bordadoxDanny
- Locale: en-BO, English (Bolivia)
+ Locale: es-BO, Español (Bolivia)
  Exported by: Caleb Baving
  Exported at: Thu, 16 Apr 2026 18:23:09 -0400
--->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="welcome_message">Welcome to Bordados Danny! Quality in every stitch.</string>
-    <string name="app_name">Danny\'s Embroidery</string>
-    <string name="sync_data_label">Sync Data</string>
-    <string name="firebase_status_label">Firebase Status: %s</string>
-    <string name="firebase_status_pending">Pending...</string>
-    <string name="firebase_status_saving">Saving...</string>
-    <string name="firebase_status_success">Success!</string>
-    <string name="firebase_status_failed">Failed: %s</string>
-    <string name="test_firebase_button">Test Firebase Database</string>
+--><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+            
+    
+    <string name="welcome_message">Bienvenido a Bordados Danny! Calidad en cada puntada.</string>
+            
+    
+    <string name="app_name">Bordados Danny</string>
+            
+    
+    <string name="sync_data_label">Sincronizar Datos</string>
+            
+    
+    <string name="firebase_status_label">Estado de Firebase: %s</string>
+            
+    
+    <string name="firebase_status_pending">Pendiente...</string>
+            
+    
+    <string name="firebase_status_saving">Guardando...</string>
+            
+    
+    <string name="firebase_status_success">Exito!</string>
+            
+    
+    <string name="firebase_status_failed">Fallo: %s</string>
+            
+    
+    <string name="test_firebase_button">Probar base de datos Firebase</string>
+    
+    <string name="hello_world">Hola mundo</string>
+    <string name="profile_language_selector">Lenguaje</string>
 </resources>

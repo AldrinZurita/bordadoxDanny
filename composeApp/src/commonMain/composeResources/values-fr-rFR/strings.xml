@@ -1,19 +1,39 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
  Loco xml export: Android strings
  Project: bordadoxDanny
  Locale: fr-FR, French (France)
  Exported by: Caleb Baving
  Exported at: Thu, 16 Apr 2026 18:48:53 -0400
--->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+--><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+            
+    
     <string name="welcome_message">Bienvenue chez Bordados Danny ! La qualité dans chaque point.</string>
+            
+    
     <string name="app_name">Broderies Danny</string>
+            
+    
     <string name="sync_data_label">Synchroniser les données</string>
+            
+    
     <string name="firebase_status_label">État de Firebase : %s</string>
+            
+    
     <string name="firebase_status_pending">En attente...</string>
+            
+    
     <string name="firebase_status_saving">Enregistrement...</string>
+            
+    
     <string name="firebase_status_success">Succès !</string>
+            
+    
     <string name="firebase_status_failed">Échec : %s</string>
+            
+    
     <string name="test_firebase_button">Tester la base de données Firebase</string>
+    
+    <string name="hello_world">salut monde</string>
+    <string name="profile_language_selector">Langue</string>
 </resources>
