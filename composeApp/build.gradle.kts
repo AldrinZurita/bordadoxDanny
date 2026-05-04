@@ -187,19 +187,19 @@ abstract class DownloadTranslationsTask @Inject constructor(
         val mapping = mapOf(
             // Loco exporta el idioma base como 'values'.
             // Si quieres que tu inglés base actualice 'values-en', cambia el valor de la derecha.
-            "values" to "values-en",
+            "values" to "values",
 
             // Variantes de Inglés USA
-            "values-en" to "values-en",
-            "values-en-US" to "values-en",
-            "values-en-rUS" to "values-en",
-            "values-en_US" to "values-en",
+            "values-en" to "values",
+            "values-en-US" to "values",
+            "values-en-rUS" to "values",
+            "values-en_US" to "values",
 
-            // Variantes para Bolivia (tu carpeta values-en-rBO)
-            "values-en-BO" to "values-en-rBO",
-            "values-en-rBO" to "values-en-rBO",
-            "values-es-BO" to "values-en-rBO",
-            "values-es-rBO" to "values-en-rBO",
+            // Variantes para Bolivia (tu carpeta values-es-rBO)
+            "values-en-BO" to "values-es-rBO",
+            "values-en-rBO" to "values-es-rBO",
+            "values-es-BO" to "values-es-rBO",
+            "values-es-rBO" to "values-es-rBO",
 
             // Francés
             "values-fr" to "values-fr-rFR",
