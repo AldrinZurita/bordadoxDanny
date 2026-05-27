@@ -25,10 +25,13 @@ import bo.bordadoxdanny.app.firebase_status_saving
 import bo.bordadoxdanny.app.firebase_status_success
 import bo.bordadoxdanny.app.firebase_status_failed
 import bo.bordadoxdanny.app.test_firebase_button
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 @Composable
 fun TestingScreen(
-    onNavigateToDaemon: () -> Unit = {}
+    onNavigateToDaemon: () -> Unit = {},
+    onResetOnboarding: () -> Unit = {}
 ) {
     val scope = rememberCoroutineScope()
     val firebaseManager = remember { FirebaseManager() }
@@ -49,9 +52,9 @@ fun TestingScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier.fillMaxSize().padding(16.dp).verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
             text = stringResource(Res.string.welcome_message),
@@ -59,14 +62,18 @@ fun TestingScreen(
             color = AppTheme.colors.textPrimary
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
-
         PrimaryButton(
             text = "Go to Daemon Status",
             onClick = onNavigateToDaemon
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        // BOTÓN PARA REINICIAR ONBOARDING
+        Button(
+            onClick = onResetOnboarding,
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+        ) {
+            Text("Reset Onboarding (Debug)")
+        }
 
         PrimaryButton(
             text = stringResource(Res.string.test_firebase_button),
@@ -92,8 +99,6 @@ fun TestingScreen(
             style = AppTheme.typography.bodyMedium,
             color = AppTheme.colors.textPrimary
         )
-
-        Spacer(modifier = Modifier.height(24.dp))
 
         PrimaryButton(
             text = "Probar Room (Guardar Perfil)",
@@ -121,8 +126,6 @@ fun TestingScreen(
             color = AppTheme.colors.textPrimary
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
-
         PrimaryButton(
             text = stringResource(Res.string.sync_data_label),
             onClick = {
@@ -131,3 +134,5 @@ fun TestingScreen(
         )
     }
 }
+
+

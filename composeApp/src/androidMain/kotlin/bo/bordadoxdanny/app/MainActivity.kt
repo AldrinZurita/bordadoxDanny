@@ -13,10 +13,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import bo.bordadoxdanny.app.data.database.AppDatabase
-import bo.bordadoxdanny.app.firebase.FirebaseManager
+import bo.bordadoxdanny.app.onboarding.OnboardingPreferences
+import bo.bordadoxdanny.app.onboarding.OnboardingScreen
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -28,7 +30,6 @@ class MainActivity : ComponentActivity() {
 
     private val TAG = "DEBUG_BORDADOS"
     
-    // Instancia inyectada por Koin (Singleton)
     private val database: AppDatabase by inject()
 
     private val requestPermissionLauncher = registerForActivityResult(
@@ -54,14 +55,40 @@ class MainActivity : ComponentActivity() {
                 }
                 setupRemoteConfig()
             }
-
-            // ELIMINADO: runRoomTest() - Evitamos competencia con WorkManager al iniciar
             
             askNotificationPermission()
             createNotificationChannel()
 
             setContent {
-                App()
+                var showOnboarding by remember { mutableStateOf<Boolean?>(null) }
+                val context = LocalContext.current
+                val scope = rememberCoroutineScope()
+
+                LaunchedEffect(Unit) {
+                    showOnboarding = !OnboardingPreferences.isOnboardingCompleted(context)
+                }
+
+                when (showOnboarding) {
+                    null -> {
+                        // Waiting for DataStore result
+                    }
+                    true -> {
+                        OnboardingScreen(
+                            onFinish = { showOnboarding = false },
+                            onSkip = { showOnboarding = false }
+                        )
+                    }
+                    false -> {
+                        App(
+                            onResetOnboarding = {
+                                scope.launch {
+                                    OnboardingPreferences.clearOnboarding(context)
+                                    showOnboarding = true
+                                }
+                            }
+                        )
+                    }
+                }
             }
 
         } catch (e: Exception) {

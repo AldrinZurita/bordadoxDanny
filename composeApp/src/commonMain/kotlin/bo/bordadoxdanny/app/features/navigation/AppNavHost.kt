@@ -16,6 +16,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun AppNavHost(
     navController: NavHostController,
+    onResetOnboarding: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -27,7 +28,8 @@ fun AppNavHost(
             TestingScreen(
                 onNavigateToDaemon = {
                     navController.navigate(NavRoute.Daemon)
-                }
+                },
+                onResetOnboarding = onResetOnboarding
             )
         }
 

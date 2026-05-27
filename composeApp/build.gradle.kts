@@ -27,9 +27,10 @@ plugins {
 }
 
 kotlin {
+    androidTarget()
     androidTarget {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_21)
         }
     }
 
@@ -50,6 +51,11 @@ kotlin {
             implementation(libs.androidx.work.runtime)
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.workmanager)
+            
+            // Onboarding Dependencies
+            implementation(libs.androidx.datastore.preferences)
+            implementation(libs.coil.compose)
+            implementation(libs.kotlinx.coroutines.android)
         }
         commonMain.dependencies {
             implementation(project(":core:designsystem"))
@@ -114,8 +120,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 }
 

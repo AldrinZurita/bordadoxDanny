@@ -17,7 +17,9 @@ import bo.bordadoxdanny.app.core.designsystem.components.dividers.HorizontalDivi
 import bo.bordadoxdanny.app.core.designsystem.components.icons.AppIcon
 
 @Composable
-fun MainNavigationContainer() {
+fun MainNavigationContainer(
+    onResetOnboarding: () -> Unit = {}
+) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -28,7 +30,10 @@ fun MainNavigationContainer() {
 
     Column(modifier = Modifier.fillMaxSize().background(AppTheme.colors.background)) {
         Box(modifier = Modifier.weight(1f)) {
-            AppNavHost(navController = navController)
+            AppNavHost(
+                navController = navController,
+                onResetOnboarding = onResetOnboarding
+            )
         }
 
         if (showBottomBar) {

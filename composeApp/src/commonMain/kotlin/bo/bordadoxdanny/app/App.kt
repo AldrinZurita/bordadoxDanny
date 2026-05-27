@@ -12,7 +12,9 @@ import bo.bordadoxdanny.app.core.designsystem.theme.ThemeMode
 import bo.bordadoxdanny.app.features.navigation.MainNavigationContainer
 
 @Composable
-fun App() {
+fun App(
+    onResetOnboarding: () -> Unit = {}
+) {
     var currentMode by remember { mutableStateOf(ThemeMode.LIGHT) }
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -44,7 +46,9 @@ fun App() {
                     // Main Content
                     // Cambiamos AppNavHost por MainNavigationContainer
                     Box(modifier = Modifier.weight(1f)) {
-                        MainNavigationContainer()
+                        MainNavigationContainer(
+                            onResetOnboarding = onResetOnboarding
+                        )
                     }
                 }
             }
