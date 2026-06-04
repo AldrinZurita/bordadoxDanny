@@ -7,6 +7,7 @@ sealed class NavRoute {
     @Serializable data object Profile : NavRoute()
 
     @Serializable data object Orders : NavRoute()
+    @Serializable data object CreateOrder : NavRoute()
     @Serializable data object Cash : NavRoute()
     @Serializable data object Reports : NavRoute()
 

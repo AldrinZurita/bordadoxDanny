@@ -13,6 +13,7 @@ import bo.bordadoxdanny.app.features.reports.data.ReportDao
 import bo.bordadoxdanny.app.features.reports.data.ReportRepositoryImpl
 import bo.bordadoxdanny.app.features.cash.domain.CashRepository
 import bo.bordadoxdanny.app.features.cash.domain.GetCashEntriesUseCase
+import bo.bordadoxdanny.app.features.orders.domain.CreateOrderUseCase
 import bo.bordadoxdanny.app.features.orders.domain.GetOrdersUseCase
 import bo.bordadoxdanny.app.features.orders.domain.OrderRepository
 import bo.bordadoxdanny.app.features.profile.domain.GetProfileUseCase
@@ -21,6 +22,7 @@ import bo.bordadoxdanny.app.features.reports.domain.GetReportsUseCase
 import bo.bordadoxdanny.app.features.reports.domain.ReportRepository
 import bo.bordadoxdanny.app.features.cash.presentation.CashViewModel
 import bo.bordadoxdanny.app.features.orders.presentation.OrdersViewModel
+import bo.bordadoxdanny.app.features.orders.presentation.create.CreateOrderViewModel
 import bo.bordadoxdanny.app.features.profile.presentation.ProfileViewModel
 import bo.bordadoxdanny.app.features.reports.presentation.ReportsViewModel
 import bo.bordadoxdanny.app.domain.SyncDataUseCase
@@ -28,7 +30,6 @@ import org.koin.compose.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
 val dataModule = module {
-    // 🔥 UNICA INSTANCIA PARA TODO EL PROYECTO
     single<AppDatabase> { 
         createRoomDatabase(getDatabaseBuilder()) 
     }
@@ -38,7 +39,7 @@ val dataModule = module {
     single<ReportDao> { get<AppDatabase>().reportDao() }
     single<ProfileDao> { get<AppDatabase>().profileDao() }
 
-    single<OrderRepository> { OrderRepositoryImpl(get()) }
+    single<OrderRepository> { OrderRepositoryImpl(get(), get()) }
     single<CashRepository> { CashRepositoryImpl(get()) }
     single<ReportRepository> { ReportRepositoryImpl(get()) }
     single<ProfileRepository> { ProfileRepositoryImpl(get()) }
@@ -46,6 +47,7 @@ val dataModule = module {
 
 val domainModule = module {
     factory { GetOrdersUseCase(get()) }
+    factory { CreateOrderUseCase(get()) }
     factory { GetCashEntriesUseCase(get()) }
     factory { GetReportsUseCase(get()) }
     factory { GetProfileUseCase(get()) }
@@ -54,6 +56,7 @@ val domainModule = module {
 
 val presentationModule = module {
     viewModelOf(::OrdersViewModel)
+    viewModelOf(::CreateOrderViewModel)
     viewModelOf(::CashViewModel)
     viewModelOf(::ReportsViewModel)
     viewModelOf(::ProfileViewModel)

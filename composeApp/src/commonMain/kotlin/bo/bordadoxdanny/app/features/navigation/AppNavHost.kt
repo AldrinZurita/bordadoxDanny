@@ -10,6 +10,8 @@ import bo.bordadoxdanny.app.core.daemon.ui.DaemonStatusScreen
 import bo.bordadoxdanny.app.core.daemon.watchdog.WatchdogViewModel
 import bo.bordadoxdanny.app.features.profile.presentation.ProfileScreen
 import bo.bordadoxdanny.app.features.testing.presentation.TestingScreen
+import bo.bordadoxdanny.app.features.orders.presentation.OrdersScreen
+import bo.bordadoxdanny.app.features.orders.presentation.create.CreateOrderScreen
 import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -40,19 +42,32 @@ fun AppNavHost(
             DaemonStatusScreen(viewModel = viewModel)
         }
 
-        // Placeholders usando BasicText y el Design System
         composable<NavRoute.Orders> {
-            BasicText(
-                text = "Pantalla de Órdenes",
-                style = AppTheme.typography.headlineLarge.copy(color = AppTheme.colors.textPrimary)
+            OrdersScreen(
+                onAddOrder = {
+                    navController.navigate(NavRoute.CreateOrder)
+                }
             )
         }
+
+        composable<NavRoute.CreateOrder> {
+            CreateOrderScreen(
+                onNavigateBack = {
+                    navController.popBackStack()
+                },
+                onSuccess = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
         composable<NavRoute.Cash> {
             BasicText(
                 text = "Pantalla de Caja",
                 style = AppTheme.typography.headlineLarge.copy(color = AppTheme.colors.textPrimary)
             )
         }
+
         composable<NavRoute.Reports> {
             BasicText(
                 text = "Pantalla de Reportes",
