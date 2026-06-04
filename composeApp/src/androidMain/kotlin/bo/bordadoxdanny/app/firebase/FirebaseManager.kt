@@ -1,7 +1,14 @@
 package bo.bordadoxdanny.app.firebase
 
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import kotlin.reflect.KClass
 
 actual class FirebaseManager actual constructor() {
     private val database = FirebaseDatabase.getInstance().reference
@@ -13,5 +20,19 @@ actual class FirebaseManager actual constructor() {
 
     actual suspend fun getData(path: String): Result<Any?> = runCatching {
         database.child(path).get().await().value
+    }
+
+    actual fun <T : Any> observeData(path: String, clazz: KClass<T>): Flow<T?> = callbackFlow {
+        val listener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                trySend(snapshot.getValue(clazz.java))
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                close(error.toException())
+            }
+        }
+        database.child(path).addValueEventListener(listener)
+        awaitClose { database.child(path).removeEventListener(listener) }
     }
 }

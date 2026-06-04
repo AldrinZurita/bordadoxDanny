@@ -50,6 +50,7 @@ kotlin {
             implementation(libs.androidx.work.runtime)
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.workmanager)
+            implementation(libs.compose.uiToolingPreview)
         }
         commonMain.dependencies {
             implementation(project(":core:designsystem"))
@@ -58,7 +59,6 @@ kotlin {
             implementation(libs.compose.material3)
             implementation(libs.compose.ui)
             implementation(libs.compose.components.resources)
-            implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.compose.icons.extended)
