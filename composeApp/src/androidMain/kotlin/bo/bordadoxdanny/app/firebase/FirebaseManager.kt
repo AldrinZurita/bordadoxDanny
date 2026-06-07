@@ -18,8 +18,9 @@ actual class FirebaseManager actual constructor() {
         Unit
     }
 
-    actual suspend fun getData(path: String): Result<Any?> = runCatching {
-        database.child(path).get().await().value
+    actual suspend fun <T : Any> getData(path: String, clazz: KClass<T>): Result<T?> = runCatching {
+        val snapshot = database.child(path).get().await()
+        snapshot.getValue(clazz.java)
     }
 
     actual fun <T : Any> observeData(path: String, clazz: KClass<T>): Flow<T?> = callbackFlow {

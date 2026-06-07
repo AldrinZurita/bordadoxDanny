@@ -10,8 +10,12 @@ import bo.bordadoxdanny.app.features.cash.data.CashEntity
 import bo.bordadoxdanny.app.features.cash.data.CashDao
 import bo.bordadoxdanny.app.features.reports.data.ReportEntity
 import bo.bordadoxdanny.app.features.reports.data.ReportDao
+import bo.bordadoxdanny.app.features.reports.data.ReportSummaryEntity
+import bo.bordadoxdanny.app.features.reports.data.ReportSummaryDao
 import bo.bordadoxdanny.app.features.profile.data.ProfileEntity
 import bo.bordadoxdanny.app.features.profile.data.ProfileDao
+import bo.bordadoxdanny.app.features.profile.data.UserEntity
+import bo.bordadoxdanny.app.features.profile.data.UserDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
@@ -21,19 +25,22 @@ import androidx.sqlite.driver.bundled.BundledSQLiteDriver
         OrderEntity::class,
         CashEntity::class,
         ReportEntity::class,
-        ProfileEntity::class
+        ReportSummaryEntity::class,
+        ProfileEntity::class,
+        UserEntity::class
     ],
-    version = 1
+    version = 2
 )
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun orderDao(): OrderDao
     abstract fun cashDao(): CashDao
     abstract fun reportDao(): ReportDao
+    abstract fun reportSummaryDao(): ReportSummaryDao
     abstract fun profileDao(): ProfileDao
+    abstract fun userDao(): UserDao
 }
 
-// Room 2.7.0+ KMP standard
 @Suppress("NO_ACTUAL_FOR_EXPECT")
 expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
     override fun initialize(): AppDatabase
@@ -43,7 +50,8 @@ expect fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase>
 
 fun createRoomDatabase(builder: RoomDatabase.Builder<AppDatabase>): AppDatabase {
     return builder
-        .setDriver(BundledSQLiteDriver()) // Use the KMP driver consistently
+        .fallbackToDestructiveMigration(true)
+        .setDriver(BundledSQLiteDriver())
         .setQueryCoroutineContext(Dispatchers.IO)
         .build()
 }

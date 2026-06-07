@@ -6,12 +6,15 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import bo.bordadoxdanny.app.core.daemon.ui.DaemonStatusScreen
 import bo.bordadoxdanny.app.core.daemon.watchdog.WatchdogViewModel
-import bo.bordadoxdanny.app.features.profile.presentation.ProfileScreen
+import bo.bordadoxdanny.app.features.profile.presentation.*
 import bo.bordadoxdanny.app.features.testing.presentation.TestingScreen
 import bo.bordadoxdanny.app.features.orders.presentation.OrdersScreen
 import bo.bordadoxdanny.app.features.orders.presentation.create.CreateOrderScreen
+import bo.bordadoxdanny.app.features.reports.presentation.AccountSummaryScreen
+import bo.bordadoxdanny.app.features.reports.presentation.ReportViewModel
 import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -22,9 +25,83 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = NavRoute.Testing,
+        startDestination = NavRoute.Login,
         modifier = modifier
     ) {
+        // --- Auth Flows ---
+        composable<NavRoute.Login> {
+            val viewModel: AuthViewModel = koinViewModel()
+            LoginScreen(
+                viewModel = viewModel,
+                onNavigateToMain = {
+                    navController.navigate(NavRoute.Orders) {
+                        popUpTo(NavRoute.Login) { inclusive = true }
+                    }
+                },
+                onNavigateToRegister = {
+                    navController.navigate(NavRoute.Register)
+                },
+                onNavigateToForgotPassword = {
+                    navController.navigate(NavRoute.ForgotPassword)
+                }
+            )
+        }
+
+        composable<NavRoute.Register> {
+            val viewModel: AuthViewModel = koinViewModel()
+            RegisterScreen(
+                viewModel = viewModel,
+                onNavigateToLogin = {
+                    navController.popBackStack()
+                },
+                onNavigateToMain = {
+                    navController.navigate(NavRoute.Orders) {
+                        popUpTo(NavRoute.Login) { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        composable<NavRoute.ForgotPassword> {
+            val viewModel: AuthViewModel = koinViewModel()
+            ForgotPasswordScreen(
+                viewModel = viewModel,
+                onNavigateBack = {
+                    navController.popBackStack()
+                },
+                onNavigateToVerification = { email ->
+                    navController.navigate(NavRoute.VerificationCode(email))
+                }
+            )
+        }
+
+        composable<NavRoute.VerificationCode> { backStackEntry ->
+            val route: NavRoute.VerificationCode = backStackEntry.toRoute()
+            val viewModel: AuthViewModel = koinViewModel()
+            VerificationCodeScreen(
+                email = route.email,
+                viewModel = viewModel,
+                onNavigateToNewPassword = { email ->
+                    navController.navigate(NavRoute.NewPassword(email))
+                }
+            )
+        }
+
+        composable<NavRoute.NewPassword> { backStackEntry ->
+            val route: NavRoute.NewPassword = backStackEntry.toRoute()
+            val viewModel: AuthViewModel = koinViewModel()
+            NewPasswordScreen(
+                email = route.email,
+                viewModel = viewModel,
+                onNavigateToLogin = {
+                    navController.navigate(NavRoute.Login) {
+                        popUpTo(NavRoute.Login) { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        // --- Main App ---
         composable<NavRoute.Testing> {
             TestingScreen(
                 onNavigateToDaemon = {
@@ -34,7 +111,15 @@ fun AppNavHost(
         }
 
         composable<NavRoute.Profile> {
-            ProfileScreen()
+            val viewModel: ProfileViewModel = koinViewModel()
+            ProfileScreen(
+                viewModel = viewModel,
+                onNavigateToLogin = {
+                    navController.navigate(NavRoute.Login) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                }
+            )
         }
 
         composable<NavRoute.Daemon> {
@@ -69,10 +154,8 @@ fun AppNavHost(
         }
 
         composable<NavRoute.Reports> {
-            BasicText(
-                text = "Pantalla de Reportes",
-                style = AppTheme.typography.headlineLarge.copy(color = AppTheme.colors.textPrimary)
-            )
+            val viewModel: ReportViewModel = koinViewModel()
+            AccountSummaryScreen(viewModel = viewModel)
         }
     }
 }
