@@ -12,11 +12,18 @@ import bo.bordadoxdanny.app.features.profile.data.AuthRepositoryImpl
 import bo.bordadoxdanny.app.features.profile.domain.AuthRepository
 import bo.bordadoxdanny.app.firebase.RemoteConfigManager
 import bo.bordadoxdanny.app.firebase.RemoteConfigManagerImpl
+import bo.bordadoxdanny.app.firebase.FirebaseManager
 import org.koin.dsl.module
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.workmanager.dsl.workerOf
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 
 val androidModule = module {
+    // Firebase Components
+    singleOf(::FirebaseManager)
+    singleOf(::RemoteConfigManagerImpl) bind RemoteConfigManager::class
+
     // Workers
     workerOf(::LogUploadWorker)
     workerOf(::OrderSyncWorker)
@@ -24,12 +31,10 @@ val androidModule = module {
     workerOf(::SyncUserWorker)
 
     // Schedulers
-    single<WorkerScheduler> { LogScheduler(androidContext()) }
-    single<SyncScheduler> { AndroidSyncScheduler(androidContext()) }
+    // Registramos la clase concreta primero para que get<LogScheduler>() funcione en BordadosApplication
+    single { LogScheduler(androidContext()) } bind WorkerScheduler::class
+    singleOf(::AndroidSyncScheduler) bind SyncScheduler::class
     
-    // Repositories (Android specific implementations)
-    single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
-    
-    // Remote Config
-    single<RemoteConfigManager> { RemoteConfigManagerImpl() }
+    // Repositories
+    singleOf(::AuthRepositoryImpl) bind AuthRepository::class
 }
