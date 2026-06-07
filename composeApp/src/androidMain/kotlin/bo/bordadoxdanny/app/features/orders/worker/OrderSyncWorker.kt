@@ -22,7 +22,7 @@ class OrderSyncWorker(
             if (pendingOrders.isEmpty()) return Result.success()
 
             pendingOrders.forEach { order ->
-                val result = firebaseManager.saveData("orders/${order.id}", order)
+                val result = firebaseManager.saveData("orders/${order.id}", order.toDto())
                 if (result.isSuccess) {
                     repository.markAsSynced(order.id)
                 }

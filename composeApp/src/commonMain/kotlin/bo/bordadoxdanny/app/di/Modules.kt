@@ -13,6 +13,8 @@ import bo.bordadoxdanny.app.features.profile.data.UserDao
 import bo.bordadoxdanny.app.features.reports.data.ReportDao
 import bo.bordadoxdanny.app.features.reports.data.ReportRepositoryImpl
 import bo.bordadoxdanny.app.features.reports.data.ReportSummaryDao
+import bo.bordadoxdanny.app.data.preferences.SettingsDao
+import bo.bordadoxdanny.app.data.preferences.PreferencesRepository
 import bo.bordadoxdanny.app.features.cash.domain.CashRepository
 import bo.bordadoxdanny.app.features.cash.domain.GetCashEntriesUseCase
 import bo.bordadoxdanny.app.features.orders.domain.CreateOrderUseCase
@@ -41,8 +43,10 @@ val dataModule = module {
     single<ReportSummaryDao> { get<AppDatabase>().reportSummaryDao() }
     single<ProfileDao> { get<AppDatabase>().profileDao() }
     single<UserDao> { get<AppDatabase>().userDao() }
+    single<SettingsDao> { get<AppDatabase>().settingsDao() }
 
     single<OrderRepository> { OrderRepositoryImpl(get(), get()) }
+    single<ProfileRepository> { ProfileRepositoryImpl(get()) }
     single<CashRepository> { CashRepositoryImpl(get()) }
     single<ReportRepository> { ReportRepositoryImpl(get(), get(), get()) }
 }
@@ -76,6 +80,7 @@ val presentationModule = module {
     viewModelOf(::ReportViewModel)
     viewModelOf(::AuthViewModel)
     viewModelOf(::ProfileViewModel)
+    viewModel { LanguageViewModel(get()) }
 }
 
 val commonModules = listOf(dataModule, domainModule, presentationModule)
