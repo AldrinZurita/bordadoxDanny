@@ -48,8 +48,12 @@ fun RegisterScreen(
     var ciComplement by remember { mutableStateOf("") }
     var ciDepartment by remember { mutableStateOf("LP") }
 
+    // Track if we've already navigated to prevent multiple calls
+    val navigated = remember { mutableStateOf(false) }
+    
     LaunchedEffect(state) {
-        if (state is AuthState.RegisterSuccess) {
+        if (state is AuthState.RegisterSuccess && !navigated.value) {
+            navigated.value = true
             onNavigateToMain()
         }
     }
@@ -239,6 +243,15 @@ fun RegisterScreen(
             isLoading = state is AuthState.Loading,
             enabled = requirements.allMet && username.isNotBlank() && email.isNotBlank() && firstName.isNotBlank() && lastName1.isNotBlank() && ciNumber.isNotBlank()
         )
+
+        if (state is AuthState.RegisterError) {
+            Text(
+                text = stringResource((state as AuthState.RegisterError).messageResId),
+                color = AppTheme.colors.error,
+                style = AppTheme.typography.bodyMedium,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 

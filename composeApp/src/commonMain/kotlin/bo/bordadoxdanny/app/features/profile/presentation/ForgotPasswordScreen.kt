@@ -26,9 +26,11 @@ fun ForgotPasswordScreen(
 ) {
     val state by viewModel.state.collectAsState()
     var emailOrUser by remember { mutableStateOf("") }
+    val navigated = remember { mutableStateOf(false) }
 
     LaunchedEffect(state) {
-        if (state is AuthState.CodeSent) {
+        if (state is AuthState.CodeSent && !navigated.value) {
+            navigated.value = true
             onNavigateToVerification((state as AuthState.CodeSent).email)
         }
     }
@@ -105,6 +107,15 @@ fun ForgotPasswordScreen(
             Text(
                 text = stringResource((state as AuthState.CodeSentError).messageResId),
                 color = AppTheme.colors.error,
+                style = AppTheme.typography.bodyMedium,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
+
+        if (state is AuthState.CodeSent) {
+            Text(
+                text = stringResource(Res.string.code_sent_success),
+                color = AppTheme.colors.primary,
                 style = AppTheme.typography.bodyMedium,
                 modifier = Modifier.padding(top = 8.dp)
             )

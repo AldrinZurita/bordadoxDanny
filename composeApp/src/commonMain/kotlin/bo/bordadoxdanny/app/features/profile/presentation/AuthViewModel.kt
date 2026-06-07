@@ -39,50 +39,70 @@ class AuthViewModel(
     private fun login(emailOrUser: String, password: String) {
         viewModelScope.launch {
             _state.value = AuthState.Loading
-            loginUseCase(emailOrUser, password).fold(
-                onSuccess = { _state.value = AuthState.LoginSuccess },
-                onFailure = { _state.value = AuthState.LoginError(Res.string.invalid_credentials) }
-            )
+            try {
+                loginUseCase(emailOrUser, password).fold(
+                    onSuccess = { _state.value = AuthState.LoginSuccess },
+                    onFailure = { _state.value = AuthState.LoginError(Res.string.invalid_credentials) }
+                )
+            } catch (e: Exception) {
+                _state.value = AuthState.LoginError(Res.string.invalid_credentials)
+            }
         }
     }
 
     private fun register(params: RegisterParams) {
         viewModelScope.launch {
             _state.value = AuthState.Loading
-            registerUseCase(params).fold(
-                onSuccess = { _state.value = AuthState.RegisterSuccess },
-                onFailure = { _state.value = AuthState.RegisterError("", Res.string.invalid_credentials) }
-            )
+            try {
+                registerUseCase(params).fold(
+                    onSuccess = { _state.value = AuthState.RegisterSuccess },
+                    onFailure = { _state.value = AuthState.RegisterError("", Res.string.invalid_credentials) }
+                )
+            } catch (e: Exception) {
+                _state.value = AuthState.RegisterError("", Res.string.invalid_credentials)
+            }
         }
     }
 
     private fun sendCode(emailOrUser: String) {
         viewModelScope.launch {
             _state.value = AuthState.Loading
-            sendVerificationCodeUseCase(emailOrUser).fold(
-                onSuccess = { _state.value = AuthState.CodeSent(emailOrUser) },
-                onFailure = { _state.value = AuthState.CodeSentError(Res.string.user_not_found) }
-            )
+            try {
+                sendVerificationCodeUseCase(emailOrUser).fold(
+                    onSuccess = { _state.value = AuthState.CodeSent(emailOrUser) },
+                    onFailure = { _state.value = AuthState.CodeSentError(Res.string.user_not_found) }
+                )
+            } catch (e: Exception) {
+                _state.value = AuthState.CodeSentError(Res.string.user_not_found)
+            }
         }
     }
 
     private fun verifyCode(email: String, code: String) {
         viewModelScope.launch {
             _state.value = AuthState.Loading
-            verifyCodeUseCase(email, code).fold(
-                onSuccess = { _state.value = AuthState.CodeVerified(email) },
-                onFailure = { _state.value = AuthState.CodeVerifiedError(Res.string.invalid_code) }
-            )
+            try {
+                verifyCodeUseCase(email, code).fold(
+                    onSuccess = { _state.value = AuthState.CodeVerified(email) },
+                    onFailure = { _state.value = AuthState.CodeVerifiedError(Res.string.invalid_code) }
+                )
+            } catch (e: Exception) {
+                _state.value = AuthState.CodeVerifiedError(Res.string.invalid_code)
+            }
         }
     }
 
     private fun resetPassword(email: String, newPassword: String) {
         viewModelScope.launch {
             _state.value = AuthState.Loading
-            resetPasswordUseCase(email, newPassword).fold(
-                onSuccess = { _state.value = AuthState.PasswordResetSuccess },
-                onFailure = { _state.value = AuthState.PasswordResetError(Res.string.invalid_credentials) }
-            )
+            try {
+                resetPasswordUseCase(email, newPassword).fold(
+                    onSuccess = { _state.value = AuthState.PasswordResetSuccess },
+                    onFailure = { _state.value = AuthState.PasswordResetError(Res.string.invalid_credentials) }
+                )
+            } catch (e: Exception) {
+                _state.value = AuthState.PasswordResetError(Res.string.invalid_credentials)
+            }
         }
     }
 
