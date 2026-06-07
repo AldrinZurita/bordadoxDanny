@@ -15,20 +15,21 @@ import bo.bordadoxdanny.app.features.reports.data.ReportRepositoryImpl
 import bo.bordadoxdanny.app.features.reports.data.ReportSummaryDao
 import bo.bordadoxdanny.app.data.preferences.SettingsDao
 import bo.bordadoxdanny.app.data.preferences.PreferencesRepository
+import bo.bordadoxdanny.app.domain.SyncDataUseCase
 import bo.bordadoxdanny.app.features.cash.domain.CashRepository
 import bo.bordadoxdanny.app.features.cash.domain.GetCashEntriesUseCase
+import bo.bordadoxdanny.app.features.cash.presentation.CashViewModel
 import bo.bordadoxdanny.app.features.orders.domain.CreateOrderUseCase
 import bo.bordadoxdanny.app.features.orders.domain.GetOrdersUseCase
 import bo.bordadoxdanny.app.features.orders.domain.OrderRepository
-import bo.bordadoxdanny.app.features.profile.domain.*
-import bo.bordadoxdanny.app.features.reports.domain.*
-import bo.bordadoxdanny.app.features.cash.presentation.CashViewModel
 import bo.bordadoxdanny.app.features.orders.presentation.OrdersViewModel
 import bo.bordadoxdanny.app.features.orders.presentation.create.CreateOrderViewModel
-import bo.bordadoxdanny.app.features.profile.presentation.ProfileViewModel
+import bo.bordadoxdanny.app.features.profile.domain.*
+import bo.bordadoxdanny.app.features.reports.domain.*
 import bo.bordadoxdanny.app.features.profile.presentation.AuthViewModel
+import bo.bordadoxdanny.app.features.profile.presentation.LanguageViewModel
+import bo.bordadoxdanny.app.features.profile.presentation.ProfileViewModel
 import bo.bordadoxdanny.app.features.reports.presentation.ReportViewModel
-import bo.bordadoxdanny.app.domain.SyncDataUseCase
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
@@ -59,7 +60,7 @@ val domainModule = module {
     factory { GetAvailablePeriodsUseCase(get()) }
     factory { GetAccountsReceivableUseCase(get()) }
     factory { GetProfileUseCase(get()) }
-    factory { SyncDataUseCase() }
+    factory<SyncDataUseCase> { SyncDataUseCase() }
     
     // Auth UseCases
     factory { LoginUseCase(get()) }
@@ -80,7 +81,7 @@ val presentationModule = module {
     viewModelOf(::ReportViewModel)
     viewModelOf(::AuthViewModel)
     viewModelOf(::ProfileViewModel)
-    viewModel { LanguageViewModel(get()) }
+    viewModelOf(::LanguageViewModel)
 }
 
 val commonModules = listOf(dataModule, domainModule, presentationModule)
