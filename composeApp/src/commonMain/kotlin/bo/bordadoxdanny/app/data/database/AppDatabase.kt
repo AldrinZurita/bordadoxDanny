@@ -16,6 +16,8 @@ import bo.bordadoxdanny.app.features.profile.data.ProfileEntity
 import bo.bordadoxdanny.app.features.profile.data.ProfileDao
 import bo.bordadoxdanny.app.features.profile.data.UserEntity
 import bo.bordadoxdanny.app.features.profile.data.UserDao
+import bo.bordadoxdanny.app.data.preferences.SettingsEntity
+import bo.bordadoxdanny.app.data.preferences.SettingsDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
@@ -27,9 +29,10 @@ import androidx.sqlite.driver.bundled.BundledSQLiteDriver
         ReportEntity::class,
         ReportSummaryEntity::class,
         ProfileEntity::class,
-        UserEntity::class
+        UserEntity::class,
+        SettingsEntity::class
     ],
-    version = 2
+    version = 3
 )
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -39,6 +42,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun reportSummaryDao(): ReportSummaryDao
     abstract fun profileDao(): ProfileDao
     abstract fun userDao(): UserDao
+    abstract fun settingsDao(): SettingsDao
 }
 
 @Suppress("NO_ACTUAL_FOR_EXPECT")
