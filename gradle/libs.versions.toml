@@ -31,7 +31,7 @@ androidx-compose-ui-test = "1.7.6"
 retrofit = "2.11.0"
 okhttp = "4.12.0"
 
-# Versiones de Firebase con nombres que no colisionan con las librerías
+# Versiones de Firebase
 firebase-bom-v = "33.7.0"
 firebase-messaging-v = "25.0.1"
 firebase-database-v = "21.0.0"
@@ -84,7 +84,7 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 
-# Firebase (CamelCase para evitar errores de agrupación en Gradle)
+# Firebase
 firebaseBom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom-v" }
 firebaseMessaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebase-messaging-v" }
 firebaseDatabase = { module = "com.google.firebase:firebase-database", version.ref = "firebase-database-v" }
@@ -97,16 +97,17 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 # Serialization
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
-# Testing
-turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
-mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
-robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
-androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidx-compose-ui-test" }
-androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-compose-ui-test" }
+# Network
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-retrofit-kotlinx-serialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version = "1.0.0" }
+retrofit-kotlinx-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
+
+# Testing
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

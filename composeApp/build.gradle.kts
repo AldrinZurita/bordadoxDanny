@@ -51,17 +51,19 @@ kotlin {
             implementation(libs.koin.androidx.workmanager)
             implementation(libs.compose.uiToolingPreview)
             
+            // Network
+            implementation(libs.retrofit)
+            implementation(libs.retrofit.kotlinx.serialization)
+            implementation(libs.okhttp)
+            implementation(libs.okhttp.logging)
+
             // Firebase Android
-            implementation(platform(libs.firebaseBom.get()))
+            implementation(project.dependencies.platform(libs.firebaseBom))
             implementation(libs.firebaseMessaging)
             implementation(libs.firebaseDatabase)
             implementation(libs.firebaseConfig)
             implementation(libs.firebaseAuth)
             implementation(libs.kotlinx.coroutines.play.services)
-            implementation(libs.retrofit)
-            implementation(libs.retrofit.kotlinx.serialization)
-            implementation(libs.okhttp)
-            implementation(libs.okhttp.logging)
         }
         commonMain.dependencies {
             implementation(project(":core:designsystem"))
@@ -88,6 +90,8 @@ kotlin {
         commonTest.dependencies {
             implementation(kotlin("test"))
             implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.mockk)
+            implementation(libs.turbine)
         }
     }
 }
@@ -113,7 +117,6 @@ android {
         versionCode = 1
         versionName = "1.0"
         
-        // Campo base de BuildConfig
         buildConfigField("boolean", "IS_DEBUG", "true")
     }
 

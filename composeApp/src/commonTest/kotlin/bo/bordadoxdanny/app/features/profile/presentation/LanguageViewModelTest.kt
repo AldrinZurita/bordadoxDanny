@@ -1,5 +1,6 @@
 package bo.bordadoxdanny.app.features.profile.presentation
 
+import app.cash.turbine.test
 import kotlinx.coroutines.test.runTest
 import kotlin.test.*
 
@@ -10,11 +11,16 @@ class LanguageViewModelTest {
         val fakePrefs = FakePreferencesRepository(savedLanguage = "es")
         val vm = LanguageViewModel(fakePrefs)
 
-        vm.onIntent(LanguageIntent.OnLoadLanguage)
-
-        assertTrue(vm.state.value is LanguageState.Loaded)
-        val loaded = vm.state.value as LanguageState.Loaded
-        assertEquals("es", loaded.languageCode)
+        vm.state.test {
+            // Skip initial Loading state if it's there, or wait for Loaded
+            var item = awaitItem()
+            if (item is LanguageState.Loading) {
+                item = awaitItem()
+            }
+            
+            assertTrue(item is LanguageState.Loaded)
+            assertEquals("es", (item as LanguageState.Loaded).languageCode)
+        }
     }
 
     @Test
@@ -22,11 +28,15 @@ class LanguageViewModelTest {
         val fakePrefs = FakePreferencesRepository(savedLanguage = null)
         val vm = LanguageViewModel(fakePrefs)
 
-        vm.onIntent(LanguageIntent.OnLoadLanguage)
+        vm.state.test {
+            var item = awaitItem()
+            if (item is LanguageState.Loading) {
+                item = awaitItem()
+            }
 
-        assertTrue(vm.state.value is LanguageState.Loaded)
-        val loaded = vm.state.value as LanguageState.Loaded
-        assertEquals("en", loaded.languageCode)
+            assertTrue(item is LanguageState.Loaded)
+            assertEquals("en", (item as LanguageState.Loaded).languageCode)
+        }
     }
 
     @Test
@@ -34,12 +44,17 @@ class LanguageViewModelTest {
         val fakePrefs = FakePreferencesRepository(savedLanguage = "en")
         val vm = LanguageViewModel(fakePrefs)
 
-        vm.onIntent(LanguageIntent.OnLanguageChanged("fr"))
-
-        assertTrue(vm.state.value is LanguageState.Loaded)
-        val loaded = vm.state.value as LanguageState.Loaded
-        assertEquals("fr", loaded.languageCode)
-        assertEquals("fr", fakePrefs.savedLanguage)
+        // Wait for initial load to finish first
+        vm.state.test {
+            if (awaitItem() is LanguageState.Loading) awaitItem()
+            
+            vm.onIntent(LanguageIntent.OnLanguageChanged("fr"))
+            
+            val item = awaitItem()
+            assertTrue(item is LanguageState.Loaded)
+            assertEquals("fr", (item as LanguageState.Loaded).languageCode)
+            assertEquals("fr", fakePrefs.savedLanguage)
+        }
     }
 }
 

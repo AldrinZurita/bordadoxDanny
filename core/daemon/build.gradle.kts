@@ -52,7 +52,7 @@ kotlin {
         }
 
         androidMain.dependencies {
-            implementation(platform(libs.firebaseBom.get()))
+            implementation(project.dependencies.platform(libs.firebaseBom))
             implementation(libs.androidx.work.runtime.ktx)
             implementation(libs.firebaseDatabase)
             implementation(libs.androidx.core.ktx)
