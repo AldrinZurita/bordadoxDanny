@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
@@ -23,7 +24,7 @@ fun MainNavigationContainer() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    // Only show bottom bar for main features
+    // Only show bottom bar for main features (Orders, Reports, etc.)
     val showBottomBar = Screen.bottomNavItems.any { screen ->
         currentDestination?.hasRoute(screen.route::class) == true
     }
@@ -54,7 +55,8 @@ fun MainNavigationContainer() {
                             .fillMaxHeight()
                             .clickable {
                                 navController.navigate(screen.route) {
-                                    popUpTo<NavRoute.Login> {
+                                    // Purgar hasta el destino inicial para evitar acumulación de pantallas
+                                    popUpTo(navController.graph.findStartDestination().id) {
                                         saveState = true
                                     }
                                     launchSingleTop = true
