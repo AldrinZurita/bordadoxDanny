@@ -54,14 +54,10 @@ fun MainNavigationContainer() {
                             .weight(1f)
                             .fillMaxHeight()
                             .clickable {
-                                navController.navigate(screen.route) {
-                                    // Purgar hasta el destino inicial para evitar acumulación de pantallas
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
+                                    navController.navigate(screen.route) {
+                                        launchSingleTop = true
+                                        restoreState = true
                                     }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
                             },
                         contentAlignment = Alignment.Center
                     ) {
