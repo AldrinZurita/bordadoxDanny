@@ -58,6 +58,10 @@ kotlin {
             implementation(libs.firebaseConfig)
             implementation(libs.firebaseAuth)
             implementation(libs.kotlinx.coroutines.play.services)
+            implementation(libs.retrofit)
+            implementation(libs.retrofit.kotlinx.serialization)
+            implementation(libs.okhttp)
+            implementation(libs.okhttp.logging)
         }
         commonMain.dependencies {
             implementation(project(":core:designsystem"))

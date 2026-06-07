@@ -53,6 +53,7 @@
     <string name="send_verification_code">Send Verification Code</string>
     <string name="user_not_found">User not found</string>
     <string name="field_required">This field is required</string>
+    <string name="code_sent_success">Verification code sent successfully!</string>
 
     <!-- Auth - Verification Code -->
     <string name="verification_code">Verification Code</string>

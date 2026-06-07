@@ -13,6 +13,10 @@ import bo.bordadoxdanny.app.features.profile.domain.AuthRepository
 import bo.bordadoxdanny.app.firebase.RemoteConfigManager
 import bo.bordadoxdanny.app.firebase.RemoteConfigManagerImpl
 import bo.bordadoxdanny.app.firebase.FirebaseManager
+import bo.bordadoxdanny.app.network.ApiService
+import bo.bordadoxdanny.app.network.RetrofitClient
+import bo.bordadoxdanny.app.data.preferences.PreferencesRepository
+import bo.bordadoxdanny.app.data.preferences.PreferencesRepositoryImpl
 import org.koin.dsl.module
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.workmanager.dsl.workerOf
@@ -37,4 +41,6 @@ val androidModule = module {
     
     // Repositories
     singleOf(::AuthRepositoryImpl) bind AuthRepository::class
+    single { PreferencesRepositoryImpl(get()) } bind PreferencesRepository::class
+    single { RetrofitClient.apiService } bind ApiService::class
 }

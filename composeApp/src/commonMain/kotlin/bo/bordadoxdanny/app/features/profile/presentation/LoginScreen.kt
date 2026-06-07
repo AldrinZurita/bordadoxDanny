@@ -23,6 +23,7 @@ import bo.bordadoxdanny.app.core.designsystem.components.icons.AppIcons
 import bo.bordadoxdanny.app.core.designsystem.components.inputs.BasicInput
 import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun LoginScreen(
@@ -36,8 +37,12 @@ fun LoginScreen(
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
+    // Track if we've already navigated to prevent multiple calls
+    val navigated = remember { mutableStateOf(false) }
+    
     LaunchedEffect(state) {
-        if (state is AuthState.LoginSuccess) {
+        if (state is AuthState.LoginSuccess && !navigated.value) {
+            navigated.value = true
             onNavigateToMain()
         }
     }
@@ -167,8 +172,21 @@ fun LoginScreen(
 
 @Composable
 fun LanguageSelector(modifier: Modifier = Modifier) {
+    val viewModel: LanguageViewModel = koinViewModel()
+    val languageState by viewModel.state.collectAsState()
+    
+    val languages = listOf(
+        AppLanguage("en", "English"),
+        AppLanguage("es", "Español"),
+        AppLanguage("fr", "Français")
+    )
+    
     var expanded by remember { mutableStateOf(false) }
-    val languages = listOf("English", "Español", "Français") // Simplificado
+    val currentLanguageCode = when (languageState) {
+        is LanguageState.Loaded -> (languageState as LanguageState.Loaded).languageCode
+        else -> "en"
+    }
+    val currentLanguage = languages.find { it.code == currentLanguageCode } ?: languages.first()
 
     Box(modifier = modifier) {
         Row(
@@ -177,14 +195,17 @@ fun LanguageSelector(modifier: Modifier = Modifier) {
         ) {
             AppIcon(resource = AppIcons.Language, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppTheme.colors.primary)
             Spacer(modifier = Modifier.width(4.dp))
-            Text(text = "English", style = AppTheme.typography.bodyMedium)
+            Text(text = currentLanguage.displayName, style = AppTheme.typography.bodyMedium)
             AppIcon(resource = AppIcons.ExpandMore, contentDescription = null, modifier = Modifier.size(16.dp))
         }
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             languages.forEach { lang ->
                 DropdownMenuItem(
-                    text = { Text(lang) },
-                    onClick = { expanded = false }
+                    text = { Text(lang.displayName) },
+                    onClick = { 
+                        viewModel.onIntent(LanguageIntent.OnLanguageChanged(lang.code))
+                        expanded = false 
+                    }
                 )
             }
         }
