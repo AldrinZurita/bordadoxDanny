@@ -27,7 +27,7 @@ import bo.bordadoxdanny.app.features.profile.presentation.ProfileViewModel
 import bo.bordadoxdanny.app.features.profile.presentation.AuthViewModel
 import bo.bordadoxdanny.app.features.reports.presentation.ReportViewModel
 import bo.bordadoxdanny.app.domain.SyncDataUseCase
-import org.koin.compose.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val dataModule = module {
@@ -44,7 +44,7 @@ val dataModule = module {
 
     single<OrderRepository> { OrderRepositoryImpl(get(), get()) }
     single<CashRepository> { CashRepositoryImpl(get()) }
-    single<ReportRepository> { ReportRepositoryImpl(get(), get()) }
+    single<ReportRepository> { ReportRepositoryImpl(get(), get(), get()) }
 }
 
 val domainModule = module {
@@ -66,6 +66,7 @@ val domainModule = module {
     factory { LogoutUseCase(get()) }
     factory { GetCurrentUserUseCase(get()) }
     factory { UpdateLanguageUseCase(get()) }
+    factory { GetReportsUseCase(get()) }
 }
 
 val presentationModule = module {

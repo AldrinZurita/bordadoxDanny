@@ -13,14 +13,16 @@ class FakeAuthRepository(
     private val registeredEmails: List<String> = listOf("usuario@gmail.com"),
     private val fakeUser: User = User(
         id = "fake-id",
-        email = "usuario@gmail.com",
         username = "usuario",
-        firstName = "Usuario",
-        lastName1 = "Demo",
-        lastName2 = null,
+        email = "usuario@gmail.com",
         phoneCountryCode = "+591",
         phoneNumber = "71234567",
+        firstName = "Usuario",
+        middleName = null,
+        lastName1 = "Demo",
+        lastName2 = null,
         ciNumber = "1234567",
+        ciComplement = null,
         ciDepartment = "LP",
         languageCode = "en"
     )

@@ -15,6 +15,6 @@ interface ProfileDao {
     @Update
     suspend fun update(profile: ProfileEntity)
 
-    @Query("SELECT * FROM profile WHERE id = 1")
+    @Query("SELECT * FROM ProfileEntity WHERE id = 1")
     fun getProfile(): Flow<ProfileEntity?>
 }

@@ -1,6 +1,11 @@
 package bo.bordadoxdanny.app.features.navigation
 
-import bo.bordadoxdanny.app.composeapp.generated.resources.*
+import bo.bordadoxdanny.app.Res
+import bo.bordadoxdanny.app.nav_orders
+import bo.bordadoxdanny.app.nav_cash
+import bo.bordadoxdanny.app.nav_reports
+import bo.bordadoxdanny.app.nav_profile
+import bo.bordadoxdanny.app.nav_testing
 import bo.bordadoxdanny.app.core.designsystem.components.icons.AppIcons
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource

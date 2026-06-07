@@ -27,6 +27,7 @@ turbine = "1.1.0"
 mockk = "1.13.10"
 robolectric = "4.12.2"
 workTesting = "2.9.0"
+androidx-compose-ui-test = "1.7.6"
 
 # Versiones de Firebase con nombres que no colisionan con las librerías
 firebase-bom-v = "33.7.0"
@@ -98,6 +99,8 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidx-compose-ui-test" }
+androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-compose-ui-test" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

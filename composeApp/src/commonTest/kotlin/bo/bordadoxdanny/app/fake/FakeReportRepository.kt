@@ -8,6 +8,7 @@ class FakeReportRepository(
     private val fakeIncome: Double = 0.0,
     private val fakeExpenses: Double = 0.0,
     private val fakeArItems: List<AccountsReceivableItem> = emptyList(),
+    private val fakeReports: List<Report> = emptyList(),
     private val shouldReturnError: Boolean = false
 ) : ReportRepository {
 
@@ -34,5 +35,9 @@ class FakeReportRepository(
 
     override fun getAccountsReceivable(): Flow<List<AccountsReceivableItem>> {
         return flowOf(fakeArItems)
+    }
+
+    override fun getAllReports(): Flow<List<Report>> {
+        return flowOf(fakeReports)
     }
 }

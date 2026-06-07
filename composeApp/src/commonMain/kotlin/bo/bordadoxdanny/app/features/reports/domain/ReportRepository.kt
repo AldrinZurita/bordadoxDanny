@@ -6,4 +6,5 @@ interface ReportRepository {
     fun getFinancialSummary(period: Period): Flow<FinancialSummary?>
     fun getAvailablePeriods(): Flow<List<Period>>
     fun getAccountsReceivable(): Flow<List<AccountsReceivableItem>>
+    fun getAllReports(): Flow<List<Report>>
 }

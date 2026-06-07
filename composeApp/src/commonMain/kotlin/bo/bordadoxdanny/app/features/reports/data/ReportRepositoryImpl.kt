@@ -3,6 +3,7 @@ package bo.bordadoxdanny.app.features.reports.data
 import bo.bordadoxdanny.app.features.reports.domain.AccountsReceivableItem
 import bo.bordadoxdanny.app.features.reports.domain.FinancialSummary
 import bo.bordadoxdanny.app.features.reports.domain.Period
+import bo.bordadoxdanny.app.features.reports.domain.Report
 import bo.bordadoxdanny.app.features.reports.domain.ReportRepository
 import bo.bordadoxdanny.app.features.orders.data.OrderDao
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +11,8 @@ import kotlinx.coroutines.flow.map
 
 class ReportRepositoryImpl(
     private val reportSummaryDao: ReportSummaryDao,
-    private val orderDao: OrderDao
+    private val orderDao: OrderDao,
+    private val reportDao: ReportDao
 ) : ReportRepository {
 
     override fun getFinancialSummary(period: Period): Flow<FinancialSummary?> {
@@ -30,8 +32,6 @@ class ReportRepositoryImpl(
     }
 
     override fun getAccountsReceivable(): Flow<List<AccountsReceivableItem>> {
-        // En un escenario real, esto vendría de una tabla de pagos/deudas o filtrando órdenes.
-        // Según el prompt: "suma de órdenes con estado pendiente de pago"
         return orderDao.getAllOrders().map { orders ->
             orders.filter { it.balance > 0 }.map { order ->
                 AccountsReceivableItem(
@@ -39,9 +39,15 @@ class ReportRepositoryImpl(
                     clientName = order.customerName,
                     description = order.description,
                     amount = order.balance,
-                    isUrgent = order.balance > 1000 // Ejemplo de lógica de urgencia
+                    isUrgent = order.balance > 1000
                 )
             }
+        }
+    }
+
+    override fun getAllReports(): Flow<List<Report>> {
+        return reportDao.getAllReports().map { entities ->
+            entities.map { it.toDomain() }
         }
     }
 }

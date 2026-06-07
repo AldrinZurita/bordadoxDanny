@@ -1,11 +1,11 @@
 package bo.bordadoxdanny.app.features.reports.domain
 
-import kotlinx.coroutines.flow.Flow
+import bo.bordadoxdanny.app.fake.FakeReportRepository
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class GetFinancialSummaryUseCaseTest {
 
@@ -19,24 +19,31 @@ class GetFinancialSummaryUseCaseTest {
         val result = useCase(Period.Month(2026, 2)).first()
         
         // THEN
-        assertEquals(2700.0 - 450.0, result?.netProfit)
+        assertNotNull(result)
+        assertEquals(2700.0 - 450.0, result.netProfit, 0.001)
     }
 
-    class FakeReportRepository(
-        private val fakeIncome: Double = 0.0,
-        private val fakeExpenses: Double = 0.0
-    ) : ReportRepository {
-        override fun getFinancialSummary(period: Period): Flow<FinancialSummary?> = flowOf(
-            FinancialSummary(
-                totalIncome = fakeIncome,
-                totalExpenses = fakeExpenses,
-                netProfit = fakeIncome - fakeExpenses,
-                accountsReceivable = 0.0,
-                period = period
-            )
-        )
+    @Test
+    fun `given no data, all summary values are zero`() = runTest {
+        val repo = FakeReportRepository(fakeIncome = 0.0, fakeExpenses = 0.0)
+        val useCase = GetFinancialSummaryUseCase(repo)
 
-        override fun getAvailablePeriods(): Flow<List<Period>> = flowOf(emptyList())
-        override fun getAccountsReceivable(): Flow<List<AccountsReceivableItem>> = flowOf(emptyList())
+        val result = useCase(Period.AllMonths).first()
+
+        assertNotNull(result)
+        assertEquals(0.0, result.totalIncome, 0.001)
+        assertEquals(0.0, result.totalExpenses, 0.001)
+        assertEquals(0.0, result.netProfit, 0.001)
+    }
+
+    @Test
+    fun `given AllMonths period, use case passes it to repository correctly`() = runTest {
+        val repo = FakeReportRepository(fakeIncome = 1500.0, fakeExpenses = 300.0)
+        val useCase = GetFinancialSummaryUseCase(repo)
+
+        val result = useCase(Period.AllMonths).first()
+
+        assertNotNull(result)
+        assertEquals(Period.AllMonths, result.period)
     }
 }

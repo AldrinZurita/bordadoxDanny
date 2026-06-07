@@ -2,6 +2,7 @@ package bo.bordadoxdanny.app.features.reports.data
 
 import bo.bordadoxdanny.app.features.reports.domain.FinancialSummary
 import bo.bordadoxdanny.app.features.reports.domain.Period
+import bo.bordadoxdanny.app.features.reports.domain.Report
 
 fun ReportSummaryEntity.toDomain(): FinancialSummary {
     val period = when {
@@ -58,4 +59,11 @@ fun ReportSummaryEntity.toDto() = ReportSummaryDto(
     year = year,
     month = month,
     updatedAt = updatedAt
+)
+
+fun ReportEntity.toDomain() = Report(
+    id = id,
+    title = title,
+    content = content,
+    createdDate = createdDate
 )
