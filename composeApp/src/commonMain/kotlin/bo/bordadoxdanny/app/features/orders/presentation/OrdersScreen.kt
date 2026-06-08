@@ -1,17 +1,19 @@
 package bo.bordadoxdanny.app.features.orders.presentation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import bo.bordadoxdanny.app.*
+import bo.bordadoxdanny.app.core.designsystem.components.buttons.PrimaryButton
 import bo.bordadoxdanny.app.core.designsystem.components.dividers.HorizontalDivider
 import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -19,8 +21,51 @@ fun OrdersScreen(
     onAddOrder: () -> Unit,
     viewModel: OrdersViewModel = koinViewModel()
 ) {
-    val orders by viewModel.orders.collectAsState()
+    val state by viewModel.state.collectAsState()
 
+    Box(modifier = Modifier.fillMaxSize().background(AppTheme.colors.background)) {
+        when (val currentState = state) {
+            is OrderState.Loading -> {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center),
+                    color = AppTheme.colors.primary
+                )
+            }
+            is OrderState.Success -> {
+                OrdersContent(
+                    orders = currentState.orders,
+                    onAddOrder = onAddOrder,
+                    onIntent = viewModel::onIntent
+                )
+            }
+            is OrderState.Error -> {
+                Column(
+                    modifier = Modifier.align(Alignment.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = stringResource(currentState.messageResId),
+                        color = AppTheme.colors.error,
+                        style = AppTheme.typography.bodyMedium
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    PrimaryButton(
+                        text = stringResource(Res.string.sign_in),
+                        onClick = { viewModel.onIntent(OrderIntent.OnRefresh) },
+                        modifier = Modifier.padding(horizontal = 32.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun OrdersContent(
+    orders: List<bo.bordadoxdanny.app.features.orders.domain.Order>,
+    onAddOrder: () -> Unit,
+    onIntent: (OrderIntent) -> Unit
+) {
     Scaffold(
         containerColor = AppTheme.colors.background,
         floatingActionButton = {
@@ -33,15 +78,25 @@ fun OrdersScreen(
             }
         }
     ) { padding ->
-        Column(modifier = Modifier.padding(padding)) {
-            Text(
-                text = "Orders",
-                style = AppTheme.typography.headlineLarge,
-                color = AppTheme.colors.textPrimary,
-                modifier = Modifier.padding(16.dp)
-            )
-            
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(modifier = Modifier.fillMaxSize().padding(padding)) {
+            item {
+                Text(
+                    text = stringResource(Res.string.nav_orders),
+                    style = AppTheme.typography.headlineLarge,
+                    color = AppTheme.colors.textPrimary,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+            if (orders.isEmpty()) {
+                item {
+                    Text(
+                        text = stringResource(Res.string.no_data_for_period),
+                        style = AppTheme.typography.bodyMedium,
+                        color = AppTheme.colors.textSecondary,
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+            } else {
                 items(orders) { order ->
                     Column(
                         modifier = Modifier

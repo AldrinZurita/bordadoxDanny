@@ -1,7 +1,6 @@
 package bo.bordadoxdanny.app.core.daemon.db
 
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import platform.Foundation.NSHomeDirectory
 
 actual fun createDaemonDatabase(context: Any?): DaemonDatabase {

@@ -9,6 +9,7 @@ import bo.bordadoxdanny.app.di.commonModules
 import bo.bordadoxdanny.app.di.androidModule
 import bo.bordadoxdanny.app.workers.LogScheduler
 import com.google.firebase.FirebaseApp
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.workmanager.koin.workManagerFactory
@@ -32,6 +33,12 @@ class BordadosApplication : Application() {
             androidContext(this@BordadosApplication)
             workManagerFactory()
             modules(commonModules + androidModule + daemonModule)
+        }
+
+        try {
+            get<bo.bordadoxdanny.app.firebase.RemoteConfigManager>()
+        } catch (e: Exception) {
+            Log.e("BORDADOS", "RemoteConfig initialization failed: ${e.message}")
         }
 
         // Initialize Daemon components

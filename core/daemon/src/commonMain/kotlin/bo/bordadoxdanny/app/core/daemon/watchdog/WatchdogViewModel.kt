@@ -7,6 +7,7 @@ import bo.bordadoxdanny.app.core.daemon.model.HeartbeatModel
 import bo.bordadoxdanny.app.core.daemon.notifications.NotificationHelper
 import bo.bordadoxdanny.app.core.daemon.repository.HeartbeatRepository
 import bo.bordadoxdanny.app.core.daemon.worker.HeartbeatScheduler
+import kotlinx.datetime.Clock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -47,11 +48,9 @@ class WatchdogViewModel(
                 WatchdogService.check(lastKnownHeartbeat) {
                     viewModelScope.launch(Dispatchers.Main) {
                         if (_watchdogState.value !is WatchdogState.Failure && _watchdogState.value !is WatchdogState.Recovering) {
-                            val missedSince = lastKnownHeartbeat?.timestampMillis ?: System.currentTimeMillis()
+                            val missedSince = lastKnownHeartbeat?.timestampMillis ?: Clock.System.now().toEpochMilliseconds()
                             _watchdogState.value = WatchdogState.Failure(missedSince)
                             NotificationHelper.showFailureNotification(context, missedSince)
-                            // Auto-repair is often desired, but the task mentions Force Repair button testing.
-                            // However, instructions for FIX 1 say: viewModelScope.launch { autoRepair() }
                             autoRepair()
                         }
                     }
@@ -72,13 +71,13 @@ class WatchdogViewModel(
             HeartbeatScheduler.start(context)
             NotificationHelper.showRecoveryNotification(context)
             withContext(Dispatchers.Main) {
-                _watchdogState.value = WatchdogState.Healthy(System.currentTimeMillis())
+                _watchdogState.value = WatchdogState.Healthy(Clock.System.now().toEpochMilliseconds())
                 println("REPAIR: autoRepair success")
             }
         } catch (e: Exception) {
             println("REPAIR: autoRepair failed: ${e.message}")
             withContext(Dispatchers.Main) {
-                _watchdogState.value = WatchdogState.Failure(System.currentTimeMillis())
+                _watchdogState.value = WatchdogState.Failure(Clock.System.now().toEpochMilliseconds())
             }
         }
     }

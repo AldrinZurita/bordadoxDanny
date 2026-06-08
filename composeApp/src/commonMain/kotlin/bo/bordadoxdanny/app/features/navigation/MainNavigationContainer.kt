@@ -3,18 +3,20 @@ package bo.bordadoxdanny.app.features.navigation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.BasicText
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
 import bo.bordadoxdanny.app.core.designsystem.components.dividers.HorizontalDivider
 import bo.bordadoxdanny.app.core.designsystem.components.icons.AppIcon
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MainNavigationContainer() {
@@ -22,9 +24,10 @@ fun MainNavigationContainer() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
+    // Only show bottom bar for main features (Orders, Reports, etc.)
     val showBottomBar = Screen.bottomNavItems.any { screen ->
         currentDestination?.hasRoute(screen.route::class) == true
-    } || currentDestination?.hasRoute(NavRoute.Testing::class) == true
+    }
 
     Column(modifier = Modifier.fillMaxSize().background(AppTheme.colors.background)) {
         Box(modifier = Modifier.weight(1f)) {
@@ -51,13 +54,10 @@ fun MainNavigationContainer() {
                             .weight(1f)
                             .fillMaxHeight()
                             .clickable {
-                                navController.navigate(screen.route) {
-                                    popUpTo(NavRoute.Testing) {
-                                        saveState = true
+                                    navController.navigate(screen.route) {
+                                        launchSingleTop = true
+                                        restoreState = true
                                     }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
                             },
                         contentAlignment = Alignment.Center
                     ) {
@@ -67,15 +67,14 @@ fun MainNavigationContainer() {
                         ) {
                             AppIcon(
                                 resource = screen.icon,
-                                contentDescription = screen.title,
+                                contentDescription = stringResource(screen.titleRes),
                                 tint = if (isSelected) AppTheme.colors.primary else AppTheme.colors.textPrimary
                             )
                             Spacer(modifier = Modifier.height(4.dp))
-                            BasicText(
-                                text = screen.title,
-                                style = AppTheme.typography.labelLarge.copy(
-                                    color = if (isSelected) AppTheme.colors.primary else AppTheme.colors.textPrimary
-                                )
+                            Text(
+                                text = stringResource(screen.titleRes),
+                                style = AppTheme.typography.labelSmall,
+                                color = if (isSelected) AppTheme.colors.primary else AppTheme.colors.textPrimary
                             )
                         }
                     }

@@ -20,16 +20,23 @@ navigation-compose = "2.8.0-alpha10"
 room = "2.7.0-alpha12"
 sqlite = "2.5.0-alpha12"
 googleGmsGoogleServices = "4.4.4"
-firebaseMessaging = "25.0.1"
-firebaseBom = "33.7.0"
 kotlinx-datetime = "0.6.0"
 kotlinx-serialization = "1.7.3"
 workManager = "2.9.0"
-firebaseDatabase = "21.0.0"
 turbine = "1.1.0"
 mockk = "1.13.10"
 robolectric = "4.12.2"
 workTesting = "2.9.0"
+androidx-compose-ui-test = "1.7.6"
+retrofit = "2.11.0"
+okhttp = "4.12.0"
+
+# Versiones de Firebase
+firebase-bom-v = "33.7.0"
+firebase-messaging-v = "25.0.1"
+firebase-database-v = "21.0.0"
+firebase-auth-v = "23.1.0"
+firebase-config-v = "22.0.1"
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
@@ -38,6 +45,7 @@ kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.
 junit = { module = "junit:junit", version.ref = "junit" }
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinx-coroutines" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-testExt-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-testExt" }
 androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-espresso" }
@@ -63,8 +71,7 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidx-workmanager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koin" }
 
 # WorkManager
-androidx-work-runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work" }
-androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workManager" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work" }
 androidx-work-testing = { module = "androidx.work:work-testing", version.ref = "workTesting" }
 
 # Navigation
@@ -78,11 +85,11 @@ room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 
 # Firebase
-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
-firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
-firebase-database = { module = "com.google.firebase:firebase-database" }
-firebase-database-ktx = { module = "com.google.firebase:firebase-database-ktx", version.ref = "firebaseDatabase" }
-firebase-config = { module = "com.google.firebase:firebase-config" }
+firebaseBom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom-v" }
+firebaseMessaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebase-messaging-v" }
+firebaseDatabase = { module = "com.google.firebase:firebase-database", version.ref = "firebase-database-v" }
+firebaseConfig = { module = "com.google.firebase:firebase-config", version.ref = "firebase-config-v" }
+firebaseAuth = { module = "com.google.firebase:firebase-auth", version.ref = "firebase-auth-v" }
 
 # Datetime
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
@@ -90,8 +97,15 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 # Serialization
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
+# Network
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-kotlinx-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
+
 # Testing
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 

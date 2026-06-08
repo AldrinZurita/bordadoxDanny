@@ -80,5 +80,12 @@ class MyFcmService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         Log.d(TAG, "FCM_TOKEN_UPDATE: $token")
+        try {
+            val prefs = getSharedPreferences("fcm_prefs", Context.MODE_PRIVATE)
+            prefs.edit().putString("fcm_token", token).apply()
+            Log.d(TAG, "FCM token saved to shared preferences")
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to save FCM token: ${e.message}")
+        }
     }
 }

@@ -3,6 +3,7 @@ package bo.bordadoxdanny.app.features.orders.worker
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import bo.bordadoxdanny.app.features.orders.data.toDto
 import bo.bordadoxdanny.app.features.orders.domain.OrderRepository
 import bo.bordadoxdanny.app.firebase.FirebaseManager
 import org.koin.core.component.KoinComponent
@@ -22,7 +23,7 @@ class OrderSyncWorker(
             if (pendingOrders.isEmpty()) return Result.success()
 
             pendingOrders.forEach { order ->
-                val result = firebaseManager.saveData("orders/${order.id}", order)
+                val result = firebaseManager.saveData("orders/${order.id}", order.toDto())
                 if (result.isSuccess) {
                     repository.markAsSynced(order.id)
                 }

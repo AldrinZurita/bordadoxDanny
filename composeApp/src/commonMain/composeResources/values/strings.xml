@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
- Loco xml export: Android strings
- Project: bordadoxDanny
- Locale: en-USA, English (USA)
- Exported by: Caleb Baving
- Exported at: Thu, 16 Apr 2026 18:48:53 -0400
---><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="welcome_message">\u0020Welcome to Bordados Danny! Quality in every stitch.</string>
+<resources>
+    <string name="welcome_message">Welcome to Bordados Danny! Quality in every stitch.</string>
     <string name="app_name">Bordados Danny</string>
     <string name="sync_data_label">Sync Data</string>
     <string name="firebase_status_label">Firebase Status: %s</string>
@@ -14,8 +8,95 @@
     <string name="firebase_status_saving">Saving...</string>
     <string name="firebase_status_success">Success!</string>
     <string name="firebase_status_failed">Failed: %s</string>
-    <string name="test_firebase_button">\u0020Test Firebase Database</string>
+    <string name="test_firebase_button">Test Firebase Database</string>
     <string name="hello_world">Hello world</string>
     <string name="profile_language_selector">Language</string>
     <string name="testing_message">testing</string>
+
+    <!-- Bottom Nav -->
+    <string name="nav_orders">Orders</string>
+    <string name="nav_cash">Cash</string>
+    <string name="nav_reports">Reports</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_testing">Testing</string>
+
+    <!-- Reports -->
+    <string name="account_summary">Account Summary</string>
+    <string name="total_income">Total Income</string>
+    <string name="total_expenses">Total Expenses</string>
+    <string name="net_profit">Net Profit</string>
+    <string name="accounts_receivable">Accounts Receivable</string>
+    <string name="income_vs_expenses">Income vs Expenses</string>
+    <string name="income">Income</string>
+    <string name="expenses">Expenses</string>
+    <string name="period">Period</string>
+    <string name="all_months">All Months</string>
+    <string name="total_pending">Total: %1$s Bs pending</string>
+    <string name="no_data_for_period">No data for this period</string>
+    <string name="accounts_receivable_empty">No pending accounts receivable</string>
+
+    <!-- Auth - Login -->
+    <string name="welcome_back">Welcome Back</string>
+    <string name="sign_in_subtitle">Sign in to continue to BordadoxDanny</string>
+    <string name="email_or_username">Email or Username</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="no_account">Don\'t have an account?</string>
+    <string name="sign_in">Sign In</string>
+    <string name="demo_credentials">Demo: usuario@gmail.com / Usuario123</string>
+    <string name="invalid_credentials">Invalid email/username or password</string>
+
+    <!-- Auth - Reset Password -->
+    <string name="back_to_login">Back to Login</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="reset_password_subtitle">Enter your email or username to receive a verification code</string>
+    <string name="send_verification_code">Send Verification Code</string>
+    <string name="user_not_found">User not found</string>
+    <string name="field_required">This field is required</string>
+    <string name="code_sent_success">Verification code sent successfully!</string>
+
+    <!-- Auth - Verification Code -->
+    <string name="verification_code">Verification Code</string>
+    <string name="code_sent_to">Enter the code sent to %1$s</string>
+    <string name="verify_code">Verify Code</string>
+    <string name="resend_in">Resend in %1$ds</string>
+    <string name="resend_code">Resend Code</string>
+    <string name="invalid_code">Invalid verification code</string>
+
+    <!-- Auth - New Password -->
+    <string name="new_password">New Password</string>
+    <string name="new_password_subtitle">Create a new strong password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="reset_password_action">Reset Password</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="password_req_lowercase">A lowercase letter</string>
+    <string name="password_req_uppercase">A capital (uppercase) letter</string>
+    <string name="password_req_number">A number</string>
+    <string name="password_req_length">Minimum 8 characters</string>
+
+    <!-- Auth - Register -->
+    <string name="create_account_title">Create Account</string>
+    <string name="join_today">Join BordadoxDanny today</string>
+    <string name="create_account">Create Account</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="first_name">First Name</string>
+    <string name="middle_name">Middle Name</string>
+    <string name="last_name_1">Last Name 1</string>
+    <string name="last_name_2">Last Name 2</string>
+    <string name="ci_number">CI Number</string>
+    <string name="ci_complement">CI Complement</string>
+    <string name="ci_department">Department</string>
+    <string name="optional_field">Optional</string>
+    <string name="username_taken">Username already taken</string>
+    <string name="email_taken">Email already registered</string>
+
+    <!-- Profile -->
+    <string name="profile">Profile</string>
+    <string name="language">Language</string>
+    <string name="logout">Logout</string>
+    <string name="logout_confirmation">Are you sure you want to logout?</string>
+    <string name="cancel">Cancel</string>
 </resources>
