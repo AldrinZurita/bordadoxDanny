@@ -50,7 +50,7 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.workmanager)
             implementation(libs.compose.uiToolingPreview)
-            
+
             // Network
             implementation(libs.retrofit)
             implementation(libs.retrofit.kotlinx.serialization)
@@ -90,8 +90,11 @@ kotlin {
         commonTest.dependencies {
             implementation(kotlin("test"))
             implementation(libs.kotlinx.coroutines.test)
-            implementation(libs.mockk)
+            //implementation(libs.mockk)
             implementation(libs.turbine)
+        }
+        androidUnitTest.dependencies {
+            implementation(libs.mockk)
         }
     }
 }
@@ -116,7 +119,7 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-        
+
         buildConfigField("boolean", "IS_DEBUG", "true")
     }
 
