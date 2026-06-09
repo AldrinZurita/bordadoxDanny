@@ -17,13 +17,14 @@ import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
 import bo.bordadoxdanny.app.core.designsystem.util.Preview
 
 /**
- * Input numérico con prefijo "Bs." y teclado numérico.
+ * Input numérico con símbolo de moneda dinámico y teclado especializado.
  */
 @Composable
 fun CurrencyInput(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
+    currencySymbol: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     isError: Boolean = false,
@@ -33,7 +34,6 @@ fun CurrencyInput(
         OutlinedTextField(
             value = value,
             onValueChange = { newValue ->
-                // Filtro: solo dígitos y un único punto decimal
                 if (newValue.isEmpty() || newValue.matches(Regex("""^\d*\.?\d*$"""))) {
                     onValueChange(newValue)
                 }
@@ -46,7 +46,7 @@ fun CurrencyInput(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             leadingIcon = {
                 Text(
-                    text = "Bs.",
+                    text = currencySymbol,
                     style = AppTheme.typography.bodyMedium,
                     color = AppTheme.colors.textSecondary,
                     modifier = Modifier.padding(start = 12.dp)
@@ -85,6 +85,7 @@ fun CurrencyInputPreview() {
     CurrencyInput(
         value = "150.50",
         onValueChange = {},
-        label = "Monto pagado"
+        label = "Monto pagado",
+        currencySymbol = "Bs."
     )
 }
