@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import bo.bordadoxdanny.app.core.designsystem.components.buttons.PrimaryButton
 import bo.bordadoxdanny.app.core.designsystem.components.inputs.BasicInput
 import bo.bordadoxdanny.app.core.designsystem.components.dividers.HorizontalDivider
+import bo.bordadoxdanny.app.core.designsystem.components.CurrencyInput
 import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -45,7 +46,6 @@ fun CreateOrderScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        // Siguiendo Regla 8 e instrucciones: placeholder de texto para volver
                         Text(
                             text = "<", 
                             style = AppTheme.typography.headlineLarge, 
@@ -108,11 +108,13 @@ fun CreateOrderScreen(
                         label = "Cant.",
                         modifier = Modifier.weight(1f)
                     )
-                    BasicInput(
-                        value = if (form.unitPrice == 0.0) "" else form.unitPrice.toString(),
+                    
+                    CurrencyInput(
+                        value = form.unitPrice,
                         onValueChange = viewModel::onUnitPriceChange,
                         label = "P. Unit",
-                        modifier = Modifier.weight(1f)
+                        currencySymbol = "Bs",
+                        modifier = Modifier.weight(1.5f)
                     )
                 }
 
@@ -142,10 +144,11 @@ fun CreateOrderScreen(
                     .padding(16.dp)
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    BasicInput(
-                        value = if (form.initialPayment == 0.0) "" else form.initialPayment.toString(),
+                    CurrencyInput(
+                        value = form.initialPayment,
                         onValueChange = viewModel::onInitialPaymentChange,
                         label = "Pago Inicial (Adelanto)",
+                        currencySymbol = "Bs",
                         modifier = Modifier.fillMaxWidth()
                     )
                     Row(

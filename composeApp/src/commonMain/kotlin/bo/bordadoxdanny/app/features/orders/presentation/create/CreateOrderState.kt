@@ -12,10 +12,10 @@ data class CreateOrderForm(
     val deliveryDate: Long? = null,
     val description: String = "",
     val quantity: Int = 1,
-    val unitPrice: Double = 0.0,
-    val initialPayment: Double = 0.0,
+    val unitPrice: String = "",
+    val initialPayment: String = "",
     val customerNameError: Boolean = false
 ) {
-    val total: Double = quantity * unitPrice
-    val balance: Double = total - initialPayment
+    val total: Double = quantity * (unitPrice.toDoubleOrNull() ?: 0.0)
+    val balance: Double = total - (initialPayment.toDoubleOrNull() ?: 0.0)
 }

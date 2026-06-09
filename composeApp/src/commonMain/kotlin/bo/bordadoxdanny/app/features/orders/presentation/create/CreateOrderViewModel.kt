@@ -32,11 +32,11 @@ class CreateOrderViewModel(
     }
 
     fun onUnitPriceChange(p: String) {
-        _form.update { it.copy(unitPrice = p.toDoubleOrNull() ?: 0.0) }
+        _form.update { it.copy(unitPrice = p) }
     }
 
     fun onInitialPaymentChange(p: String) {
-        _form.update { it.copy(initialPayment = p.toDoubleOrNull() ?: 0.0) }
+        _form.update { it.copy(initialPayment = p) }
     }
 
     fun createOrder() {
@@ -54,8 +54,8 @@ class CreateOrderViewModel(
                     deliveryDate = current.deliveryDate ?: Clock.System.now().toEpochMilliseconds(),
                     description = current.description,
                     quantity = current.quantity,
-                    unitPrice = current.unitPrice,
-                    initialPayment = current.initialPayment,
+                    unitPrice = current.unitPrice.toDoubleOrNull() ?: 0.0,
+                    initialPayment = current.initialPayment.toDoubleOrNull() ?: 0.0,
                     total = current.total,
                     balance = current.balance,
                     createdAt = Clock.System.now().toEpochMilliseconds()
