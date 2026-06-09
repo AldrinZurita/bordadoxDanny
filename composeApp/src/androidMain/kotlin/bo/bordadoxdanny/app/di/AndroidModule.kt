@@ -8,6 +8,7 @@ import bo.bordadoxdanny.app.features.orders.worker.AndroidSyncScheduler
 import bo.bordadoxdanny.app.features.orders.data.SyncScheduler
 import bo.bordadoxdanny.app.workers.SyncReportWorker
 import bo.bordadoxdanny.app.workers.SyncUserWorker
+import bo.bordadoxdanny.app.features.cash.worker.SyncTransactionWorker
 import bo.bordadoxdanny.app.features.profile.data.AuthRepositoryImpl
 import bo.bordadoxdanny.app.features.profile.domain.AuthRepository
 import bo.bordadoxdanny.app.firebase.RemoteConfigManager
@@ -33,9 +34,9 @@ val androidModule = module {
     workerOf(::OrderSyncWorker)
     workerOf(::SyncReportWorker)
     workerOf(::SyncUserWorker)
+    workerOf(::SyncTransactionWorker)
 
     // Schedulers
-    // Registramos la clase concreta primero para que get<LogScheduler>() funcione en BordadosApplication
     single { LogScheduler(androidContext()) } bind WorkerScheduler::class
     singleOf(::AndroidSyncScheduler) bind SyncScheduler::class
     

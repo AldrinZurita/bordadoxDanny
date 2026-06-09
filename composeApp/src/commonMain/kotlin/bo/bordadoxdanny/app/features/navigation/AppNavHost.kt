@@ -1,6 +1,5 @@
 package bo.bordadoxdanny.app.features.navigation
 
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -15,7 +14,7 @@ import bo.bordadoxdanny.app.features.orders.presentation.OrdersScreen
 import bo.bordadoxdanny.app.features.orders.presentation.create.CreateOrderScreen
 import bo.bordadoxdanny.app.features.reports.presentation.AccountSummaryScreen
 import bo.bordadoxdanny.app.features.reports.presentation.ReportViewModel
-import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
+import bo.bordadoxdanny.app.features.cash.presentation.*
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -147,10 +146,18 @@ fun AppNavHost(
         }
 
         composable<NavRoute.Cash> {
-            BasicText(
-                text = "Pantalla de Caja",
-                style = AppTheme.typography.headlineLarge.copy(color = AppTheme.colors.textPrimary)
+            CashScreen(
+                onAddIncome = { navController.navigate(NavRoute.AddIncome) },
+                onAddExpense = { navController.navigate(NavRoute.AddExpense) }
             )
+        }
+
+        composable<NavRoute.AddIncome> {
+            AddIncomeScreen()
+        }
+
+        composable<NavRoute.AddExpense> {
+            AddExpenseScreen()
         }
 
         composable<NavRoute.Reports> {
