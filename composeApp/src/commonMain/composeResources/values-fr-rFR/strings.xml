@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
- Loco xml export: Android strings
- Project: bordadoxDanny
- Locale: fr-FR, French (France)
- Exported by: Caleb Baving
- Exported at: Thu, 16 Apr 2026 18:48:53 -0400
---><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="welcome_message">Bienvenue chez Bordados Danny ! La qualité dans chaque point.</string>
     <string name="app_name">Broderies Danny</string>
     <string name="sync_data_label">Synchroniser les données</string>
@@ -18,4 +12,90 @@
     <string name="hello_world">salut monde</string>
     <string name="profile_language_selector">Langue</string>
     <string name="testing_message">mbappe</string>
+
+    <string name="nav_orders">Commandes</string>
+    <string name="nav_cash">Caisse</string>
+    <string name="nav_reports">Rapports</string>
+    <string name="nav_profile">Profil</string>
+    <string name="nav_testing">Test</string>
+
+    <string name="account_summary">Résumé du Compte</string>
+    <string name="total_income">Revenus Totaux</string>
+    <string name="total_expenses">Dépenses Totales</string>
+    <string name="net_profit">Bénéfice Net</string>
+    <string name="accounts_receivable">Comptes Clients</string>
+    <string name="income_vs_expenses">Revenus vs Dépenses</string>
+    <string name="income">Revenus</string>
+    <string name="expenses">Dépenses</string>
+    <string name="period">Période</string>
+    <string name="all_months">Tous les mois</string>
+    <string name="total_pending">Total : %1$s Bs en attente</string>
+    <string name="no_data_for_period">Aucune donnée pour cette période</string>
+    <string name="accounts_receivable_empty">Aucun compte client en attente</string>
+
+    <string name="total_income_month">Revenus Totals (Mois)</string>
+    <string name="total_expenses_month">Dépenses Totales (Mois)</string>
+    <string name="currency_bs">Bs</string>
+    <string name="no_transactions">Aucune transaction trouvée</string>
+    <string name="add_income_placeholder">La logique pour remplir un nouveau revenu sera implémentée ici</string>
+    <string name="add_expense_placeholder">La logique pour remplir une nouvelle dépense sera implémentée ici</string>
+
+    <string name="welcome_back">Bon retour</string>
+    <string name="sign_in_subtitle">Connectez-vous pour continuer sur BordadoxDanny</string>
+    <string name="email_or_username">E-mail ou nom d\'utilisateur</string>
+    <string name="password">Mot de passe</string>
+    <string name="forgot_password">Mot de passe oublié ?</string>
+    <string name="no_account">Vous n\'avez pas de compte ?</string>
+    <string name="sign_in">Se Connecter</string>
+    <string name="demo_credentials">Démo : usuario@gmail.com / Usuario123</string>
+    <string name="invalid_credentials">E-mail/nom d\'utilisateur ou mot de passe invalide</string>
+
+    <string name="back_to_login">Retour à la connexion</string>
+    <string name="reset_password">Réinitialiser le mot de passe</string>
+    <string name="reset_password_subtitle">Entrez votre e-mail ou nom d\'utilisateur pour recevoir un code de vérification</string>
+    <string name="send_verification_code">Envoyer le code de vérification</string>
+    <string name="user_not_found">Utilisateur introuvable</string>
+    <string name="field_required">Ce champ est obligatoire</string>
+    <string name="code_sent_success">Code de vérification envoyé avec succès !</string>
+
+    <string name="verification_code">Code de vérification</string>
+    <string name="code_sent_to">Entrez le code envoyé à %1$s</string>
+    <string name="verify_code">Vérifier le code</string>
+    <string name="resend_in">Renvoyer dans %1$ds</string>
+    <string name="resend_code">Renvoyer le code</string>
+    <string name="invalid_code">Code de vérification invalide</string>
+
+    <string name="new_password">Nouveau mot de passe</string>
+    <string name="new_password_subtitle">Créez un nouveau mot de passe fort</string>
+    <string name="confirm_password">Confirmer le mot de passe</string>
+    <string name="reset_password_action">Réinitialiser le mot de passe</string>
+    <string name="passwords_do_not_match">Les mots de passe ne correspondent pas</string>
+    <string name="password_req_lowercase">Une lettre minuscule</string>
+    <string name="password_req_uppercase">Une lettre majuscule</string>
+    <string name="password_req_number">Un chiffre</string>
+    <string name="password_req_length">Minimum 8 caractères</string>
+
+    <string name="create_account_title">Créer un compte</string>
+    <string name="join_today">Rejoignez BordadoxDanny aujourd\'hui</string>
+    <string name="create_account">Créer un compte</string>
+    <string name="already_have_account">Vous avez déjà un compte ?</string>
+    <string name="phone_number">Numéro de téléphone</string>
+    <string name="username">Nom d\'utilisateur</string>
+    <string name="email">E-mail</string>
+    <string name="first_name">Prénom</string>
+    <string name="middle_name">Deuxième prénom</string>
+    <string name="last_name_1">Nom de famille 1</string>
+    <string name="last_name_2">Nom de famille 2</string>
+    <string name="ci_number">Numéro de CI</string>
+    <string name="ci_complement">Complément de CI</string>
+    <string name="ci_department">Département</string>
+    <string name="optional_field">Optionnel</string>
+    <string name="username_taken">Nom d\'utilisateur déjà pris</string>
+    <string name="email_taken">E-mail déjà enregistré</string>
+
+    <string name="profile">Profil</string>
+    <string name="language">Langue</string>
+    <string name="logout">Se déconnecter</string>
+    <string name="logout_confirmation">Êtes-vous sûr de vouloir vous déconnecter ?</string>
+    <string name="cancel">Annuler</string>
 </resources>

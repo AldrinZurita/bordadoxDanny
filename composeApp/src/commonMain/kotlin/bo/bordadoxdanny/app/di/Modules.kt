@@ -1,7 +1,7 @@
 package bo.bordadoxdanny.app.di
 
-import bo.bordadoxdanny.app.features.cash.data.CashDao
-import bo.bordadoxdanny.app.features.cash.data.CashRepositoryImpl
+import bo.bordadoxdanny.app.features.cash.data.TransactionDao
+import bo.bordadoxdanny.app.features.cash.data.TransactionRepositoryImpl
 import bo.bordadoxdanny.app.data.database.AppDatabase
 import bo.bordadoxdanny.app.data.database.getDatabaseBuilder
 import bo.bordadoxdanny.app.data.database.createRoomDatabase
@@ -14,10 +14,9 @@ import bo.bordadoxdanny.app.features.reports.data.ReportDao
 import bo.bordadoxdanny.app.features.reports.data.ReportRepositoryImpl
 import bo.bordadoxdanny.app.features.reports.data.ReportSummaryDao
 import bo.bordadoxdanny.app.data.preferences.SettingsDao
-import bo.bordadoxdanny.app.data.preferences.PreferencesRepository
-import bo.bordadoxdanny.app.domain.SyncDataUseCase
-import bo.bordadoxdanny.app.features.cash.domain.CashRepository
-import bo.bordadoxdanny.app.features.cash.domain.GetCashEntriesUseCase
+import bo.bordadoxdanny.app.features.cash.domain.TransactionRepository
+import bo.bordadoxdanny.app.features.cash.domain.GetTransactionsUseCase
+import bo.bordadoxdanny.app.features.cash.domain.GetTotalBalanceUseCase
 import bo.bordadoxdanny.app.features.cash.presentation.CashViewModel
 import bo.bordadoxdanny.app.features.orders.domain.CreateOrderUseCase
 import bo.bordadoxdanny.app.features.orders.domain.GetOrdersUseCase
@@ -32,6 +31,7 @@ import bo.bordadoxdanny.app.features.profile.presentation.ProfileViewModel
 import bo.bordadoxdanny.app.features.reports.presentation.ReportViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
+import bo.bordadoxdanny.app.domain.SyncDataUseCase
 
 val dataModule = module {
     single<AppDatabase> { 
@@ -39,7 +39,7 @@ val dataModule = module {
     }
     
     single<OrderDao> { get<AppDatabase>().orderDao() }
-    single<CashDao> { get<AppDatabase>().cashDao() }
+    single<TransactionDao> { get<AppDatabase>().transactionDao() }
     single<ReportDao> { get<AppDatabase>().reportDao() }
     single<ReportSummaryDao> { get<AppDatabase>().reportSummaryDao() }
     single<ProfileDao> { get<AppDatabase>().profileDao() }
@@ -48,14 +48,21 @@ val dataModule = module {
 
     single<OrderRepository> { OrderRepositoryImpl(get(), get()) }
     single<ProfileRepository> { ProfileRepositoryImpl(get()) }
-    single<CashRepository> { CashRepositoryImpl(get()) }
+    //single<TransactionRepository> { TransactionRepositoryImpl(get()) }
+    single<TransactionRepository> {
+        TransactionRepositoryImpl(
+            transactionDao = get(),
+            syncScheduler = get()
+        )
+    }
     single<ReportRepository> { ReportRepositoryImpl(get(), get(), get()) }
 }
 
 val domainModule = module {
     factory { GetOrdersUseCase(get()) }
-    factory { CreateOrderUseCase(get()) }
-    factory { GetCashEntriesUseCase(get()) }
+    factory { CreateOrderUseCase(get(), get()) }
+    factory { GetTransactionsUseCase(get()) }
+    factory { GetTotalBalanceUseCase(get()) }
     factory { GetFinancialSummaryUseCase(get()) }
     factory { GetAvailablePeriodsUseCase(get()) }
     factory { GetAccountsReceivableUseCase(get()) }

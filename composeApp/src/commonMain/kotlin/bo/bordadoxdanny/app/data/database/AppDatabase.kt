@@ -6,8 +6,8 @@ import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 import bo.bordadoxdanny.app.features.orders.data.OrderEntity
 import bo.bordadoxdanny.app.features.orders.data.OrderDao
-import bo.bordadoxdanny.app.features.cash.data.CashEntity
-import bo.bordadoxdanny.app.features.cash.data.CashDao
+import bo.bordadoxdanny.app.features.cash.data.TransactionEntity
+import bo.bordadoxdanny.app.features.cash.data.TransactionDao
 import bo.bordadoxdanny.app.features.reports.data.ReportEntity
 import bo.bordadoxdanny.app.features.reports.data.ReportDao
 import bo.bordadoxdanny.app.features.reports.data.ReportSummaryEntity
@@ -25,19 +25,19 @@ import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 @Database(
     entities = [
         OrderEntity::class,
-        CashEntity::class,
+        TransactionEntity::class,
         ReportEntity::class,
         ReportSummaryEntity::class,
         ProfileEntity::class,
         UserEntity::class,
         SettingsEntity::class
     ],
-    version = 3
+    version = 4
 )
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun orderDao(): OrderDao
-    abstract fun cashDao(): CashDao
+    abstract fun transactionDao(): TransactionDao
     abstract fun reportDao(): ReportDao
     abstract fun reportSummaryDao(): ReportSummaryDao
     abstract fun profileDao(): ProfileDao

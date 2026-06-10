@@ -13,14 +13,12 @@
     <string name="profile_language_selector">Language</string>
     <string name="testing_message">testing</string>
 
-    <!-- Bottom Nav -->
     <string name="nav_orders">Orders</string>
     <string name="nav_cash">Cash</string>
     <string name="nav_reports">Reports</string>
     <string name="nav_profile">Profile</string>
     <string name="nav_testing">Testing</string>
 
-    <!-- Reports -->
     <string name="account_summary">Account Summary</string>
     <string name="total_income">Total Income</string>
     <string name="total_expenses">Total Expenses</string>
@@ -35,7 +33,13 @@
     <string name="no_data_for_period">No data for this period</string>
     <string name="accounts_receivable_empty">No pending accounts receivable</string>
 
-    <!-- Auth - Login -->
+    <string name="total_income_month">Total Income (Month)</string>
+    <string name="total_expenses_month">Total Expenses (Month)</string>
+    <string name="currency_bs">Bs</string>
+    <string name="no_transactions">No transactions found</string>
+    <string name="add_income_placeholder">The logic for adding a new income will be implemented here</string>
+    <string name="add_expense_placeholder">The logic for adding a new expense will be implemented here</string>
+
     <string name="welcome_back">Welcome Back</string>
     <string name="sign_in_subtitle">Sign in to continue to BordadoxDanny</string>
     <string name="email_or_username">Email or Username</string>
@@ -46,7 +50,6 @@
     <string name="demo_credentials">Demo: usuario@gmail.com / Usuario123</string>
     <string name="invalid_credentials">Invalid email/username or password</string>
 
-    <!-- Auth - Reset Password -->
     <string name="back_to_login">Back to Login</string>
     <string name="reset_password">Reset Password</string>
     <string name="reset_password_subtitle">Enter your email or username to receive a verification code</string>
@@ -55,7 +58,6 @@
     <string name="field_required">This field is required</string>
     <string name="code_sent_success">Verification code sent successfully!</string>
 
-    <!-- Auth - Verification Code -->
     <string name="verification_code">Verification Code</string>
     <string name="code_sent_to">Enter the code sent to %1$s</string>
     <string name="verify_code">Verify Code</string>
@@ -63,7 +65,6 @@
     <string name="resend_code">Resend Code</string>
     <string name="invalid_code">Invalid verification code</string>
 
-    <!-- Auth - New Password -->
     <string name="new_password">New Password</string>
     <string name="new_password_subtitle">Create a new strong password</string>
     <string name="confirm_password">Confirm Password</string>
@@ -74,7 +75,6 @@
     <string name="password_req_number">A number</string>
     <string name="password_req_length">Minimum 8 characters</string>
 
-    <!-- Auth - Register -->
     <string name="create_account_title">Create Account</string>
     <string name="join_today">Join BordadoxDanny today</string>
     <string name="create_account">Create Account</string>
@@ -93,7 +93,6 @@
     <string name="username_taken">Username already taken</string>
     <string name="email_taken">Email already registered</string>
 
-    <!-- Profile -->
     <string name="profile">Profile</string>
     <string name="language">Language</string>
     <string name="logout">Logout</string>
