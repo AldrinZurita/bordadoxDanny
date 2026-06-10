@@ -14,9 +14,7 @@ import bo.bordadoxdanny.app.features.reports.data.ReportDao
 import bo.bordadoxdanny.app.features.reports.data.ReportRepositoryImpl
 import bo.bordadoxdanny.app.features.reports.data.ReportSummaryDao
 import bo.bordadoxdanny.app.data.preferences.SettingsDao
-import bo.bordadoxdanny.app.features.cash.domain.TransactionRepository
-import bo.bordadoxdanny.app.features.cash.domain.GetTransactionsUseCase
-import bo.bordadoxdanny.app.features.cash.domain.GetTotalBalanceUseCase
+import bo.bordadoxdanny.app.features.cash.domain.*
 import bo.bordadoxdanny.app.features.cash.presentation.CashViewModel
 import bo.bordadoxdanny.app.features.orders.domain.CreateOrderUseCase
 import bo.bordadoxdanny.app.features.orders.domain.GetOrdersUseCase
@@ -63,6 +61,7 @@ val domainModule = module {
     factory { CreateOrderUseCase(get(), get()) }
     factory { GetTransactionsUseCase(get()) }
     factory { GetTotalBalanceUseCase(get()) }
+    factory { AddTransactionUseCase(get()) }
     factory { GetFinancialSummaryUseCase(get()) }
     factory { GetAvailablePeriodsUseCase(get()) }
     factory { GetAccountsReceivableUseCase(get()) }
