@@ -146,18 +146,7 @@ fun AppNavHost(
         }
 
         composable<NavRoute.Cash> {
-            CashScreen(
-                onAddIncome = { navController.navigate(NavRoute.AddIncome) },
-                onAddExpense = { navController.navigate(NavRoute.AddExpense) }
-            )
-        }
-
-        composable<NavRoute.AddIncome> {
-            AddIncomeScreen()
-        }
-
-        composable<NavRoute.AddExpense> {
-            AddExpenseScreen()
+            CashScreen()
         }
 
         composable<NavRoute.Reports> {

@@ -17,10 +17,6 @@ sealed class NavRoute {
     @Serializable data class VerificationCode(val email: String) : NavRoute()
     @Serializable data class NewPassword(val email: String) : NavRoute()
 
-    // Cash Feature Routes
-    @Serializable data object AddIncome : NavRoute()
-    @Serializable data object AddExpense : NavRoute()
-
     @Serializable data object Testing : NavRoute()
     @Serializable data object Daemon : NavRoute()
 }
