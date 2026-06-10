@@ -24,7 +24,7 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = NavRoute.Orders,
+        startDestination = NavRoute.Login,
         modifier = modifier
     ) {
         // --- Auth Flows ---
