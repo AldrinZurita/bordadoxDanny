@@ -4,7 +4,7 @@ import bo.bordadoxdanny.app.features.profile.domain.RegisterParams
 
 sealed class AuthIntent {
     data class OnLogin(val emailOrUser: String, val password: String) : AuthIntent()
-    data class OnRegister(val params: RegisterParams) : AuthIntent()
+    data class OnRegister(val params: RegisterParams, val confirmPassword: String) : AuthIntent()
     data class OnSendCode(val emailOrUser: String) : AuthIntent()
     data class OnVerifyCode(val email: String, val code: String) : AuthIntent()
     data class OnResendCode(val email: String) : AuthIntent()

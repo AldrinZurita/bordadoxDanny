@@ -64,6 +64,9 @@ kotlin {
             implementation(libs.firebaseConfig)
             implementation(libs.firebaseAuth)
             implementation(libs.kotlinx.coroutines.play.services)
+
+            // Security
+            implementation(libs.androidx.security.crypto)
         }
         commonMain.dependencies {
             implementation(project(":core:designsystem"))

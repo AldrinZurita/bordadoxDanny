@@ -19,10 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import bo.bordadoxdanny.app.Res
-import bo.bordadoxdanny.app.account_summary
-import bo.bordadoxdanny.app.accounts_receivable
-import bo.bordadoxdanny.app.all_months
+import bo.bordadoxdanny.app.*
 import bo.bordadoxdanny.app.core.designsystem.components.dividers.HorizontalDivider
 import bo.bordadoxdanny.app.core.designsystem.components.icons.AppIcon
 import bo.bordadoxdanny.app.core.designsystem.components.icons.AppIcons
@@ -31,11 +28,6 @@ import bo.bordadoxdanny.app.features.reports.domain.FinancialSummary
 import bo.bordadoxdanny.app.features.reports.domain.Period
 import bo.bordadoxdanny.app.features.reports.presentation.components.AccountsReceivableList
 import bo.bordadoxdanny.app.features.reports.presentation.components.IncomeExpensesBarChart
-import bo.bordadoxdanny.app.income_vs_expenses
-import bo.bordadoxdanny.app.net_profit
-import bo.bordadoxdanny.app.total_expenses
-import bo.bordadoxdanny.app.total_income
-import bo.bordadoxdanny.app.total_pending
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

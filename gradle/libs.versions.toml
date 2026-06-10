@@ -30,6 +30,7 @@ workTesting = "2.9.0"
 androidx-compose-ui-test = "1.7.6"
 retrofit = "2.11.0"
 okhttp = "4.12.0"
+androidx-security = "1.1.0-alpha06"
 
 # Versiones de Firebase
 firebase-bom-v = "33.7.0"
@@ -37,6 +38,7 @@ firebase-messaging-v = "25.0.1"
 firebase-database-v = "21.0.0"
 firebase-auth-v = "23.1.0"
 firebase-config-v = "22.0.1"
+roomKtx = "2.8.4"
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
@@ -62,6 +64,7 @@ compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMul
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatform" }
 compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
 compose-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "composeMultiplatform" }
+androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "androidx-security" }
 
 # Koin
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
@@ -108,6 +111,7 @@ turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -18,6 +18,9 @@ import bo.bordadoxdanny.app.network.ApiService
 import bo.bordadoxdanny.app.network.RetrofitClient
 import bo.bordadoxdanny.app.data.preferences.PreferencesRepository
 import bo.bordadoxdanny.app.data.preferences.PreferencesRepositoryImpl
+import bo.bordadoxdanny.app.data.local.SecurityManager
+import bo.bordadoxdanny.app.core.locale.LocaleManager
+import bo.bordadoxdanny.app.core.locale.AndroidLocaleManager
 import org.koin.dsl.module
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.workmanager.dsl.workerOf
@@ -25,6 +28,12 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 
 val androidModule = module {
+    // Security
+    single { SecurityManager(androidContext()) }
+
+    // Locale
+    single<LocaleManager> { AndroidLocaleManager() }
+
     // Firebase Components
     singleOf(::FirebaseManager)
     singleOf(::RemoteConfigManagerImpl) bind RemoteConfigManager::class

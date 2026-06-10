@@ -21,11 +21,15 @@ class ReportRepositoryImpl(
 
     override fun getAvailablePeriods(): Flow<List<Period>> {
         return reportSummaryDao.getAllSummaries().map { summaries ->
-            summaries.map { entity ->
-                when {
-                    entity.year == null && entity.month == null -> Period.AllMonths
-                    entity.month == null -> Period.Year(entity.year!!)
-                    else -> Period.Month(entity.year!!, entity.month!!)
+            if (summaries.isEmpty()) {
+                listOf(Period.AllMonths)
+            } else {
+                summaries.map { entity ->
+                    when {
+                        entity.periodId == "ALL" -> Period.AllMonths
+                        entity.month == null -> Period.Year(entity.year ?: 2024)
+                        else -> Period.Month(entity.year ?: 2024, entity.month)
+                    }
                 }
             }
         }

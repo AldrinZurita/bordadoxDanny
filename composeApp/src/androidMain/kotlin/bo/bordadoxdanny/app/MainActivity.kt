@@ -8,27 +8,23 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.Text
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import bo.bordadoxdanny.app.data.database.AppDatabase
-import bo.bordadoxdanny.app.firebase.FirebaseManager
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     private val TAG = "DEBUG_BORDADOS"
     
-    // Instancia inyectada por Koin (Singleton)
     private val database: AppDatabase by inject()
 
     private val requestPermissionLauncher = registerForActivityResult(
@@ -55,8 +51,6 @@ class MainActivity : ComponentActivity() {
                 setupRemoteConfig()
             }
 
-            // ELIMINADO: runRoomTest() - Evitamos competencia con WorkManager al iniciar
-            
             askNotificationPermission()
             createNotificationChannel()
 

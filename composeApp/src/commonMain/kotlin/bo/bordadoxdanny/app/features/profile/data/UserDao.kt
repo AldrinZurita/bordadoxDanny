@@ -17,6 +17,9 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE id = :id LIMIT 1")
     fun getById(id: String): Flow<UserEntity?>
 
+    @Query("SELECT * FROM users WHERE id = :id LIMIT 1")
+    suspend fun getByIdSuspend(id: String): UserEntity?
+
     @Query("SELECT * FROM users WHERE syncStatus = 'PENDING'")
     suspend fun getPendingUsers(): List<UserEntity>
 
@@ -28,6 +31,9 @@ interface UserDao {
 
     @Query("UPDATE users SET syncStatus = :status WHERE id = :userId")
     suspend fun updateSyncStatus(userId: String, status: String)
+
+    @Query("UPDATE users SET isVerified = 1 WHERE id = :userId")
+    suspend fun markAsVerified(userId: String)
 
     @Query("DELETE FROM users")
     suspend fun deleteAll()

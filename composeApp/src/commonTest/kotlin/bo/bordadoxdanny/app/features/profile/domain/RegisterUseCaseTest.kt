@@ -4,7 +4,6 @@ import bo.bordadoxdanny.app.fake.FakeAuthRepository
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
-import kotlin.test.assertNotNull
 
 class RegisterUseCaseTest {
 
@@ -13,7 +12,7 @@ class RegisterUseCaseTest {
         phoneNumber = "71234567",
         username = "newuser",
         email = "new@email.com",
-        password = "Passw0rd123",
+        password = "Passw0rd123!",
         firstName = "Juan",
         middleName = null,
         lastName1 = "Perez",
@@ -27,8 +26,9 @@ class RegisterUseCaseTest {
     fun `given all valid data, returns Success`() = runTest {
         val repo = FakeAuthRepository()
         val useCase = RegisterUseCase(repo)
+        val params = validParams()
 
-        val result = useCase(validParams())
+        val result = useCase(params, params.password)
 
         assertTrue(result.isSuccess)
     }
@@ -37,8 +37,9 @@ class RegisterUseCaseTest {
     fun `given duplicate email, returns failure`() = runTest {
         val repo = FakeAuthRepository(duplicateEmail = "new@email.com")
         val useCase = RegisterUseCase(repo)
+        val params = validParams()
 
-        val result = useCase(validParams())
+        val result = useCase(params, params.password)
 
         assertTrue(result.isFailure)
     }

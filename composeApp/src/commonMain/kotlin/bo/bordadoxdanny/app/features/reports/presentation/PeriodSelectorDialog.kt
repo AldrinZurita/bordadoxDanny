@@ -18,12 +18,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import bo.bordadoxdanny.app.Res
 import bo.bordadoxdanny.app.all_months
+import bo.bordadoxdanny.app.period
 import bo.bordadoxdanny.app.core.designsystem.components.dividers.HorizontalDivider
 import bo.bordadoxdanny.app.core.designsystem.components.icons.AppIcon
 import bo.bordadoxdanny.app.core.designsystem.components.icons.AppIcons
 import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
 import bo.bordadoxdanny.app.features.reports.domain.Period
-import bo.bordadoxdanny.app.period
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
