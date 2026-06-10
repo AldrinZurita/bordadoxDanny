@@ -9,6 +9,7 @@ fun TransactionEntity.toDomain(): Transaction = Transaction(
     type = TransactionType.valueOf(type),
     description = description,
     reference = reference,
+    category = category,
     timestamp = timestamp,
     syncStatus = syncStatus
 )
@@ -19,6 +20,7 @@ fun Transaction.toEntity(): TransactionEntity = TransactionEntity(
     type = type.name,
     description = description,
     reference = reference,
+    category = category,
     timestamp = timestamp,
     syncStatus = syncStatus
 )

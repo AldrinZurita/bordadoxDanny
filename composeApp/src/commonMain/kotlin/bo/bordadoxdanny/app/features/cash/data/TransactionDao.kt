@@ -22,4 +22,7 @@ interface TransactionDao {
 
     @Query("UPDATE transactions SET syncStatus = 'SYNCED' WHERE id = :id")
     suspend fun markAsSynced(id: Long)
+
+    @Query("SELECT DISTINCT timestamp FROM transactions ORDER BY timestamp DESC")
+    fun getAllTransactionTimestamps(): Flow<List<Long>>
 }

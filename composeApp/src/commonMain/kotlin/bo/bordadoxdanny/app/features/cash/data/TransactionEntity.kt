@@ -11,6 +11,7 @@ data class TransactionEntity(
     val type: String, // "INCOME", "EXPENSE"
     val description: String,
     val reference: String,
+    val category: String? = null,
     val timestamp: Long,
     val syncStatus: SyncStatus = SyncStatus.PENDING
 )

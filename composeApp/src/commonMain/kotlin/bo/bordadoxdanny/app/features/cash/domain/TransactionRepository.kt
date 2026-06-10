@@ -8,4 +8,5 @@ interface TransactionRepository {
     suspend fun addTransaction(transaction: Transaction)
     suspend fun getPendingTransactions(): List<Transaction>
     suspend fun markAsSynced(id: Long)
+    fun getAllTransactionTimestamps(): Flow<List<Long>>
 }

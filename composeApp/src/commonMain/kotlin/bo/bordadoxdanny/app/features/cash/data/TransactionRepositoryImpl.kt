@@ -34,4 +34,8 @@ class TransactionRepositoryImpl(
     override suspend fun markAsSynced(id: Long) {
         transactionDao.markAsSynced(id)
     }
+
+    override fun getAllTransactionTimestamps(): Flow<List<Long>> {
+        return transactionDao.getAllTransactionTimestamps()
+    }
 }

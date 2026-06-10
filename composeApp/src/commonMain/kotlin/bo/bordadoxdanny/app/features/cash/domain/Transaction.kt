@@ -8,6 +8,7 @@ data class Transaction(
     val type: TransactionType,
     val description: String,
     val reference: String, // e.g. "Nota #1029"
+    val category: String? = null, // Material, Hilos, etc.
     val timestamp: Long,
     val syncStatus: SyncStatus = SyncStatus.PENDING
 )
