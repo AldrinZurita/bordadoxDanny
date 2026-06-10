@@ -12,7 +12,7 @@ class FakeReportRepository(
     private val shouldReturnError: Boolean = false
 ) : ReportRepository {
 
-    override fun getFinancialSummary(period: Period): Flow<FinancialSummary?> {
+    override fun getFinancialSummary(userId: String, period: Period): Flow<FinancialSummary?> {
         return if (shouldReturnError) {
             // Flow that throws an exception
             flowOf(null).let { throw Exception("Simulated DB Error") }
@@ -29,15 +29,15 @@ class FakeReportRepository(
         }
     }
 
-    override fun getAvailablePeriods(): Flow<List<Period>> {
+    override fun getAvailablePeriods(userId: String): Flow<List<Period>> {
         return flowOf(listOf(Period.AllMonths, Period.Month(2026, 6)))
     }
 
-    override fun getAccountsReceivable(): Flow<List<AccountsReceivableItem>> {
+    override fun getAccountsReceivable(userId: String): Flow<List<AccountsReceivableItem>> {
         return flowOf(fakeArItems)
     }
 
-    override fun getAllReports(): Flow<List<Report>> {
+    override fun getAllReports(userId: String): Flow<List<Report>> {
         return flowOf(fakeReports)
     }
 }

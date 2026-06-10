@@ -9,6 +9,8 @@ import kotlin.test.assertNotNull
 
 class GetFinancialSummaryUseCaseTest {
 
+    private val userId = "test-user-id"
+
     @Test
     fun `given monthly data, net profit equals income minus expenses`() = runTest {
         // GIVEN
@@ -16,7 +18,7 @@ class GetFinancialSummaryUseCaseTest {
         val useCase = GetFinancialSummaryUseCase(repo)
         
         // WHEN
-        val result = useCase(Period.Month(2026, 2)).first()
+        val result = useCase(userId, Period.Month(2026, 2)).first()
         
         // THEN
         assertNotNull(result)
@@ -28,7 +30,7 @@ class GetFinancialSummaryUseCaseTest {
         val repo = FakeReportRepository(fakeIncome = 0.0, fakeExpenses = 0.0)
         val useCase = GetFinancialSummaryUseCase(repo)
 
-        val result = useCase(Period.AllMonths).first()
+        val result = useCase(userId, Period.AllMonths).first()
 
         assertNotNull(result)
         assertEquals(0.0, result.totalIncome, 0.001)
@@ -41,7 +43,7 @@ class GetFinancialSummaryUseCaseTest {
         val repo = FakeReportRepository(fakeIncome = 1500.0, fakeExpenses = 300.0)
         val useCase = GetFinancialSummaryUseCase(repo)
 
-        val result = useCase(Period.AllMonths).first()
+        val result = useCase(userId, Period.AllMonths).first()
 
         assertNotNull(result)
         assertEquals(Period.AllMonths, result.period)

@@ -1,11 +1,11 @@
 package bo.bordadoxdanny.app.features.reports.presentation
 
+import bo.bordadoxdanny.app.fake.FakeAuthRepository
 import bo.bordadoxdanny.app.fake.FakeRemoteConfigManager
 import bo.bordadoxdanny.app.fake.FakeReportRepository
 import bo.bordadoxdanny.app.features.reports.domain.GetAccountsReceivableUseCase
 import bo.bordadoxdanny.app.features.reports.domain.GetAvailablePeriodsUseCase
 import bo.bordadoxdanny.app.features.reports.domain.GetFinancialSummaryUseCase
-import bo.bordadoxdanny.app.features.reports.domain.Period
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
@@ -15,6 +15,7 @@ import kotlin.test.*
 class ReportViewModelTest {
 
     private val testDispatcher = UnconfinedTestDispatcher()
+    private val fakeAuthRepository = FakeAuthRepository()
 
     @BeforeTest
     fun setUp() {
@@ -33,7 +34,8 @@ class ReportViewModelTest {
             getFinancialSummaryUseCase = GetFinancialSummaryUseCase(repo),
             getAvailablePeriodsUseCase = GetAvailablePeriodsUseCase(repo),
             getAccountsReceivableUseCase = GetAccountsReceivableUseCase(repo),
-            remoteConfigManager = FakeRemoteConfigManager()
+            remoteConfigManager = FakeRemoteConfigManager(),
+            authRepository = fakeAuthRepository
         )
 
         assertTrue(vm.state.value is ReportState.Success)
@@ -48,7 +50,8 @@ class ReportViewModelTest {
             getFinancialSummaryUseCase = GetFinancialSummaryUseCase(repo),
             getAvailablePeriodsUseCase = GetAvailablePeriodsUseCase(repo),
             getAccountsReceivableUseCase = GetAccountsReceivableUseCase(repo),
-            remoteConfigManager = FakeRemoteConfigManager()
+            remoteConfigManager = FakeRemoteConfigManager(),
+            authRepository = fakeAuthRepository
         )
 
         vm.onIntent(ReportIntent.OnOpenPeriodSelector)
@@ -63,7 +66,8 @@ class ReportViewModelTest {
             getFinancialSummaryUseCase = GetFinancialSummaryUseCase(repo),
             getAvailablePeriodsUseCase = GetAvailablePeriodsUseCase(repo),
             getAccountsReceivableUseCase = GetAccountsReceivableUseCase(repo),
-            remoteConfigManager = FakeRemoteConfigManager()
+            remoteConfigManager = FakeRemoteConfigManager(),
+            authRepository = fakeAuthRepository
         )
 
         vm.onIntent(ReportIntent.OnOpenPeriodSelector)
@@ -79,7 +83,8 @@ class ReportViewModelTest {
             getFinancialSummaryUseCase = GetFinancialSummaryUseCase(repo),
             getAvailablePeriodsUseCase = GetAvailablePeriodsUseCase(repo),
             getAccountsReceivableUseCase = GetAccountsReceivableUseCase(repo),
-            remoteConfigManager = FakeRemoteConfigManager()
+            remoteConfigManager = FakeRemoteConfigManager(),
+            authRepository = fakeAuthRepository
         )
 
         val success = vm.state.value as? ReportState.Success

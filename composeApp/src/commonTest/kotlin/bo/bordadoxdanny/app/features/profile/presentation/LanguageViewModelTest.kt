@@ -2,17 +2,19 @@ package bo.bordadoxdanny.app.features.profile.presentation
 
 import app.cash.turbine.test
 import bo.bordadoxdanny.app.core.locale.LocaleManager
+import bo.bordadoxdanny.app.fake.FakeAuthRepository
 import kotlinx.coroutines.test.runTest
 import kotlin.test.*
 
 class LanguageViewModelTest {
 
     private val fakeLocaleManager = FakeLocaleManager()
+    private val fakeAuthRepository = FakeAuthRepository()
 
     @Test
     fun `given OnLoadLanguage intent with saved language, state is Loaded with that language`() = runTest {
         val fakePrefs = FakePreferencesRepository(savedLanguage = "es")
-        val vm = LanguageViewModel(fakePrefs, fakeLocaleManager)
+        val vm = LanguageViewModel(fakePrefs, fakeLocaleManager, fakeAuthRepository)
 
         vm.state.test {
             // Skip initial Loading state if it's there, or wait for Loaded
@@ -30,7 +32,7 @@ class LanguageViewModelTest {
     @Test
     fun `given OnLoadLanguage intent with no saved language, state defaults to en`() = runTest {
         val fakePrefs = FakePreferencesRepository(savedLanguage = null)
-        val vm = LanguageViewModel(fakePrefs, fakeLocaleManager)
+        val vm = LanguageViewModel(fakePrefs, fakeLocaleManager, fakeAuthRepository)
 
         vm.state.test {
             var item = awaitItem()
@@ -47,7 +49,7 @@ class LanguageViewModelTest {
     @Test
     fun `given OnLanguageChanged intent, state updates and saves language`() = runTest {
         val fakePrefs = FakePreferencesRepository(savedLanguage = "en")
-        val vm = LanguageViewModel(fakePrefs, fakeLocaleManager)
+        val vm = LanguageViewModel(fakePrefs, fakeLocaleManager, fakeAuthRepository)
 
         // Wait for initial load to finish first
         vm.state.test {
@@ -65,8 +67,8 @@ class LanguageViewModelTest {
 }
 
 class FakePreferencesRepository(var savedLanguage: String? = null) : bo.bordadoxdanny.app.data.preferences.PreferencesRepository {
-    override suspend fun getLanguage(): String? = savedLanguage
-    override suspend fun saveLanguage(languageCode: String) {
+    override suspend fun getLanguage(userId: String): String? = savedLanguage
+    override suspend fun saveLanguage(userId: String, languageCode: String) {
         savedLanguage = languageCode
     }
 }

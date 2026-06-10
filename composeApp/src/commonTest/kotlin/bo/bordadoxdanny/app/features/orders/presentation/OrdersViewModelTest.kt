@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import bo.bordadoxdanny.app.features.orders.domain.GetOrdersUseCase
 import bo.bordadoxdanny.app.features.orders.domain.Order
 import bo.bordadoxdanny.app.features.orders.domain.OrderRepository
+import bo.bordadoxdanny.app.fake.FakeAuthRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -12,21 +13,24 @@ import kotlin.test.*
 class OrdersViewModelTest {
 
     private lateinit var fakeRepository: FakeOrderRepository
+    private lateinit var fakeAuthRepository: FakeAuthRepository
     private lateinit var getOrdersUseCase: GetOrdersUseCase
     private lateinit var vm: OrdersViewModel
+    private val userId = "fake-id"
 
     @BeforeTest
     fun setup() {
         fakeRepository = FakeOrderRepository()
+        fakeAuthRepository = FakeAuthRepository()
         getOrdersUseCase = GetOrdersUseCase(fakeRepository)
-        vm = OrdersViewModel(getOrdersUseCase)
+        vm = OrdersViewModel(getOrdersUseCase, fakeAuthRepository)
     }
 
     @Test
     fun `given OnLoadOrders intent, state transitions to Success with orders`() = runTest {
         val orders = listOf(
-            Order(id = 1, customerName = "Juan Perez", deliveryDate = 0, description = "Camisa", quantity = 1, unitPrice = 100.0, initialPayment = 0.0, total = 100.0, balance = 0.0),
-            Order(id = 2, customerName = "Maria Lopez", deliveryDate = 0, description = "Pantalon", quantity = 2, unitPrice = 50.0, initialPayment = 0.0, total = 100.0, balance = 0.0)
+            Order(id = 1, userId = userId, customerName = "Juan Perez", deliveryDate = 0, description = "Camisa", quantity = 1, unitPrice = 100.0, initialPayment = 0.0, total = 100.0, balance = 0.0),
+            Order(id = 2, userId = userId, customerName = "Maria Lopez", deliveryDate = 0, description = "Pantalon", quantity = 2, unitPrice = 50.0, initialPayment = 0.0, total = 100.0, balance = 0.0)
         )
         fakeRepository.emit(orders)
         
@@ -59,7 +63,7 @@ class OrdersViewModelTest {
     @Test
     fun `given OnRefresh intent, reloads orders`() = runTest {
         val orders = listOf(
-            Order(id = 1, customerName = "Test", deliveryDate = 0, description = "Test", quantity = 1, unitPrice = 10.0, initialPayment = 0.0, total = 10.0, balance = 0.0)
+            Order(id = 1, userId = userId, customerName = "Test", deliveryDate = 0, description = "Test", quantity = 1, unitPrice = 10.0, initialPayment = 0.0, total = 10.0, balance = 0.0)
         )
         fakeRepository.emit(orders)
         
@@ -83,10 +87,10 @@ class FakeOrderRepository : OrderRepository {
         ordersFlow.value = orders
     }
 
-    override fun getAllOrders(): Flow<List<Order>> = ordersFlow
+    override fun getAllOrders(userId: String): Flow<List<Order>> = ordersFlow
 
     override suspend fun saveOrder(order: Order): Long = 0
-    override suspend fun getUniqueCustomerNames(query: String): List<String> = emptyList()
-    override suspend fun getPendingOrders(): List<Order> = emptyList()
-    override suspend fun markAsSynced(orderId: Long) {}
+    override suspend fun getUniqueCustomerNames(userId: String, query: String): List<String> = emptyList()
+    override suspend fun getPendingOrders(userId: String): List<Order> = emptyList()
+    override suspend fun markAsSynced(orderId: Long, userId: String) {}
 }
