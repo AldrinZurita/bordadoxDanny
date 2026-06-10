@@ -98,4 +98,23 @@
     <string name="logout">Cerrar Sesión</string>
     <string name="logout_confirmation">¿Estás seguro de que deseas cerrar sesión?</string>
     <string name="cancel">Cancelar</string>
+
+    <string name="month">Mes</string>
+    <string name="add_income">Agregar Ingreso</string>
+    <string name="new_expense">Nuevo Egreso</string>
+    <string name="amount">Monto</string>
+    <string name="detail">Detalle</string>
+    <string name="date_and_time">Fecha y hora</string>
+    <string name="save">Guardar</string>
+    <string name="category">Categoría</string>
+    <string name="cat_material">Material</string>
+    <string name="cat_threads">Hilos</string>
+    <string name="cat_machinery">Maquinaria</string>
+    <string name="cat_maintenance">Mantenimiento</string>
+    <string name="cat_services">Servicios</string>
+    <string name="cat_rent">Alquiler</string>
+    <string name="cat_personnel">Personal</string>
+    <string name="cat_transport">Transporte</string>
+    <string name="cat_others">Otros</string>
+    <string name="manual_income">Ingreso Manual</string>
 </resources>

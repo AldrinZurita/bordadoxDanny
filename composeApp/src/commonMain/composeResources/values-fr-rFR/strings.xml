@@ -98,4 +98,23 @@
     <string name="logout">Se déconnecter</string>
     <string name="logout_confirmation">Êtes-vous sûr de vouloir vous déconnecter ?</string>
     <string name="cancel">Annuler</string>
+
+    <string name="month">Mois</string>
+    <string name="add_income">Ajouter un revenu</string>
+    <string name="new_expense">Nouvelle dépense</string>
+    <string name="amount">Montant</string>
+    <string name="detail">Détail</string>
+    <string name="date_and_time">Date et heure</string>
+    <string name="save">Enregistrer</string>
+    <string name="category">Catégorie</string>
+    <string name="cat_material">Matériel</string>
+    <string name="cat_threads">Fils</string>
+    <string name="cat_machinery">Machines</string>
+    <string name="cat_maintenance">Entretien</string>
+    <string name="cat_services">Services</string>
+    <string name="cat_rent">Location</string>
+    <string name="cat_personnel">Personnel</string>
+    <string name="cat_transport">Transport</string>
+    <string name="cat_others">Autres</string>
+    <string name="manual_income">Entrée Manuelle</string>
 </resources>

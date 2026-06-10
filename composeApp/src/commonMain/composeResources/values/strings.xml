@@ -98,4 +98,23 @@
     <string name="logout">Logout</string>
     <string name="logout_confirmation">Are you sure you want to logout?</string>
     <string name="cancel">Cancel</string>
+
+    <string name="month">Month</string>
+    <string name="add_income">Add Income</string>
+    <string name="new_expense">New Expense</string>
+    <string name="amount">Amount</string>
+    <string name="detail">Detail</string>
+    <string name="date_and_time">Date and time</string>
+    <string name="save">Save</string>
+    <string name="category">Category</string>
+    <string name="cat_material">Material</string>
+    <string name="cat_threads">Threads</string>
+    <string name="cat_machinery">Machinery</string>
+    <string name="cat_maintenance">Maintenance</string>
+    <string name="cat_services">Services</string>
+    <string name="cat_rent">Rent</string>
+    <string name="cat_personnel">Personnel</string>
+    <string name="cat_transport">Transport</string>
+    <string name="cat_others">Others</string>
+    <string name="manual_income">Manual Income</string>
 </resources>
