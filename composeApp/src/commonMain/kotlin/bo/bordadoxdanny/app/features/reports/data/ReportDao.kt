@@ -10,6 +10,6 @@ interface ReportDao {
     @Insert
     suspend fun insert(report: ReportEntity)
 
-    @Query("SELECT * FROM reports")
-    fun getAllReports(): Flow<List<ReportEntity>>
+    @Query("SELECT * FROM reports WHERE userId = :userId ORDER BY createdDate DESC")
+    fun getAllReports(userId: String): Flow<List<ReportEntity>>
 }

@@ -5,6 +5,7 @@ import bo.bordadoxdanny.app.features.cash.domain.TransactionType
 
 fun TransactionEntity.toDomain(): Transaction = Transaction(
     id = id,
+    userId = userId,
     amount = amount,
     type = TransactionType.valueOf(type),
     description = description,
@@ -16,6 +17,7 @@ fun TransactionEntity.toDomain(): Transaction = Transaction(
 
 fun Transaction.toEntity(): TransactionEntity = TransactionEntity(
     id = id,
+    userId = userId,
     amount = amount,
     type = type.name,
     description = description,

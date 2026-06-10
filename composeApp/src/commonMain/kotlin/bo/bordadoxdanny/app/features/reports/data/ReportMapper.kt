@@ -19,9 +19,10 @@ fun ReportSummaryEntity.toDomain(): FinancialSummary {
     )
 }
 
-fun FinancialSummary.toEntity(): ReportSummaryEntity {
+fun FinancialSummary.toEntity(userId: String): ReportSummaryEntity {
     return ReportSummaryEntity(
         periodId = period.id,
+        userId = userId,
         totalIncome = totalIncome,
         totalExpenses = totalExpenses,
         netProfit = netProfit,
@@ -40,6 +41,7 @@ fun FinancialSummary.toEntity(): ReportSummaryEntity {
 
 fun ReportSummaryDto.toEntity() = ReportSummaryEntity(
     periodId = periodId,
+    userId = userId,
     totalIncome = totalIncome,
     totalExpenses = totalExpenses,
     netProfit = netProfit,
@@ -52,6 +54,7 @@ fun ReportSummaryDto.toEntity() = ReportSummaryEntity(
 
 fun ReportSummaryEntity.toDto() = ReportSummaryDto(
     periodId = periodId,
+    userId = userId,
     totalIncome = totalIncome,
     totalExpenses = totalExpenses,
     netProfit = netProfit,
@@ -63,6 +66,15 @@ fun ReportSummaryEntity.toDto() = ReportSummaryDto(
 
 fun ReportEntity.toDomain() = Report(
     id = id,
+    userId = userId,
+    title = title,
+    content = content,
+    createdDate = createdDate
+)
+
+fun Report.toEntity() = ReportEntity(
+    id = id,
+    userId = userId,
     title = title,
     content = content,
     createdDate = createdDate

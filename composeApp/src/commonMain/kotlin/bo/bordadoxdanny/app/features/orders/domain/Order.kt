@@ -2,6 +2,7 @@ package bo.bordadoxdanny.app.features.orders.domain
 
 data class Order(
     val id: Long = 0,
+    val userId: String,
     val customerName: String,
     val deliveryDate: Long,
     val description: String,

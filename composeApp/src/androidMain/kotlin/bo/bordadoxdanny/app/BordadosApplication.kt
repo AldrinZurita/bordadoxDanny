@@ -11,7 +11,7 @@ import bo.bordadoxdanny.app.workers.LogScheduler
 import bo.bordadoxdanny.app.data.preferences.PreferencesRepository
 import bo.bordadoxdanny.app.core.locale.LocaleManager
 import com.google.firebase.FirebaseApp
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
@@ -43,7 +43,8 @@ class BordadosApplication : Application() {
         val prefs = get<PreferencesRepository>()
         val localeManager = get<LocaleManager>()
         MainScope().launch {
-            val lang = prefs.getLanguage() ?: "en"
+            val userId = FirebaseAuth.getInstance().currentUser?.uid ?: "default"
+            val lang = prefs.getLanguage(userId) ?: "en"
             localeManager.applyLocale(lang)
         }
 

@@ -1,10 +1,13 @@
 package bo.bordadoxdanny.app.data.preferences
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity(tableName = "settings")
+@Entity(
+    tableName = "settings",
+    primaryKeys = ["key", "userId"]
+)
 data class SettingsEntity(
-    @PrimaryKey val key: String,
+    val key: String,
+    val userId: String,
     val value: String
 )

@@ -7,6 +7,7 @@ import kotlinx.datetime.Clock
 @Entity(tableName = "orders")
 data class OrderEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val userId: String,
     val customerName: String,
     val deliveryDate: Long,
     val description: String,

@@ -1,11 +1,14 @@
 package bo.bordadoxdanny.app.features.reports.data
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity(tableName = "report_summaries")
+@Entity(
+    tableName = "report_summaries",
+    primaryKeys = ["periodId", "userId"]
+)
 data class ReportSummaryEntity(
-    @PrimaryKey val periodId: String, // e.g., "ALL", "2026", "2026-06"
+    val periodId: String, // e.g., "ALL", "2026", "2026-06"
+    val userId: String,
     val totalIncome: Double,
     val totalExpenses: Double,
     val netProfit: Double,

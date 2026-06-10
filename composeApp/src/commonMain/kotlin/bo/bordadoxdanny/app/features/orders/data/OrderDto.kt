@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class OrderDto(
     val id: String = "",
+    val userId: String = "",
     val customerName: String = "",
     val deliveryDate: Long = 0L,
     val description: String = "",

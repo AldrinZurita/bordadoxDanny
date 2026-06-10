@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "reports")
 data class ReportEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val userId: String,
     val title: String,
     val content: String,
     val createdDate: Long

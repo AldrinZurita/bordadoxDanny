@@ -7,6 +7,7 @@ import bo.bordadoxdanny.app.core.domain.SyncStatus
 @Entity(tableName = "transactions")
 data class TransactionEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val userId: String,
     val amount: Double,
     val type: String, // "INCOME", "EXPENSE"
     val description: String,

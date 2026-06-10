@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ReportSummaryDto(
     val periodId: String = "",
+    val userId: String = "",
     val totalIncome: Double = 0.0,
     val totalExpenses: Double = 0.0,
     val netProfit: Double = 0.0,

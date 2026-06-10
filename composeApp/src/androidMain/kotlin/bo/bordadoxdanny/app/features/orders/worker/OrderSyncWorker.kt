@@ -3,6 +3,7 @@ package bo.bordadoxdanny.app.features.orders.worker
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import bo.bordadoxdanny.app.core.sync.SyncConfig
 import bo.bordadoxdanny.app.features.orders.data.toDto
 import bo.bordadoxdanny.app.features.orders.domain.OrderRepository
 import bo.bordadoxdanny.app.firebase.FirebaseManager
@@ -18,19 +19,22 @@ class OrderSyncWorker(
     private val firebaseManager: FirebaseManager by inject()
 
     override suspend fun doWork(): Result {
+        val userId = inputData.getString(SyncConfig.KEY_USER_ID) ?: return Result.failure()
+
         return try {
-            val pendingOrders = repository.getPendingOrders()
+            val pendingOrders = repository.getPendingOrders(userId)
             if (pendingOrders.isEmpty()) return Result.success()
 
             pendingOrders.forEach { order ->
-                val result = firebaseManager.saveData("orders/${order.id}", order.toDto())
+                // Nodo unificado: orders/{userId}/{orderId}
+                val result = firebaseManager.saveData("orders/$userId/${order.id}", order.toDto())
                 if (result.isSuccess) {
-                    repository.markAsSynced(order.id)
+                    repository.markAsSynced(order.id, userId)
                 }
             }
             Result.success()
         } catch (e: Exception) {
-            Result.retry()
+            if (runAttemptCount < 3) Result.retry() else Result.failure()
         }
     }
 }

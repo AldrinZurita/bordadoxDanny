@@ -15,12 +15,12 @@ class ReportRepositoryImpl(
     private val reportDao: ReportDao
 ) : ReportRepository {
 
-    override fun getFinancialSummary(period: Period): Flow<FinancialSummary?> {
-        return reportSummaryDao.getSummaryById(period.id).map { it?.toDomain() }
+    override fun getFinancialSummary(userId: String, period: Period): Flow<FinancialSummary?> {
+        return reportSummaryDao.getSummaryById(period.id, userId).map { it?.toDomain() }
     }
 
-    override fun getAvailablePeriods(): Flow<List<Period>> {
-        return reportSummaryDao.getAllSummaries().map { summaries ->
+    override fun getAvailablePeriods(userId: String): Flow<List<Period>> {
+        return reportSummaryDao.getAllSummaries(userId).map { summaries ->
             if (summaries.isEmpty()) {
                 listOf(Period.AllMonths)
             } else {
@@ -35,8 +35,8 @@ class ReportRepositoryImpl(
         }
     }
 
-    override fun getAccountsReceivable(): Flow<List<AccountsReceivableItem>> {
-        return orderDao.getAllOrders().map { orders ->
+    override fun getAccountsReceivable(userId: String): Flow<List<AccountsReceivableItem>> {
+        return orderDao.getAllOrders(userId).map { orders ->
             orders.filter { it.balance > 0 }.map { order ->
                 AccountsReceivableItem(
                     id = order.id.toString(),
@@ -49,8 +49,8 @@ class ReportRepositoryImpl(
         }
     }
 
-    override fun getAllReports(): Flow<List<Report>> {
-        return reportDao.getAllReports().map { entities ->
+    override fun getAllReports(userId: String): Flow<List<Report>> {
+        return reportDao.getAllReports(userId).map { entities ->
             entities.map { it.toDomain() }
         }
     }

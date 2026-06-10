@@ -4,6 +4,7 @@ import bo.bordadoxdanny.app.features.orders.domain.Order
 
 fun OrderEntity.toDomain() = Order(
     id = id,
+    userId = userId,
     customerName = customerName,
     deliveryDate = deliveryDate,
     description = description,
@@ -19,6 +20,7 @@ fun OrderEntity.toDomain() = Order(
 
 fun Order.toEntity() = OrderEntity(
     id = id,
+    userId = userId,
     customerName = customerName,
     deliveryDate = deliveryDate,
     description = description,
@@ -34,6 +36,7 @@ fun Order.toEntity() = OrderEntity(
 
 fun OrderDto.toEntity() = OrderEntity(
     id = id.toLongOrNull() ?: 0,
+    userId = userId,
     customerName = customerName,
     deliveryDate = deliveryDate,
     description = description,
@@ -49,6 +52,7 @@ fun OrderDto.toEntity() = OrderEntity(
 
 fun OrderEntity.toDto() = OrderDto(
     id = id.takeIf { it > 0 }?.toString() ?: "",
+    userId = userId,
     customerName = customerName,
     deliveryDate = deliveryDate,
     description = description,
@@ -64,6 +68,7 @@ fun OrderEntity.toDto() = OrderDto(
 
 fun Order.toDto() = OrderDto(
     id = id.takeIf { it > 0 }?.toString() ?: "",
+    userId = userId,
     customerName = customerName,
     deliveryDate = deliveryDate,
     description = description,
@@ -76,4 +81,3 @@ fun Order.toDto() = OrderDto(
     syncStatus = syncStatus,
     createdAt = createdAt
 )
-

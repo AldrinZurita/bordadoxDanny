@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bo.bordadoxdanny.app.Res
 import bo.bordadoxdanny.app.features.reports.domain.*
+import bo.bordadoxdanny.app.features.profile.domain.AuthRepository
 import bo.bordadoxdanny.app.firebase.RemoteConfigManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
@@ -14,7 +15,8 @@ class ReportViewModel(
     private val getFinancialSummaryUseCase: GetFinancialSummaryUseCase,
     private val getAvailablePeriodsUseCase: GetAvailablePeriodsUseCase,
     private val getAccountsReceivableUseCase: GetAccountsReceivableUseCase,
-    private val remoteConfigManager: RemoteConfigManager
+    private val remoteConfigManager: RemoteConfigManager,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<ReportState>(ReportState.Loading)
@@ -41,27 +43,31 @@ class ReportViewModel(
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun loadData() {
         viewModelScope.launch {
-            _selectedPeriod
-                .flatMapLatest { period ->
-                    combine(
-                        getFinancialSummaryUseCase(period),
-                        getAvailablePeriodsUseCase(),
-                        getAccountsReceivableUseCase()
-                    ) { summary, periods, arItems ->
-                        val filteredArItems = if (remoteConfigManager.getShowAccountsReceivable()) {
-                            arItems
-                        } else {
-                            emptyList()
+            authRepository.getCurrentUser()
+                .filterNotNull()
+                .flatMapLatest { user ->
+                    _selectedPeriod
+                        .flatMapLatest { period ->
+                            combine(
+                                getFinancialSummaryUseCase(user.id, period),
+                                getAvailablePeriodsUseCase(user.id),
+                                getAccountsReceivableUseCase(user.id)
+                            ) { summary, periods, arItems ->
+                                val filteredArItems = if (remoteConfigManager.getShowAccountsReceivable()) {
+                                    arItems
+                                } else {
+                                    emptyList()
+                                }
+                                
+                                ReportState.Success(
+                                    summary = summary ?: FinancialSummary(0.0, 0.0, 0.0, 0.0, period),
+                                    arItems = filteredArItems,
+                                    mockChartData = mockChartData,
+                                    periods = periods.ifEmpty { listOf(Period.AllMonths) },
+                                    selectedPeriod = period
+                                )
+                            }
                         }
-                        
-                        ReportState.Success(
-                            summary = summary ?: FinancialSummary(0.0, 0.0, 0.0, 0.0, period),
-                            arItems = filteredArItems,
-                            mockChartData = mockChartData,
-                            periods = periods.ifEmpty { listOf(Period.AllMonths) },
-                            selectedPeriod = period
-                        )
-                    }
                 }
                 .onStart { _state.value = ReportState.Loading }
                 .catch { e ->

@@ -9,7 +9,8 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 
 class CreateOrderViewModel(
-    private val createOrderUseCase: CreateOrderUseCase
+    private val createOrderUseCase: CreateOrderUseCase,
+    private val authRepository: bo.bordadoxdanny.app.features.profile.domain.AuthRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<CreateOrderState>(CreateOrderState.Idle)
@@ -49,7 +50,9 @@ class CreateOrderViewModel(
         viewModelScope.launch {
             _state.value = CreateOrderState.Loading
             try {
+                val userId = authRepository.getCurrentUser().first()?.id ?: ""
                 val order = Order(
+                    userId = userId,
                     customerName = current.customerName.trim(),
                     deliveryDate = current.deliveryDate ?: Clock.System.now().toEpochMilliseconds(),
                     description = current.description,

@@ -5,13 +5,13 @@ import androidx.lifecycle.viewModelScope
 import bo.bordadoxdanny.app.Res
 import bo.bordadoxdanny.app.no_data_for_period
 import bo.bordadoxdanny.app.features.orders.domain.GetOrdersUseCase
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import bo.bordadoxdanny.app.features.profile.domain.AuthRepository
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class OrdersViewModel(
-    private val getOrdersUseCase: GetOrdersUseCase
+    private val getOrdersUseCase: GetOrdersUseCase,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<OrderState>(OrderState.Loading)
@@ -34,7 +34,8 @@ class OrdersViewModel(
         viewModelScope.launch {
             _state.value = OrderState.Loading
             try {
-                getOrdersUseCase().collect { orders ->
+                val user = authRepository.getCurrentUser().filterNotNull().first()
+                getOrdersUseCase(user.id).collect { orders ->
                     _state.value = OrderState.Success(orders)
                 }
             } catch (e: Exception) {

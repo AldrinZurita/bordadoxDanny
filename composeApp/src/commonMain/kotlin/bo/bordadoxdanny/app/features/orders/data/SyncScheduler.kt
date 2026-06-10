@@ -1,6 +1,6 @@
 package bo.bordadoxdanny.app.features.orders.data
 
 interface SyncScheduler {
-    fun scheduleOrderSync()
-    fun scheduleTransactionSync()
+    fun scheduleOrderSync(userId: String)
+    fun scheduleTransactionSync(userId: String)
 }

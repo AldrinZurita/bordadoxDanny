@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 class GetTransactionsUseCase(
     private val repository: TransactionRepository
 ) {
-    operator fun invoke(type: TransactionType): Flow<List<Transaction>> {
-        return repository.getTransactionsByType(type)
+    operator fun invoke(userId: String, type: TransactionType): Flow<List<Transaction>> {
+        return repository.getTransactionsByType(userId, type)
     }
 }

@@ -12,30 +12,30 @@ class TransactionRepositoryImpl(
     private val syncScheduler: SyncScheduler
 ) : TransactionRepository {
 
-    override fun getTransactionsByType(type: TransactionType): Flow<List<Transaction>> {
-        return transactionDao.getTransactionsByType(type.name).map { entities ->
+    override fun getTransactionsByType(userId: String, type: TransactionType): Flow<List<Transaction>> {
+        return transactionDao.getTransactionsByType(userId, type.name).map { entities ->
             entities.map { it.toDomain() }
         }
     }
 
-    override fun getTotalByType(type: TransactionType): Flow<Double> {
-        return transactionDao.getTotalByType(type.name).map { it ?: 0.0 }
+    override fun getTotalByType(userId: String, type: TransactionType): Flow<Double> {
+        return transactionDao.getTotalByType(userId, type.name).map { it ?: 0.0 }
     }
 
     override suspend fun addTransaction(transaction: Transaction) {
         transactionDao.insertTransaction(transaction.toEntity())
-        syncScheduler.scheduleTransactionSync()
+        syncScheduler.scheduleTransactionSync(transaction.userId)
     }
 
-    override suspend fun getPendingTransactions(): List<Transaction> {
-        return transactionDao.getPendingTransactions().map { it.toDomain() }
+    override suspend fun getPendingTransactions(userId: String): List<Transaction> {
+        return transactionDao.getPendingTransactions(userId).map { it.toDomain() }
     }
 
-    override suspend fun markAsSynced(id: Long) {
-        transactionDao.markAsSynced(id)
+    override suspend fun markAsSynced(id: Long, userId: String) {
+        transactionDao.markAsSynced(id, userId)
     }
 
-    override fun getAllTransactionTimestamps(): Flow<List<Long>> {
-        return transactionDao.getAllTransactionTimestamps()
+    override fun getAllTransactionTimestamps(userId: String): Flow<List<Long>> {
+        return transactionDao.getAllTransactionTimestamps(userId)
     }
 }

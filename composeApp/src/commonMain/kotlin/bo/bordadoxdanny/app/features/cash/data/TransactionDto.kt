@@ -6,6 +6,7 @@ import bo.bordadoxdanny.app.core.domain.SyncStatus
 @Serializable
 data class TransactionDto(
     val id: Long? = null,
+    val userId: String = "",
     val amount: Double = 0.0,
     val type: String = "",
     val description: String = "",
@@ -16,6 +17,7 @@ data class TransactionDto(
 
 fun TransactionEntity.toDto() = TransactionDto(
     id = id,
+    userId = userId,
     amount = amount,
     type = type,
     description = description,
@@ -26,6 +28,7 @@ fun TransactionEntity.toDto() = TransactionDto(
 
 fun TransactionDto.toEntity(id: Long? = null) = TransactionEntity(
     id = id ?: this.id ?: 0L,
+    userId = userId,
     amount = amount,
     type = type,
     description = description,

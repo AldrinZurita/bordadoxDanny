@@ -20,6 +20,7 @@ class CreateOrderUseCase(
         if (finalOrder.initialPayment > 0) {
             transactionRepository.addTransaction(
                 Transaction(
+                    userId = finalOrder.userId,
                     amount = finalOrder.initialPayment,
                     type = TransactionType.INCOME,
                     description = "Pago Inicial – Nota #$orderId",

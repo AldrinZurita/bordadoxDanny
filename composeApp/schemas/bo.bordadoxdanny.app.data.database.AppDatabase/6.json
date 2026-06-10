@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 5,
-    "identityHash": "be4894fef0471a737c1c6342d2a6174a",
+    "version": 6,
+    "identityHash": "cd5e63920a1da370de31c020eeea7676",
     "entities": [
       {
         "tableName": "orders",
@@ -203,11 +203,17 @@
       },
       {
         "tableName": "report_summaries",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`periodId` TEXT NOT NULL, `totalIncome` REAL NOT NULL, `totalExpenses` REAL NOT NULL, `netProfit` REAL NOT NULL, `accountsReceivable` REAL NOT NULL, `year` INTEGER, `month` INTEGER, `syncStatus` TEXT NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`periodId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`periodId` TEXT NOT NULL, `userId` TEXT NOT NULL, `totalIncome` REAL NOT NULL, `totalExpenses` REAL NOT NULL, `netProfit` REAL NOT NULL, `accountsReceivable` REAL NOT NULL, `year` INTEGER, `month` INTEGER, `syncStatus` TEXT NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`periodId`, `userId`))",
         "fields": [
           {
             "fieldPath": "periodId",
             "columnName": "periodId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -261,7 +267,8 @@
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
-            "periodId"
+            "periodId",
+            "userId"
           ]
         }
       },
@@ -414,11 +421,17 @@
       },
       {
         "tableName": "settings",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`key` TEXT NOT NULL, `value` TEXT NOT NULL, PRIMARY KEY(`key`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`key` TEXT NOT NULL, `userId` TEXT NOT NULL, `value` TEXT NOT NULL, PRIMARY KEY(`key`, `userId`))",
         "fields": [
           {
             "fieldPath": "key",
             "columnName": "key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -432,14 +445,15 @@
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
-            "key"
+            "key",
+            "userId"
           ]
         }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'be4894fef0471a737c1c6342d2a6174a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cd5e63920a1da370de31c020eeea7676')"
     ]
   }
 }

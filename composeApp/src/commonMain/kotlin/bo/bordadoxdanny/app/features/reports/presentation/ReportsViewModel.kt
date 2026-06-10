@@ -4,11 +4,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bo.bordadoxdanny.app.features.reports.domain.Report
 import bo.bordadoxdanny.app.features.reports.domain.GetReportsUseCase
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import bo.bordadoxdanny.app.features.profile.domain.AuthRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 
-class ReportsViewModel(getReportsUseCase: GetReportsUseCase) : ViewModel() {
-    val reports: StateFlow<List<Report>> = getReportsUseCase()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+class ReportsViewModel(
+    private val getReportsUseCase: GetReportsUseCase,
+    private val authRepository: AuthRepository
+) : ViewModel() {
+    
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val reports: StateFlow<List<Report>> = authRepository.getCurrentUser()
+        .filterNotNull()
+        .flatMapLatest { user -> 
+            getReportsUseCase(user.id)
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
 }

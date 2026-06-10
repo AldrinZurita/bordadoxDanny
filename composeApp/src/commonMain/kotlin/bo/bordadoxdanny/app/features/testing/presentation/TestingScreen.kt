@@ -102,7 +102,7 @@ fun TestingScreen(
                     try {
                         roomMessage = "Guardando en Room..."
                         val testProfile = Profile(
-                            id = 1, 
+                            userId = "test_user_123",
                             name = "Test Room User", 
                             email = "room@test.com", 
                             phone = "999999"

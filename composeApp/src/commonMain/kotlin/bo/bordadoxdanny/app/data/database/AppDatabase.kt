@@ -32,7 +32,7 @@ import androidx.sqlite.driver.bundled.BundledSQLiteDriver
         UserEntity::class,
         SettingsEntity::class
     ],
-    version = 5
+    version = 6
 )
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {
