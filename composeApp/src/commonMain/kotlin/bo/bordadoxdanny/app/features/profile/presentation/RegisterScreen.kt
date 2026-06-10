@@ -39,7 +39,9 @@ fun RegisterScreen(
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+    var confirmPasswordVisible by remember { mutableStateOf(false) }
     var firstName by remember { mutableStateOf("") }
     var middleName by remember { mutableStateOf("") }
     var lastName1 by remember { mutableStateOf("") }
@@ -143,6 +145,27 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        OutlinedTextField(
+            value = confirmPassword,
+            onValueChange = { confirmPassword = it },
+            label = { Text(stringResource(Res.string.confirm_password)) },
+            modifier = Modifier.fillMaxWidth(),
+            visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                val image = if (confirmPasswordVisible) AppIcons.Visibility else AppIcons.VisibilityOff
+                IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
+                    AppIcon(resource = image, contentDescription = null)
+                }
+            },
+            leadingIcon = {
+                AppIcon(resource = AppIcons.Lock, contentDescription = null, tint = AppTheme.colors.textSecondary)
+            },
+            shape = RoundedCornerShape(8.dp),
+            textStyle = AppTheme.typography.bodyMedium.copy(color = AppTheme.colors.textPrimary)
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         // Requirements Block
         Column(
             modifier = Modifier
@@ -223,7 +246,7 @@ fun RegisterScreen(
             text = stringResource(Res.string.create_account),
             onClick = {
                 viewModel.onIntent(AuthIntent.OnRegister(
-                    RegisterParams(
+                    params = RegisterParams(
                         username = username,
                         email = email,
                         password = password,
@@ -236,12 +259,13 @@ fun RegisterScreen(
                         ciNumber = ciNumber,
                         ciComplement = ciComplement.takeIf { it.isNotBlank() },
                         ciDepartment = ciDepartment
-                    )
+                    ),
+                    confirmPassword = confirmPassword
                 ))
             },
             modifier = Modifier.fillMaxWidth(),
             isLoading = state is AuthState.Loading,
-            enabled = requirements.allMet && username.isNotBlank() && email.isNotBlank() && firstName.isNotBlank() && lastName1.isNotBlank() && ciNumber.isNotBlank()
+            enabled = requirements.allMet && username.isNotBlank() && email.isNotBlank() && firstName.isNotBlank() && lastName1.isNotBlank() && ciNumber.isNotBlank() && confirmPassword.isNotBlank()
         )
 
         if (state is AuthState.RegisterError) {

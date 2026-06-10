@@ -1,15 +1,18 @@
 package bo.bordadoxdanny.app.features.profile.presentation
 
 import app.cash.turbine.test
+import bo.bordadoxdanny.app.core.locale.LocaleManager
 import kotlinx.coroutines.test.runTest
 import kotlin.test.*
 
 class LanguageViewModelTest {
 
+    private val fakeLocaleManager = FakeLocaleManager()
+
     @Test
     fun `given OnLoadLanguage intent with saved language, state is Loaded with that language`() = runTest {
         val fakePrefs = FakePreferencesRepository(savedLanguage = "es")
-        val vm = LanguageViewModel(fakePrefs)
+        val vm = LanguageViewModel(fakePrefs, fakeLocaleManager)
 
         vm.state.test {
             // Skip initial Loading state if it's there, or wait for Loaded
@@ -20,13 +23,14 @@ class LanguageViewModelTest {
             
             assertTrue(item is LanguageState.Loaded)
             assertEquals("es", (item as LanguageState.Loaded).languageCode)
+            assertEquals("es", fakeLocaleManager.appliedLocale)
         }
     }
 
     @Test
     fun `given OnLoadLanguage intent with no saved language, state defaults to en`() = runTest {
         val fakePrefs = FakePreferencesRepository(savedLanguage = null)
-        val vm = LanguageViewModel(fakePrefs)
+        val vm = LanguageViewModel(fakePrefs, fakeLocaleManager)
 
         vm.state.test {
             var item = awaitItem()
@@ -36,13 +40,14 @@ class LanguageViewModelTest {
 
             assertTrue(item is LanguageState.Loaded)
             assertEquals("en", (item as LanguageState.Loaded).languageCode)
+            assertEquals("en", fakeLocaleManager.appliedLocale)
         }
     }
 
     @Test
     fun `given OnLanguageChanged intent, state updates and saves language`() = runTest {
         val fakePrefs = FakePreferencesRepository(savedLanguage = "en")
-        val vm = LanguageViewModel(fakePrefs)
+        val vm = LanguageViewModel(fakePrefs, fakeLocaleManager)
 
         // Wait for initial load to finish first
         vm.state.test {
@@ -54,6 +59,7 @@ class LanguageViewModelTest {
             assertTrue(item is LanguageState.Loaded)
             assertEquals("fr", (item as LanguageState.Loaded).languageCode)
             assertEquals("fr", fakePrefs.savedLanguage)
+            assertEquals("fr", fakeLocaleManager.appliedLocale)
         }
     }
 }
@@ -63,4 +69,12 @@ class FakePreferencesRepository(var savedLanguage: String? = null) : bo.bordadox
     override suspend fun saveLanguage(languageCode: String) {
         savedLanguage = languageCode
     }
+}
+
+class FakeLocaleManager : LocaleManager {
+    var appliedLocale: String = ""
+    override fun applyLocale(languageCode: String) {
+        appliedLocale = languageCode
+    }
+    override fun getCurrentLocale(): String = appliedLocale
 }

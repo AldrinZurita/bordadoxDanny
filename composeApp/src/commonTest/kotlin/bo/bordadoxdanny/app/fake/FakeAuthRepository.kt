@@ -24,20 +24,22 @@ class FakeAuthRepository(
         ciNumber = "1234567",
         ciComplement = null,
         ciDepartment = "LP",
-        languageCode = "en"
+        languageCode = "en",
+        isVerified = false,
+        syncStatus = "SYNCED"
     )
 ) : AuthRepository {
 
     private val _currentUser = MutableStateFlow<User?>(if (shouldReturnLoginError) null else fakeUser)
     private var storedCode: String = "123456"
 
-    override suspend fun login(emailOrUsername: String, password: String): Result<User> {
-        if (emailOrUsername.isBlank() || password.isBlank()) return Result.failure(Exception("field_required"))
+    override suspend fun login(email: String, password: String): Result<String> {
+        if (email.isBlank() || password.isBlank()) return Result.failure(Exception("field_required"))
         return if (shouldReturnLoginError) {
             Result.failure(Exception("Invalid credentials"))
         } else {
             _currentUser.value = fakeUser
-            Result.success(fakeUser)
+            Result.success("fake-token")
         }
     }
 
@@ -53,15 +55,15 @@ class FakeAuthRepository(
         }
     }
 
-    override suspend fun sendVerificationCode(emailOrUsername: String): Result<String> {
-        val email = registeredEmails.find { it == emailOrUsername || fakeUser.username == emailOrUsername }
+    override suspend fun sendVerificationCode(email: String): Result<String> {
+        val foundEmail = registeredEmails.find { it == email || fakeUser.username == email }
             ?: return Result.failure(Exception("User not found"))
         storedCode = "654321"
-        return Result.success(email)
+        return Result.success(foundEmail)
     }
 
-    override suspend fun verifyCode(email: String, code: String): Result<Unit> {
-        return if (code == storedCode) Result.success(Unit)
+    override suspend fun verifyCode(email: String, code: String): Result<Boolean> {
+        return if (code == storedCode) Result.success(true)
         else Result.failure(Exception("Invalid code"))
     }
 
@@ -80,5 +82,9 @@ class FakeAuthRepository(
             _currentUser.value = current.copy(languageCode = languageCode)
         }
         return Result.success(Unit)
+    }
+
+    override suspend fun isUserLoggedIn(): Boolean {
+        return _currentUser.value != null
     }
 }

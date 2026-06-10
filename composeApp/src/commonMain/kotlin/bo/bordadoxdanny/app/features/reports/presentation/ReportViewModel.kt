@@ -2,13 +2,13 @@ package bo.bordadoxdanny.app.features.reports.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import bo.bordadoxdanny.app.Res
 import bo.bordadoxdanny.app.features.reports.domain.*
 import bo.bordadoxdanny.app.firebase.RemoteConfigManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import bo.bordadoxdanny.app.Res
-import bo.bordadoxdanny.app.no_data_for_period
+import bo.bordadoxdanny.app.*
 
 class ReportViewModel(
     private val getFinancialSummaryUseCase: GetFinancialSummaryUseCase,
@@ -41,38 +41,34 @@ class ReportViewModel(
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun loadData() {
         viewModelScope.launch {
-            combine(
-                _selectedPeriod.flatMapLatest { getFinancialSummaryUseCase(it) },
-                getAvailablePeriodsUseCase(),
-                getAccountsReceivableUseCase()
-            ) { summary, periods, arItems ->
-                if (summary != null) {
-                    val filteredArItems = if (remoteConfigManager.getShowAccountsReceivable()) {
-                        arItems
-                    } else {
-                        emptyList()
+            _selectedPeriod
+                .flatMapLatest { period ->
+                    combine(
+                        getFinancialSummaryUseCase(period),
+                        getAvailablePeriodsUseCase(),
+                        getAccountsReceivableUseCase()
+                    ) { summary, periods, arItems ->
+                        val filteredArItems = if (remoteConfigManager.getShowAccountsReceivable()) {
+                            arItems
+                        } else {
+                            emptyList()
+                        }
+                        
+                        ReportState.Success(
+                            summary = summary ?: FinancialSummary(0.0, 0.0, 0.0, 0.0, period),
+                            arItems = filteredArItems,
+                            mockChartData = mockChartData,
+                            periods = periods.ifEmpty { listOf(Period.AllMonths) },
+                            selectedPeriod = period
+                        )
                     }
-                    ReportState.Success(
-                        summary = summary,
-                        arItems = filteredArItems,
-                        mockChartData = mockChartData,
-                        periods = periods.ifEmpty { listOf(Period.AllMonths) },
-                        selectedPeriod = _selectedPeriod.value
-                    )
-                } else {
-                    ReportState.Success(
-                        summary = FinancialSummary(0.0, 0.0, 0.0, 0.0, _selectedPeriod.value),
-                        arItems = emptyList(),
-                        mockChartData = mockChartData,
-                        periods = periods.ifEmpty { listOf(Period.AllMonths) },
-                        selectedPeriod = _selectedPeriod.value
-                    )
                 }
-            }.map { it as ReportState }
-                .catch {
-                    emit(ReportState.Error(Res.string.no_data_for_period))
-                }.collect {
-                    _state.value = it
+                .onStart { _state.value = ReportState.Loading }
+                .catch { e ->
+                    _state.value = ReportState.Error(Res.string.no_data_for_period)
+                }
+                .collect { newState ->
+                    _state.value = newState
                 }
         }
     }

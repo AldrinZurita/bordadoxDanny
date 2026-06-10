@@ -106,7 +106,10 @@ fun NewPasswordScreen(
         // Confirm Password Field
         OutlinedTextField(
             value = confirmPassword,
-            onValueChange = { confirmPassword = it },
+            onValueChange = { 
+                confirmPassword = it
+                viewModel.onIntent(AuthIntent.OnConfirmPasswordChanged(it))
+            },
             label = { Text(stringResource(Res.string.confirm_password)) },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),

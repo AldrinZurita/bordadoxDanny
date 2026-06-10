@@ -9,14 +9,14 @@ import kotlin.test.assertTrue
 class LoginUseCaseTest {
 
     @Test
-    fun `given valid credentials, returns Success with User`() = runTest {
+    fun `given valid credentials, returns Success with Token`() = runTest {
         val repo = FakeAuthRepository(shouldReturnLoginError = false)
         val useCase = LoginUseCase(repo)
 
         val result = useCase("usuario@gmail.com", "Usuario123")
 
         assertTrue(result.isSuccess)
-        assertEquals("usuario@gmail.com", result.getOrThrow().email)
+        assertEquals("fake-token", result.getOrThrow())
     }
 
     @Test

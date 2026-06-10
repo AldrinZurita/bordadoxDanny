@@ -29,6 +29,7 @@ import bo.bordadoxdanny.app.features.profile.presentation.AuthViewModel
 import bo.bordadoxdanny.app.features.profile.presentation.LanguageViewModel
 import bo.bordadoxdanny.app.features.profile.presentation.ProfileViewModel
 import bo.bordadoxdanny.app.features.reports.presentation.ReportViewModel
+import bo.bordadoxdanny.app.features.reports.presentation.ReportsViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import bo.bordadoxdanny.app.domain.SyncDataUseCase
@@ -48,7 +49,6 @@ val dataModule = module {
 
     single<OrderRepository> { OrderRepositoryImpl(get(), get()) }
     single<ProfileRepository> { ProfileRepositoryImpl(get()) }
-    //single<TransactionRepository> { TransactionRepositoryImpl(get()) }
     single<TransactionRepository> {
         TransactionRepositoryImpl(
             transactionDao = get(),
@@ -86,6 +86,7 @@ val presentationModule = module {
     viewModelOf(::CreateOrderViewModel)
     viewModelOf(::CashViewModel)
     viewModelOf(::ReportViewModel)
+    viewModelOf(::ReportsViewModel)
     viewModelOf(::AuthViewModel)
     viewModelOf(::ProfileViewModel)
     viewModelOf(::LanguageViewModel)

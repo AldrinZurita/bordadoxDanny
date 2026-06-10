@@ -3,13 +3,15 @@ package bo.bordadoxdanny.app.features.profile.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bo.bordadoxdanny.app.data.preferences.PreferencesRepository
+import bo.bordadoxdanny.app.core.locale.LocaleManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class LanguageViewModel(
-    private val preferencesRepository: PreferencesRepository
+    private val preferencesRepository: PreferencesRepository,
+    private val localeManager: LocaleManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<LanguageState>(LanguageState.Loading)
@@ -30,11 +32,9 @@ class LanguageViewModel(
         viewModelScope.launch {
             try {
                 val lang = preferencesRepository.getLanguage()
-                if (lang != null) {
-                    _state.value = LanguageState.Loaded(lang)
-                } else {
-                    _state.value = LanguageState.Loaded("en")
-                }
+                val code = lang ?: "en"
+                localeManager.applyLocale(code)
+                _state.value = LanguageState.Loaded(code)
             } catch (e: Exception) {
                 _state.value = LanguageState.Loaded("en")
             }
@@ -45,6 +45,7 @@ class LanguageViewModel(
         viewModelScope.launch {
             try {
                 preferencesRepository.saveLanguage(code)
+                localeManager.applyLocale(code)
                 _state.value = LanguageState.Loaded(code)
             } catch (e: Exception) {
                 _state.value = LanguageState.Loaded(code)

@@ -6,9 +6,9 @@ import bo.bordadoxdanny.app.features.reports.domain.Report
 
 fun ReportSummaryEntity.toDomain(): FinancialSummary {
     val period = when {
-        year == null && month == null -> Period.AllMonths
-        month == null -> Period.Year(year!!)
-        else -> Period.Month(year!!, month!!)
+        periodId == "ALL" -> Period.AllMonths
+        month == null -> Period.Year(year ?: 2024)
+        else -> Period.Month(year ?: 2024, month)
     }
     return FinancialSummary(
         totalIncome = totalIncome,

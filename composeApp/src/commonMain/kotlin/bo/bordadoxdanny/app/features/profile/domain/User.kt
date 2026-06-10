@@ -14,6 +14,7 @@ data class User(
     val ciComplement: String?,
     val ciDepartment: String,
     val languageCode: String,
+    val isVerified: Boolean = false,
     val syncStatus: String = "PENDING",
     val createdAt: Long = 0L,
     val updatedAt: Long = 0L

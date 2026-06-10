@@ -5,10 +5,7 @@ import androidx.lifecycle.viewModelScope
 import bo.bordadoxdanny.app.features.profile.domain.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import bo.bordadoxdanny.app.Res
-import bo.bordadoxdanny.app.invalid_credentials
-import bo.bordadoxdanny.app.user_not_found
-import bo.bordadoxdanny.app.invalid_code
+import bo.bordadoxdanny.app.*
 
 class AuthViewModel(
     private val loginUseCase: LoginUseCase,
@@ -27,16 +24,27 @@ class AuthViewModel(
     fun onIntent(intent: AuthIntent) {
         when (intent) {
             is AuthIntent.OnLogin -> login(intent.emailOrUser, intent.password)
-            is AuthIntent.OnRegister -> register(intent.params)
+            is AuthIntent.OnRegister -> register(intent.params, intent.confirmPassword)
             is AuthIntent.OnSendCode -> sendCode(intent.emailOrUser)
             is AuthIntent.OnVerifyCode -> verifyCode(intent.email, intent.code)
             is AuthIntent.OnResetPassword -> resetPassword(intent.email, intent.newPassword)
-            is AuthIntent.OnPasswordChanged -> validatePassword(intent.value)
+            is AuthIntent.OnPasswordChanged -> {
+                validatePassword(intent.value)
+                clearErrorState()
+            }
+            is AuthIntent.OnConfirmPasswordChanged -> clearErrorState()
             else -> {} // Navigation intents handled by UI
         }
     }
 
+    private fun clearErrorState() {
+        if (_state.value is AuthState.PasswordResetError || _state.value is AuthState.CodeVerifiedError) {
+            _state.value = AuthState.Idle
+        }
+    }
+
     private fun login(emailOrUser: String, password: String) {
+        if (_state.value is AuthState.Loading) return
         viewModelScope.launch {
             _state.value = AuthState.Loading
             try {
@@ -50,11 +58,12 @@ class AuthViewModel(
         }
     }
 
-    private fun register(params: RegisterParams) {
+    private fun register(params: RegisterParams, confirmPass: String) {
+        if (_state.value is AuthState.Loading) return
         viewModelScope.launch {
             _state.value = AuthState.Loading
             try {
-                registerUseCase(params).fold(
+                registerUseCase(params, confirmPass).fold(
                     onSuccess = { _state.value = AuthState.RegisterSuccess },
                     onFailure = { _state.value = AuthState.RegisterError("", Res.string.invalid_credentials) }
                 )
@@ -65,6 +74,7 @@ class AuthViewModel(
     }
 
     private fun sendCode(emailOrUser: String) {
+        if (_state.value is AuthState.Loading) return
         viewModelScope.launch {
             _state.value = AuthState.Loading
             try {
@@ -79,6 +89,7 @@ class AuthViewModel(
     }
 
     private fun verifyCode(email: String, code: String) {
+        if (_state.value is AuthState.Loading) return
         viewModelScope.launch {
             _state.value = AuthState.Loading
             try {
@@ -93,6 +104,7 @@ class AuthViewModel(
     }
 
     private fun resetPassword(email: String, newPassword: String) {
+        if (_state.value is AuthState.Loading) return
         viewModelScope.launch {
             _state.value = AuthState.Loading
             try {

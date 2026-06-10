@@ -8,8 +8,12 @@ import bo.bordadoxdanny.app.core.daemon.di.daemonModule
 import bo.bordadoxdanny.app.di.commonModules
 import bo.bordadoxdanny.app.di.androidModule
 import bo.bordadoxdanny.app.workers.LogScheduler
+import bo.bordadoxdanny.app.data.preferences.PreferencesRepository
+import bo.bordadoxdanny.app.core.locale.LocaleManager
 import com.google.firebase.FirebaseApp
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.workmanager.koin.workManagerFactory
@@ -33,6 +37,14 @@ class BordadosApplication : Application() {
             androidContext(this@BordadosApplication)
             workManagerFactory()
             modules(commonModules + androidModule + daemonModule)
+        }
+
+        // Initialize Locale from Preferences
+        val prefs = get<PreferencesRepository>()
+        val localeManager = get<LocaleManager>()
+        MainScope().launch {
+            val lang = prefs.getLanguage() ?: "en"
+            localeManager.applyLocale(lang)
         }
 
         try {

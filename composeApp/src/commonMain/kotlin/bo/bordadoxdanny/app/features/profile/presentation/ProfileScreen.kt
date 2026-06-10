@@ -12,15 +12,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import bo.bordadoxdanny.app.Res
+import bo.bordadoxdanny.app.*
 import bo.bordadoxdanny.app.core.designsystem.components.dividers.HorizontalDivider
 import bo.bordadoxdanny.app.core.designsystem.components.buttons.PrimaryButton
 import bo.bordadoxdanny.app.core.designsystem.components.icons.AppIcon
 import bo.bordadoxdanny.app.core.designsystem.components.icons.AppIcons
 import bo.bordadoxdanny.app.core.designsystem.theme.AppTheme
-import bo.bordadoxdanny.app.language
-import bo.bordadoxdanny.app.logout
-import bo.bordadoxdanny.app.profile
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "f84b2eb5088e40136d53d7d8ccb92ecb",
+    "identityHash": "6fa29ce189842d1778974dc3f9f0801c",
     "entities": [
       {
         "tableName": "orders",
@@ -280,7 +280,7 @@
       },
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `username` TEXT NOT NULL, `email` TEXT NOT NULL, `phoneCountryCode` TEXT NOT NULL, `phoneNumber` TEXT NOT NULL, `firstName` TEXT NOT NULL, `middleName` TEXT, `lastName1` TEXT NOT NULL, `lastName2` TEXT, `ciNumber` TEXT NOT NULL, `ciComplement` TEXT, `ciDepartment` TEXT NOT NULL, `languageCode` TEXT NOT NULL, `syncStatus` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `username` TEXT NOT NULL, `email` TEXT NOT NULL, `phoneCountryCode` TEXT NOT NULL, `phoneNumber` TEXT NOT NULL, `firstName` TEXT NOT NULL, `middleName` TEXT, `lastName1` TEXT NOT NULL, `lastName2` TEXT, `ciNumber` TEXT NOT NULL, `ciComplement` TEXT, `ciDepartment` TEXT NOT NULL, `languageCode` TEXT NOT NULL, `isVerified` INTEGER NOT NULL, `syncStatus` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -358,6 +358,12 @@
             "notNull": true
           },
           {
+            "fieldPath": "isVerified",
+            "columnName": "isVerified",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
             "fieldPath": "syncStatus",
             "columnName": "syncStatus",
             "affinity": "TEXT",
@@ -410,7 +416,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f84b2eb5088e40136d53d7d8ccb92ecb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6fa29ce189842d1778974dc3f9f0801c')"
     ]
   }
 }
